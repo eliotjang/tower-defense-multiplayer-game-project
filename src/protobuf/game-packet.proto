@@ -32,7 +32,7 @@ message S2C_LoginResponse {
 }
 
 // 클라이언트 -> 서버: 대결 신청 요청 패킷
-message C2S_matchRequest {
+message C2S_MatchRequest {
     string id = 1;
 		
 }

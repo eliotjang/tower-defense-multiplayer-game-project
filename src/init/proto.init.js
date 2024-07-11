@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import url from "url";
 import protobuf from "protobufjs";
-import protoTypeNames from "../constants/packet-names.constants.js";
+import protoTypeNames from "../constants/proto-type-names.constants.js";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,11 +32,8 @@ export const loadProtoFiles = async () => {
     const root = new protobuf.Root();
     protoFiles.forEach((file) => root.loadSync(file));
 
-    for (const [packetType, types] of Object.entries(protoTypeNames)) {
-      protoMessages[packetType] = {};
-      for (const [type, typeName] of Object.entries(types)) {
-        protoMessages[packageName][type] = root.lookupType(typeName);
-      }
+    for (const [packetType, typeName] of Object.entries(protoTypeNames)) {
+      protoMessages[packetType] = root.lookupType(typeName);
     }
 
     Object.freeze(protoMessages);
