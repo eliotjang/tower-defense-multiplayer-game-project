@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Changmin Kang" />
+    <title>내일배움캠프 Node.js 트랙 타워 디펜스 게임 온라인</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #2d2d2d;
+        flex-direction: column;
+      }
+      #gameCanvas {
+        border: 2px solid #000;
+        display: none;
+      }
+      #opponentCanvas {
+        border: 2px solid #000;
+        display: none;
+      }
+      .button-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+      .button-container button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      #progressBarContainer {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: white;
+      }
+      #progressBar {
+        width: 100%;
+        height: 70px;
+      }
+      .loader {
+        border: 16px solid #f3f3f3;
+        border-top: 16px solid #3498db;
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+        animation: spin 2s linear infinite;
+        margin-bottom: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="button-container">
+      <img src="/images/logo.png" alt="logo" />
+      <button id="registerButton">회원가입</button>
+      <button id="loginButton">로그인</button>
+      <button id="loginButton2">
+        로그인2 (로컬에서 2인 테스트 할 때 사용)
+      </button>
+      <button id="matchButton">다른 유저와 대결하기</button>
+      <button id="matchButton2">
+        다른 유저와 대결하기2 (로컬에서 2인 테스트 할 때 사용)
+      </button>
+    </div>
+    <div id="progressBarContainer">
+      <h1 id="progressBarMessage" style="color: white">
+        대결 상대를 탐색중입니다!
+      </h1>
+      <div class="loader"></div>
+      <progress
+        id="progressBar"
+        max="100"
+        value="0"
+        style="display: none"
+      ></progress>
+    </div>
+    <canvas id="gameCanvas" width="1500" height="680"></canvas>
+    <canvas id="opponentCanvas" width="1500" height="680"></canvas>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script type="module">
+      document
+        .getElementById("registerButton")
+        .addEventListener("click", () => {
+          window.location.href = "register.html";
+        });
+
+      document.getElementById("loginButton").addEventListener("click", () => {
+        window.location.href = "login.html";
+      });
+
+      document.getElementById("loginButton2").addEventListener("click", () => {
+        window.location.href = "login2.html";
+      });
+
+      document.getElementById("matchButton").addEventListener("click", () => {
+        document.querySelector(".button-container").style.display = "none";
+        document.getElementById("progressBarContainer").style.display = "block";
+        import("./src/multi_game.js");
+      });
+
+      document.getElementById("matchButton2").addEventListener("click", () => {
+        document.querySelector(".button-container").style.display = "none";
+        document.getElementById("progressBarContainer").style.display = "block";
+        import("./src/multi_game2.js");
+      });
+    </script>
+  </body>
+</html>
