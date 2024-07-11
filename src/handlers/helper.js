@@ -1,1 +1,3 @@
-const handleConnection = (socket) => {};
+export const handleConnection = (socket, userUUID) => {
+  socket.emit('connection', { uuid: userUUID });
+};
