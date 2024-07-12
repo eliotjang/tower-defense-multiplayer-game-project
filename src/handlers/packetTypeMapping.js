@@ -1,6 +1,6 @@
-import { matchRequestHandler } from '../../src/handlers/game.handler.js';
+import { matchRequestHandler } from './game.handler.js';
 
-export const packetTypeMappings = {
+const packetTypeMappings = {
   // 1: signUpHandler,
   // 2: loginHandler,
   3: matchRequestHandler,
@@ -20,3 +20,5 @@ export const packetTypeMappings = {
   // 33: gameEndHandler,
   // 40: chattingHandler,
 };
+
+export default packetTypeMappings;
