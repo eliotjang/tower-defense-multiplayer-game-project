@@ -1,5 +1,3 @@
-import initSocket from './init/socket.js';
-import config from './config/configs.js';
 import express from 'express';
 import { createServer } from 'http';
 import initSocket from './init/socket.js';

@@ -2,7 +2,7 @@ import { Base } from './base.js';
 import { Monster } from './monster.js';
 import { Tower } from './tower.js';
 
-// if (!localStorage.getItem("token2")) {
+// if (!localStorage.getItem("token")) {
 //   alert("로그인이 필요합니다.");
 //   location.href = "/login";
 // }
@@ -243,11 +243,12 @@ function initGame() {
   }
   bgm = new Audio('sounds/bgm.mp3');
   bgm.loop = true;
-  bgm.volume = 0.2;
+  bgm.volume = 0;
   bgm.play();
 
   initMap(); // 맵 초기화 (배경, 몬스터 경로 그리기)
 
+  monsterSpawnInterval = 3000;
   setInterval(spawnMonster, monsterSpawnInterval); // 설정된 몬스터 생성 주기마다 몬스터 생성
   gameLoop(); // 게임 루프 최초 실행
   isInitGame = true;
@@ -264,7 +265,7 @@ Promise.all([
   console.log('loading');
   serverSocket = io('http://127.0.0.1:5555', {
     // auth: {
-    //   token: localStorage.getItem('token2'),
+    //   token: localStorage.getItem('token'),
     // },
   });
 
@@ -278,8 +279,6 @@ Promise.all([
     });
   };
 
-  // 유저 아이디 임의 생성
-  let userId = 'user2';
   serverSocket.on('connect_error', (err) => {
     if (err.message === 'Authentication error') {
       alert('잘못된 토큰입니다.');
@@ -287,20 +286,37 @@ Promise.all([
     }
   });
 
-  serverSocket.on('connect', () => {
+  let userId;
+  serverSocket.on('connection', (data) => {
     // TODO. 서버와 연결되면 대결 대기열 큐 진입
-    console.log('connect');
+    console.log('서버 연결 완료');
+    userId = data.uuid;
     sendEvent(3, { timestamp: Date.now(), userId });
   });
 
   // 패킷 타입을 확인하여 해당 핸들러에서 처리
-  serverSocket.on('data', () => {
-    //
+  serverSocket.on('data', (data) => {
+    console.log(data.payload);
   });
 
   serverSocket.on('matchFound', (data) => {
+    console.log('matchFound');
     // 상대가 매치되면 3초 뒤 게임 시작
     progressBarMessage.textContent = '게임이 3초 뒤에 시작됩니다.';
+
+    baseHp = 200;
+    for (const key in data.payload) {
+      if (key === userId) {
+        basePosition = data.payload[key].basePosition;
+        initialTowerCoords = data.payload[key].initialTowerCoords;
+        monsterPath = data.payload[key].monsterPath;
+        continue;
+      } else {
+        opponentBasePosition = data.payload[key].basePosition;
+        opponentInitialTowerCoords = data.payload[key].initialTowerCoords;
+        opponentMonsterPath = data.payload[key].monsterPath;
+      }
+    }
 
     let progressValue = 0;
     const progressInterval = setInterval(() => {
