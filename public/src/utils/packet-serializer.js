@@ -1,5 +1,5 @@
 import packetNames from "../constants/packet-names.constants.js";
-import { getProtoMessages } from "../init/load-proto.js";
+import { getProtoMessages } from "../protobuf/load-proto.js";
 
 /**
  *
