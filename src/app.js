@@ -1,7 +1,5 @@
 import express from "express";
 import { createServer } from "http";
-import initSocket from "./init/socket.js";
-import { loadGameAssets, getGameAssets } from "./init/assets.js";
 import config from "./config/configs.js";
 import initServer from "./init/init.js";
 
@@ -21,12 +19,13 @@ app.get("/", (req, res) => {
   res.send("<h1>Hello World</h1>");
 });
 
-await initServer();
+initServer(server).then(() => {
+  server.listen(PORT, async () => {
+    console.log(`Server is running on port ${PORT}`);
 
-server.listen(PORT, async () => {
-  console.log(`Server is running on port ${PORT}`);
-  try {
-  } catch (error) {
-    console.error("게임 에셋 로드 실패");
-  }
+    try {
+    } catch (error) {
+      console.error("게임 에셋 로드 실패");
+    }
+  });
 });
