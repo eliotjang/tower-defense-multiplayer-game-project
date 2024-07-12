@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
@@ -44,32 +44,32 @@
       <button id="back" style="margin-top: 50px">뒤로가기</button>
     </div>
     <script>
-      document.getElementById("register").addEventListener("click", () => {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
+      document.getElementById('register').addEventListener('click', () => {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
 
-        fetch("http://15.165.15.118:3000/register", {
-          method: "POST",
+        fetch('/api/register', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({ username, password }),
         })
           .then((response) => {
             if (response.status === 201) {
-              alert("회원가입 성공");
-              window.location.href = "index.html";
+              alert('회원가입 성공');
+              window.location.href = 'index.html';
             } else {
-              alert("회원가입 실패");
+              alert('회원가입 실패');
             }
           })
           .catch((error) => {
-            console.error("Error:", error);
+            console.error('Error:', error);
           });
       });
 
-      document.getElementById("back").addEventListener("click", () => {
-        window.location.href = "index.html";
+      document.getElementById('back').addEventListener('click', () => {
+        window.location.href = 'index.html';
       });
     </script>
   </body>

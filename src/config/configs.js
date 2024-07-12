@@ -1,7 +1,4 @@
-import dotEnv from "dotenv";
-import env from "../constants/env.constants.js";
-
-dotEnv.config();
+import env from '../constants/env.constants.js';
 
 const configs = {
   env: {
@@ -14,5 +11,4 @@ const configs = {
     jwtSecret: env.JWT_SECRET,
   },
 };
-
 export default configs;
