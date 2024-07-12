@@ -1,3 +1,7 @@
+import dotEnv from "dotenv";
+
+dotEnv.config();
+
 const envConstants = {
   JWT_SECRET: process.env.JWT_SECRET,
   SERVER_HOST: process.env.SERVER_HOST || "127.0.0.1",
