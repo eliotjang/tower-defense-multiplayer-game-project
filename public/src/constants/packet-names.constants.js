@@ -1,12 +1,11 @@
 import protoTypeNames from "./proto-type-names.constants.js";
 import packetTypes from "./packet-types.constants.js";
-import MatchFoundNotification from "../protobuf/classes/notification/match-found-notification.proto.js";
 
 const packetNames = {
   packet: {
-    request: protoTypeNames.REQUEST,
-    response: protoTypeNames.RESPONSE,
-    notification: protoTypeNames.NOTIFICATION,
+    request: protoTypeNames.request.NAME,
+    response: protoTypeNames.response.NAME,
+    notification: protoTypeNames.notification.NAME,
     // GamePacket: "GamePacket",
   },
   payload: {

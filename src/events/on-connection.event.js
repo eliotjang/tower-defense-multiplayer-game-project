@@ -1,7 +1,9 @@
+import { handleConnection } from '../handlers/helper.js';
 import onData from './on-data.event.js';
 import jwt from 'jsonwebtoken';
 import config from '../config/configs.js';
 import { addPlayers, findUserByUserName, getPlayers } from '../models/user.model.js';
+import { v4 as uuidv4 } from 'uuid';
 
 const onConnection = async (socket) => {
   try {

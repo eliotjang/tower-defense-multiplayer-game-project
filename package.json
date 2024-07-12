@@ -17,7 +17,7 @@
     "jsonwebtoken": "^9.0.2",
     "long": "^5.2.3",
     "mysql2": "^3.10.2",
-    "protobufjs": "^7.3.2",
+    "protobufjs": "7.3.2",
     "redis": "^4.6.15",
     "socket.io": "^4.7.5",
     "uuid": "^10.0.0"
