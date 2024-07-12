@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package request;
+
+message C2S_SignUpRequest {
+    string id = 1;
+    string password = 2;
+}
+
+message C2S_SignInRequest {
+    string id = 1;
+    string password = 2;
+}
+
+message C2S_MatchRequest {
+    string id = 1;
+		
+}
+
+message C2S_TowerPurchaseRequest {
+
+}
+
+message C2S_TowerAttackRequest {
+
+}
+
+message C2S_MonsterSpawnRequest {
+
+}
+
+message C2S_MonsterKillRequest {
+
+}
+
+message C2S_BaseAttackedRequest {
+
+}
+
+message C2S_GameEndRequest {
+    
+}
+
+message RequestPacket {
+    uint32 packetType = 1;
+    string token = 2;
+    string clientVersion = 3;
+    oneof payload {
+        C2S_SignUpRequest signUpRequest = 4;
+        C2S_SignInRequest signInRequest = 5;
+        C2S_MatchRequest matchRequest = 6;
+        C2S_TowerPurchaseRequest towerPurchaseRequest = 7;
+        C2S_TowerAttackRequest towerAttackRequest = 8;
+        C2S_MonsterSpawnRequest monsterSpawnRequest = 9;
+        C2S_MonsterKillRequest monsterKillRequest = 10;
+        C2S_BaseAttackedRequest baseAttackedRequest = 11;
+        C2S_GameEndRequest gameEndRequest = 12;
+    }
+}

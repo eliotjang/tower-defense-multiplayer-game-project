@@ -1,4 +1,4 @@
-import protoTypeNames from '../constants/proto-type-names.constants.js';
+import handlerMappings from "../constants/handler.constants.js";
 
 export const handleConnection = (socket, uuid) => {
   socket.emit('connection', { uuid });
@@ -11,5 +11,5 @@ export const handleDisconnect = (socket, uuid) => {
 };
 
 export const getHandlerByPacketType = (packetType) => {
-  return protoTypeNames[packetType]?.handler;
+  return handlerMappings[packetType]?.handler;
 };

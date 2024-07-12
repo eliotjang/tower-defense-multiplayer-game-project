@@ -33,7 +33,7 @@ export const loadProtoFiles = async () => {
     protoFiles.forEach((file) => root.loadSync(file));
 
     for (const [packetType, typeName] of Object.entries(protoTypeNames)) {
-      protoMessages[packetType] = root.lookupType(typeName);
+      protoMessages[typeName] = root.lookupType(typeName);
     }
 
     Object.freeze(protoMessages);

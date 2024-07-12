@@ -1,6 +1,7 @@
 class SignInPayload {
-  constructor() {
+  constructor(success, message, token, failCode) {
     // some init values
+    this.success = success;
   }
 }
 
