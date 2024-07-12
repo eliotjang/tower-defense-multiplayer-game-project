@@ -1,8 +1,9 @@
 //import { getGameAssets } from "../init/assets";
-import { getProtoMessages } from '../init/proto.init';
-import { towers } from '../models/tower.model';
+// import { getProtoMessages } from '../init/proto.init';
+import { towers, addTower } from '../models/tower.model.js';
+import { Tower } from '../../public/src/tower.js';
 
-export const purchaseTowerHandler = (socket, userId, packetType, payload) => {
+export const purchaseTowerHandler = (socket, userId, packetType, payload, io) => {
   /*
     에셋 사용한다면
   const {towerListData} = getGameAssets();
@@ -24,16 +25,22 @@ export const purchaseTowerHandler = (socket, userId, packetType, payload) => {
   }
     const { tower, userGold } = decodedPayload;
     */
-  console.log(packetType);
-  const { tower, userGold } = payload;
-  console.log(tower, userGold);
+  // console.log(packetType);
+  const { x, y, userGold, towerCost } = payload;
+  // console.log(tower, userGold);
+  const tower = new Tower(x, y, towerCost);
   if (tower.towerCost > userGold) {
     console.log('골드가 부족합니다');
-  } else {
-    console.log('서버에 타워 추가');
-    towers.push(tower);
-    userGold = userGold - tower.towerCost;
   }
-  socket.emit('data', { packetType, userGold, tower });
-  socket.broadcast.emit('data', { packetType: 11, tower });
+  let newUserGold = userGold - 50;
+  console.log('서버에 타워 추가');
+  towers.push(tower);
+  // console.log(towers);
+  // towers.addTower(userId, tower);
+  //userGold = userGold - tower.towerCost;
+  // console.log('여기');
+  // console.log(towers);
+
+  socket.emit('newTower', { packetType, newUserGold, x, y });
+  socket.broadcast.emit('targetNewTower', { packetType: 11, x, y });
 };

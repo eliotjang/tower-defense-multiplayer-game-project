@@ -26,7 +26,7 @@ let towerCost = 0; // 타워 구입 비용
 let monsterSpawnInterval = 0; // 몬스터 생성 주기
 
 // 유저 데이터
-let userGold = 0; // 유저 골드
+let userGold = 1000; // 유저 골드
 let base; // 기지 객체
 let baseHp = 0; // 기지 체력
 let monsterLevel = 0; // 몬스터 레벨
@@ -149,9 +149,10 @@ function placeNewTower() {
   }
 
   const { x, y } = getRandomPositionNearPath(200);
-  const tower = new Tower(x, y);
-  towers.push(tower);
-  tower.draw(ctx, towerImage);
+  // const tower = new Tower(x, y, towerCost);
+  sendEvent(10, { x, y, userGold, towerCost });
+  //towers.push(tower);
+  // tower.draw(ctx, towerImage);
 }
 
 function placeBase(position, isPlayer) {
@@ -296,7 +297,28 @@ Promise.all([
 
   // 패킷 타입을 확인하여 해당 핸들러에서 처리
   serverSocket.on('data', (data) => {
-    console.log(data.payload);
+    console.log(data);
+  });
+
+  serverSocket.on('newTower', (data) => {
+    //console.log(data);
+    const { packetType, newUserGold, x, y } = data;
+    if (packetType === 10) {
+      const tower = new Tower(x, y, towerCost);
+      userGold = newUserGold;
+      towers.push(tower);
+      tower.draw(ctx, towerImage);
+    }
+  });
+
+  serverSocket.on('targetNewTower', (data) => {
+    //console.log(data);
+    const { packetType, x, y } = data;
+    if (packetType === 11) {
+      const tower = new Tower(x, y, towerCost);
+      opponentTowers.push(tower);
+      tower.draw(opponentCtx, towerImage);
+    }
   });
 
   serverSocket.on('matchFound', (data) => {

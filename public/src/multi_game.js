@@ -2,14 +2,15 @@ import { Base } from './base.js';
 import { Monster } from './monster.js';
 import { Tower } from './tower.js';
 
-if (!localStorage.getItem("token")) {
-  alert("로그인이 필요합니다.");
-  location.href = "/login";
-}
+// if (!localStorage.getItem("token")) {
+//   alert("로그인이 필요합니다.");
+//   location.href = "/login";
+// }
 
 let serverSocket;
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+let sendEvent;
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
 const opponentCanvas = document.getElementById('opponentCanvas');
 const opponentCtx = opponentCanvas.getContext('2d');
@@ -25,7 +26,7 @@ let towerCost = 0; // 타워 구입 비용
 let monsterSpawnInterval = 0; // 몬스터 생성 주기
 
 // 유저 데이터
-let userGold = 0; // 유저 골드
+let userGold = 1000; // 유저 골드
 let base; // 기지 객체
 let baseHp = 0; // 기지 체력
 let monsterLevel = 0; // 몬스터 레벨
@@ -148,10 +149,10 @@ function placeNewTower() {
   }
 
   const { x, y } = getRandomPositionNearPath(200);
-  const tower = new Tower(x, y);
-  serverSocket.emit('event', { packetType: 10, token: 'token', clientVersion: '1.0.0', payload: { tower, userGold } });
-  towers.push(tower);
-  tower.draw(ctx, towerImage);
+  // const tower = new Tower(x, y, towerCost);
+  sendEvent(10, { x, y, userGold, towerCost });
+  //towers.push(tower);
+  // tower.draw(ctx, towerImage);
 }
 
 function placeBase(position, isPlayer) {
@@ -262,36 +263,82 @@ Promise.all([
   new Promise((resolve) => (pathImage.onload = resolve)),
   ...monsterImages.map((img) => new Promise((resolve) => (img.onload = resolve))),
 ]).then(() => {
-  serverSocket = io("http://127.0.0.1:5555", {
-    auth: {
-      token: localStorage.getItem("token"),
-    },
+  console.log('loading');
+  serverSocket = io('http://127.0.0.1:5555', {
+    // auth: {
+    //   token: localStorage.getItem('token'),
+    // },
   });
 
-  serverSocket.on("connect_error", (err) => {
-    if (err.message === "Authentication error") {
-      alert("잘못된 토큰입니다.");
-      location.href = "/login";
+  // 토큰과 클라이언트 버전 임의 생성
+  sendEvent = (packetType, payload) => {
+    serverSocket.emit('event', {
+      packetType,
+      token: 'token',
+      clientVersion: '1.0.0',
+      payload,
+    });
+  };
+
+  serverSocket.on('connect_error', (err) => {
+    if (err.message === 'Authentication error') {
+      alert('잘못된 토큰입니다.');
+      location.href = '/login';
     }
   });
 
-  serverSocket.on("connect", () => {
+  let userId;
+  serverSocket.on('connection', (data) => {
     // TODO. 서버와 연결되면 대결 대기열 큐 진입
     console.log('서버 연결 완료');
     userId = data.uuid;
-    // console.log(userData);
-    const canvasWidth = canvas.width;
     sendEvent(3, { timestamp: Date.now(), userId });
   });
 
   // 패킷 타입을 확인하여 해당 핸들러에서 처리
-  serverSocket.on("data", () => {
-    //
+  serverSocket.on('data', (data) => {
+    console.log(data);
   });
 
-  serverSocket.on("matchFound", (data) => {
+  serverSocket.on('newTower', (data) => {
+    //console.log(data);
+    const { packetType, newUserGold, x, y } = data;
+    if (packetType === 10) {
+      const tower = new Tower(x, y, towerCost);
+      userGold = newUserGold;
+      towers.push(tower);
+      tower.draw(ctx, towerImage);
+    }
+  });
+
+  serverSocket.on('targetNewTower', (data) => {
+    //console.log(data);
+    const { packetType, x, y } = data;
+    if (packetType === 11) {
+      const tower = new Tower(x, y, towerCost);
+      opponentTowers.push(tower);
+      tower.draw(opponentCtx, towerImage);
+    }
+  });
+
+  serverSocket.on('matchFound', (data) => {
+    console.log('matchFound');
     // 상대가 매치되면 3초 뒤 게임 시작
-    progressBarMessage.textContent = "게임이 3초 뒤에 시작됩니다.";
+    progressBarMessage.textContent = '게임이 3초 뒤에 시작됩니다.';
+
+    baseHp = 200;
+    for (const key in data.payload) {
+      if (key === userId) {
+        basePosition = data.payload[key].basePosition;
+        initialTowerCoords = data.payload[key].initialTowerCoords;
+        monsterPath = data.payload[key].monsterPath;
+        continue;
+      } else {
+        opponentBasePosition = data.payload[key].basePosition;
+        opponentInitialTowerCoords = data.payload[key].initialTowerCoords;
+        opponentMonsterPath = data.payload[key].monsterPath;
+      }
+    }
 
     let progressValue = 0;
     const progressInterval = setInterval(() => {

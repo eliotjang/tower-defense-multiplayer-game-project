@@ -1,4 +1,5 @@
 import { matchRequestHandler } from './game.handler.js';
+import { purchaseTowerHandler } from './tower.handler.js';
 
 const packetTypeMappings = {
   // 1: signUpHandler,
@@ -6,7 +7,7 @@ const packetTypeMappings = {
   3: matchRequestHandler,
   // 4: matchFoundHandler,
   // 5: stateSyncHandler,
-  // 10: purchaseTowerHandler,
+   10: purchaseTowerHandler,
   // 11: targetPurchaseTowerHandler,
   // 12: towerAttackHandler,
   // 13: targetTowerAttackHandler,
