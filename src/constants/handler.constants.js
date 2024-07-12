@@ -5,20 +5,17 @@ const dummyHandler = () => {
 };
 
 const handlerMappings = {
-  [packetTypes.SIGN_UP]: {
+  [packetTypes.SIGN_UP_REQUEST]: {
     handler: dummyHandler,
-    // request: "C2S_SignUpRequest", // ?
-    // response: "S2C_SignUpResponse",
   },
-  [packetTypes.SIGN_IN]: {
+  [packetTypes.SIGN_IN_REQUEST]: {
     handler: dummyHandler,
-    // request: "C2S_SignInRequest",
-    // response: "S2C_SignInResponse",
   },
-  [packetTypes.MATCH]: {
+  [packetTypes.MATCH_REQUEST]: {
     handler: dummyHandler,
-    // request: "C2S_MatchRequest",
-    // response: "S2C_MatchFound",
+  },
+  [packetTypes.BASE_ATTACKED_REQUEST]: {
+    handler: dummyHandler, // baseAttackHandler,
   },
 };
 

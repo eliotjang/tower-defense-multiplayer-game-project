@@ -12,7 +12,6 @@ const onConnection = (io) => async (socket) => {
 
   socket.on('event', onData(io, socket));
   // socket.on('disconnect', onDisconnect(socket));
-  //
 };
 
 export default onConnection;
