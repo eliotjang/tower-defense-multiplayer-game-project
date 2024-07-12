@@ -32,7 +32,7 @@ message S2C_LoginResponse {
 }
 
 // 클라이언트 -> 서버: 대결 신청 요청 패킷
-message C2S_matchRequest {
+message C2S_MatchRequest {
     string id = 1;
 		
 }
@@ -48,7 +48,7 @@ message S2C_MatchFound {
 			uint32 base_hp = 3;
 			uint32 monsterLevel = 4;
 			
-			repeated TowerCoordinates = 5;
+			repeated TowerCoordinates coords = 5;
 			message TowerCoordinates { // ??
 				uint32 x = 1;
 				uint32 y = 2;

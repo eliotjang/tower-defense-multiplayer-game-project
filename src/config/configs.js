@@ -13,6 +13,7 @@ const configs = {
     redisPassword: env.REDIS_PASSWORD,
     jwtSecret: env.JWT_SECRET,
   },
+  server: {},
 };
 
 export default configs;

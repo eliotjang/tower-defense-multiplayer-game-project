@@ -1,3 +1,7 @@
-export const handleConnection = (socket, userUUID) => {
-  socket.emit('connection', { uuid: userUUID });
+import protoTypeNames from '../constants/proto-type-names.constants.js';
+
+const handleConnection = (socket) => {};
+
+export const getHandlerByPacketType = (packetType) => {
+  return protoTypeNames[packetType]?.handler;
 };

@@ -38,6 +38,7 @@ export const loadGameAssets = async () => {
     //   // readFileAsync("monster_unlock.json"),
     // ]);
     // gameAssets = { game, monster, stage, tower, monster_unlock };
+    // console.log("게임 에셋 로드 성공");
     // return gameAssets;
   } catch (error) {
     throw new Error("Failed to load game assets: " + error.message);

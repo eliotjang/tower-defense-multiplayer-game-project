@@ -1,4 +1,4 @@
-import protoTypeNames from "../constants/packet-names.constants.js";
+import protoTypeNames from "../constants/proto-type-names.constants.js";
 import { getProtoMessages } from "../init/proto.init.js";
 
 export const serialize = (packetType, payload) => {
