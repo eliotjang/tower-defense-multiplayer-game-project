@@ -2,7 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import initSocket from "./init/socket.js";
 import { loadGameAssets, getGameAssets } from "./init/assets.js";
-import config from "./config/configs.js";
+import config from "./config/config.js";
 import initServer from "./init/init.js";
 
 const app = express();
