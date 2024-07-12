@@ -33,7 +33,7 @@ export const purchaseTowerHandler = (socket, userId, packetType, payload, io) =>
     console.log('골드가 부족합니다');
   }
   let newUserGold = userGold - 50;
-  console.log('서버에 타워 추가');
+  //console.log('서버에 타워 추가');
   towers.push(tower);
   // console.log(towers);
   // towers.addTower(userId, tower);
