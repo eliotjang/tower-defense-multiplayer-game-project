@@ -37,8 +37,6 @@ export const purchaseTowerHandler = (socket, userId, packetType, payload, io) =>
   towers.push(tower);
   // console.log(towers);
   // towers.addTower(userId, tower);
-  //userGold = userGold - tower.towerCost;
-  // console.log('여기');
   // console.log(towers);
 
   socket.emit('newTower', { packetType, newUserGold, x, y });
