@@ -2,10 +2,10 @@ import { Base } from './base.js';
 import { Monster } from './monster.js';
 import { Tower } from './tower.js';
 
-// if (!localStorage.getItem("token")) {
-//   alert("로그인이 필요합니다.");
-//   location.href = "/login";
-// }
+if (!localStorage.getItem('token2')) {
+  alert('로그인이 필요합니다.');
+  location.href = '/login';
+}
 
 let serverSocket;
 let sendEvent;
@@ -264,9 +264,9 @@ Promise.all([
 ]).then(() => {
   console.log('loading');
   serverSocket = io('http://127.0.0.1:5555', {
-    // auth: {
-    //   token: localStorage.getItem('token'),
-    // },
+    auth: {
+      token: localStorage.getItem('token2'),
+    },
   });
 
   // 토큰과 클라이언트 버전 임의 생성

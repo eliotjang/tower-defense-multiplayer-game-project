@@ -1,4 +1,4 @@
-const onDisconnect = (socket) => () => {
+const onDisconnect = (io, socket) => () => {
   //
 };
 
