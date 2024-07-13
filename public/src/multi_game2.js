@@ -9,6 +9,7 @@ import { Tower } from './tower.js';
 
 let serverSocket;
 let sendEvent;
+let userId;
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -150,7 +151,7 @@ function placeNewTower() {
 
   const { x, y } = getRandomPositionNearPath(200);
   // const tower = new Tower(x, y, towerCost);
-  sendEvent(10, { x, y, userGold, towerCost });
+  sendEvent(10, { x, y, userGold, userId, towerCost });
   //towers.push(tower);
   // tower.draw(ctx, towerImage);
 }
@@ -287,11 +288,11 @@ Promise.all([
     }
   });
 
-  let userId;
   serverSocket.on('connection', (data) => {
     // TODO. 서버와 연결되면 대결 대기열 큐 진입
     console.log('서버 연결 완료');
     userId = data.uuid;
+    console.log(userId);
     sendEvent(3, { timestamp: Date.now(), userId });
   });
 

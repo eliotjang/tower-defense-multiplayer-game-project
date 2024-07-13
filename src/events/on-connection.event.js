@@ -8,6 +8,7 @@ const onConnection = (io) => async (socket) => {
 
   // 아이디 임의 생성
   const id = uuidv4();
+  // console.log(id);
   handleConnection(socket, id);
 
   socket.on('event', onData(io, socket));

@@ -1,4 +1,4 @@
-export const towers = [];
+export const towers = {};
 
 export const addTower = (uuid, tower) => {
     if (!towers[uuid]) {

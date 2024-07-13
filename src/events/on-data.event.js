@@ -2,7 +2,7 @@ import { getProtoMessages } from '../init/proto.init.js';
 import { getHandlerByPacketType } from '../handlers/helper.js';
 import { matchRequestHandler } from '../handlers/game.handler.js';
 import packetTypeMappings from '../handlers/packetTypeMapping.js';
-import { deserializeRequest } from "../utils/packet-serializer.utils.js";
+import { deserializeRequest } from '../utils/packet-serializer.utils.js';
 
 let userId;
 
@@ -11,9 +11,9 @@ const onData = (io, socket) => async (data) => {
     // const decoded = deserializeRequest(data);
     // const { packetType, token, clientVersion, payload } = decoded;
     const { packetType, clientVersion, payload } = data;
-    
+
     // token 검증?
-    
+
     // clientVersion 검증
     // verifyClientVersion(clientVersion);
 
@@ -32,6 +32,9 @@ const onData = (io, socket) => async (data) => {
 
     // 유저 아이디 임시 저장
     if (packetType === 3) {
+      userId = payload.userId;
+    }
+    if (packetType === 10) {
       userId = payload.userId;
     }
     // handler 실행
