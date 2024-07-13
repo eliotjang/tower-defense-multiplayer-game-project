@@ -1,3 +1,8 @@
+import packetNames from '../constants/packet-names.constants.js';
+import packetTypes from '../constants/packet-types.constants.js';
+import Notification from '../protobuf/classes/notification/notification.proto.js';
+import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
+
 const userQueue = [];
 const userDataQueue = [];
 const numOfInitialTowers = 3;
@@ -5,7 +10,7 @@ const canvasWidth = 1920;
 const canvasHeight = 1080;
 
 export const matchRequestHandler = async (socket, userId, packetType, payload, io) => {
-  // console.log('matchRequestHandler');
+  console.log('matchRequestHandler');
   const { timestamp } = payload;
 
   const monsterPath = generateRandomMonsterPath();
@@ -35,12 +40,20 @@ export const matchRequestHandler = async (socket, userId, packetType, payload, i
 const matchFound = async (io, userId) => {
   console.log('matchFound');
 
-  let payload = {};
-  payload[userQueue.pop()] = userDataQueue.pop();
-  payload[userQueue.pop()] = userDataQueue.pop();
+  let payload = new Map();
+  payload.set(userQueue.pop(), userDataQueue.pop());
+  payload.set(userQueue.pop(), userDataQueue.pop());
 
+  console.log(payload);
+  console.log(payload.monsterPath);
+
+  const packetType = packetTypes.MATCH_FOUND_NOTIFICATION;
+  const notificationPacket = new Notification('matchFound 임시 메세지', payload);
   // 대결 시작 (통지 패킷)
-  io.emit('matchFound', { packetType: 5, token: 'token', clientVersion: '1.0.0', payload });
+
+  const packet = serialize(packetType, notificationPacket);
+  // console.log('decoded: ', deserialize(packet)); // 역직렬화 테스트
+  io.emit('event', packet);
 };
 
 function generateRandomMonsterPath() {

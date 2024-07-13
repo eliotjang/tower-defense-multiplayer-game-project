@@ -1,7 +1,6 @@
 import { Base } from '../base.js';
 import { Monster } from '../monster.js';
 import { Tower } from '../tower.js';
-import { serialize } from '../utils/packet-serializer.js';
 
 const gameConstants = {
   NUM_OF_MONSTERS: 5,
@@ -42,10 +41,10 @@ class Game {
 
   initGameComponents() {
     this.canvas = document.getElementById('gameCanvas');
-    this.ctx = canvas.getContext('2d');
+    this.ctx = this.canvas.getContext('2d');
 
     this.opponentCanvas = document.getElementById('opponentCanvas');
-    this.opponentCtx = opponentCanvas.getContext('2d');
+    this.opponentCtx = this.opponentCanvas.getContext('2d');
 
     this.progressBarContainer = document.getElementById('progressBarContainer');
     this.progressBarMessage = document.getElementById('progressBarMessage');
@@ -65,7 +64,7 @@ class Game {
     this.buyTowerButton.style.cursor = 'pointer';
     this.buyTowerButton.style.display = 'none';
 
-    this.buyTowerButton.addEventListener('click', placeNewTower);
+    this.buyTowerButton.addEventListener('click', this.placeNewTower);
   }
 
   initGameData() {
@@ -304,25 +303,6 @@ class Game {
     this.gameLoop(); // 게임 루프 최초 실행
     this.isInitGame = true;
   }
-
-  sendEventProto = (packetType, payload) => {
-    // 소켓 없으면 에러
-    if (!this.socket) {
-      console.error('multi_game.js: 소켓이 없습니다.');
-      return;
-    }
-
-    // 프로토콜 버퍼 적용된 sendEvent
-    const requestData = {
-      token: 'token',
-      clientVersion: '1.0.0',
-      payload,
-    };
-
-    const packet = serialize(packetType, requestData, true);
-
-    this.socket.emit('event', packet);
-  };
 }
 
 export default Game;

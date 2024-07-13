@@ -2,21 +2,12 @@ syntax = "proto3";
 
 // 서버 -> 클라이언트: 회원가입 응답 패킷
 message S2C_SignUpResponse {
-    bool success = 1; // true = 성공, false = 실패
-    string message = 2; // 성공/실패 출력 메세지 
-    uint32 fail_code = 3;
-    // GlobalFailCode fail_code = 3;
-    // 추후 code 번호 외에 추가로 보내야할 소요가 생기면 클래스 생성
+    
 }
 
 // 서버 -> 클라이언트: 로그인 응답 패킷
 message S2C_SignInResponse {
-    bool success = 1; // true = 성공, false = 실패
-    string message = 2; // 성공/실패 시 출력 될 메세지 
-    string token = 3; // 성공 시 발급되는 JWT 토큰
-    uint32 fail_code = 4;
-    // GlobalFailCode fail_code = 4;
-    // 추후 code 번호 외에 추가로 보내야할 소요가 생기면 클래스 생성
+    string token = 1; // 성공 시 발급되는 JWT 토큰
 }
 
 message S2C_TowerPurchaseResponse {
@@ -40,9 +31,9 @@ message S2C_BaseAttackedResponse {
 }
 
 message ResponsePacket {
-    bool success = 1;
-    uint32 failCode = 2;
-    string message = 3;
+    bool success = 1; // true = 성공, false = 실패
+    string message = 2; // 성공/실패 출력 메세지
+    uint32 failCode = 3; // GlobalFailCode fail_code = 4;
     oneof payload {
         S2C_SignUpResponse signUpResponse = 4;
         S2C_SignInResponse signInResponse = 5;
