@@ -76,16 +76,12 @@
       <button id="registerButton">회원가입</button>
       <button id="loginButton">로그인</button>
       <button id="loginButton2">로그인2 (로컬에서 2인 테스트 할 때 사용)</button>
-      <button id="loginButton2">로그인2 (로컬에서 2인 테스트 할 때 사용)</button>
       <button id="matchButton">다른 유저와 대결하기</button>
-      <button id="matchButton2">다른 유저와 대결하기2 (로컬에서 2인 테스트 할 때 사용)</button>
       <button id="matchButton2">다른 유저와 대결하기2 (로컬에서 2인 테스트 할 때 사용)</button>
     </div>
     <div id="progressBarContainer">
       <h1 id="progressBarMessage" style="color: white">대결 상대를 탐색중입니다!</h1>
-      <h1 id="progressBarMessage" style="color: white">대결 상대를 탐색중입니다!</h1>
       <div class="loader"></div>
-      <progress id="progressBar" max="100" value="0" style="display: none"></progress>
       <progress id="progressBar" max="100" value="0" style="display: none"></progress>
     </div>
     <canvas id="gameCanvas" width="1500" height="680"></canvas>
@@ -93,9 +89,6 @@
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/protobufjs@7.3.2/dist/protobuf.min.js"></script>
     <script type="module">
-      document.getElementById('registerButton').addEventListener('click', () => {
-        window.location.href = 'register.html';
-      });
       document.getElementById('registerButton').addEventListener('click', () => {
         window.location.href = 'register.html';
       });

@@ -1,6 +1,6 @@
-import { loadProtoFiles } from "./proto.init.js";
+import { loadProtoFiles } from './proto.init.js';
 // import { loadGameAssets } from "./assets.js";
-import initSocket from "./socket.js";
+import initSocket from './socket.js';
 
 const initServer = async (server) => {
   try {
