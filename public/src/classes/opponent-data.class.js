@@ -12,8 +12,15 @@ class OpponentData {
     OpponentData.instance = this;
   }
 
+  /**
+   *
+   * @returns {OpponentData} singleton instance
+   */
   static getInstance() {
-    return OpponentData.instance;
+    if (OpponentData.instance) {
+      return OpponentData.instance;
+    }
+    return new OpponentData();
   }
 }
 
