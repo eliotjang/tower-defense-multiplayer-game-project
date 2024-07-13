@@ -1,6 +1,7 @@
 //import { getGameAssets } from "../init/assets";
 // import { getProtoMessages } from '../init/proto.init';
-import { towers, addTower } from '../models/tower.model.js';
+import configs from '../config/configs.js';
+import { towers, addTower, redisAddTower } from '../models/tower.model.js';
 
 export const purchaseTowerHandler = (socket, userId, packetType, payload, io) => {
   /*
@@ -8,6 +9,7 @@ export const purchaseTowerHandler = (socket, userId, packetType, payload, io) =>
   에셋 사용하면 타워도 검증?
   역직렬화, 직렬화 코드 추가
   */
+  const redisClient = redis.createClient(configs.env.redisHost, configs.env.redisPort);
   const { x, y, userGold, towerCost } = payload;
   const tower = { x, y };
   if (towerCost > userGold) {
@@ -17,6 +19,7 @@ export const purchaseTowerHandler = (socket, userId, packetType, payload, io) =>
   //console.log('서버에 타워 추가');
   // console.log(userId);
   addTower(userId, tower);
+  redisAddTower(userId, tower);
   console.log(`${userId}님 타워 추가`);
   // console.log(towers);
 
