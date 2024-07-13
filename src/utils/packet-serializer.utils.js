@@ -58,7 +58,7 @@ const serializers = {
 };
 
 /**
- * 패킷을 역직렬화하는 함수. 받은 데이터를 그대로 넣어주면 된다.
+ * 패킷의 페이로드를 역직렬화하고 반환하는 함수. 받은 데이터를 그대로 넣어주면 된다.
  * @param {Object} packet packet received
  * @returns deserialied packet payload
  */
