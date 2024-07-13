@@ -1,7 +1,4 @@
-import dotEnv from "dotenv";
 import env from "../constants/env.constants.js";
-
-dotEnv.config();
 
 const configs = {
   env: {
@@ -12,6 +9,9 @@ const configs = {
     redisUsername: env.REDIS_USERNAME,
     redisPassword: env.REDIS_PASSWORD,
     jwtSecret: env.JWT_SECRET,
+  },
+  client: {
+    clientVersion: "1.0.0",
   },
   server: {},
 };
