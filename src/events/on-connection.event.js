@@ -12,8 +12,7 @@ const onConnection = (io) => async (socket) => {
   const password = '1234';
   const userId = uuidv4();
   const uuid = uuidv4();
-  const token =
-    'Bearauthorization=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOjEwLCJpYXQiOjE3MTc2NzM0ODF9.hLUf94PBDhrz6joCSpwU_9n0FPH09Nf9xwPXYHLnkek';
+  const token = '임시 생성 토큰';
 
   let userDB = await findUserByUserId(userId);
   if (!userDB) {
