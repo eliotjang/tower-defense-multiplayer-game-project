@@ -1,6 +1,6 @@
 import packetTypes from '../constants/packet-types.constants.js';
-import loadGame from '../init/game-loader.init.js';
-import init from '../init/init.js';
+import loadGame from './game-loader.init.js';
+import init from './init.js';
 import Socket from '../socket.js';
 
 init();
