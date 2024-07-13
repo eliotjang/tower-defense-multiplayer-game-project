@@ -89,30 +89,30 @@
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/protobufjs@7.3.2/dist/protobuf.min.js"></script>
     <script type="module">
-      document.getElementById("registerButton").addEventListener("click", () => {
-        window.location.href = "register.html";
+      import('./src/init/init.js');
+      document.getElementById('registerButton').addEventListener('click', () => {
+        window.location.href = 'register.html';
       });
 
-      document.getElementById("loginButton").addEventListener("click", () => {
-        window.location.href = "login.html";
+      document.getElementById('loginButton').addEventListener('click', () => {
+        window.location.href = 'login.html';
       });
 
-      document.getElementById("loginButton2").addEventListener("click", () => {
-        window.location.href = "login2.html";
+      document.getElementById('loginButton2').addEventListener('click', () => {
+        window.location.href = 'login2.html';
       });
 
-      document.getElementById("matchButton").addEventListener("click", () => {
-        document.querySelector(".button-container").style.display = "none";
-        document.getElementById("progressBarContainer").style.display = "block";
-        import("./src/init.js");
-        import("./src/multi_game.js");
+      document.getElementById('matchButton').addEventListener('click', () => {
+        document.querySelector('.button-container').style.display = 'none';
+        document.getElementById('progressBarContainer').style.display = 'block';
+
+        import('./src/multi_game.js');
       });
 
-      document.getElementById("matchButton2").addEventListener("click", () => {
-        document.querySelector(".button-container").style.display = "none";
-        document.getElementById("progressBarContainer").style.display = "block";
-        import("./src/init.js");
-        import("./src/multi_game2.js");
+      document.getElementById('matchButton2').addEventListener('click', () => {
+        document.querySelector('.button-container').style.display = 'none';
+        document.getElementById('progressBarContainer').style.display = 'block';
+        import('./src/multi_game2.js');
       });
     </script>
   </body>
