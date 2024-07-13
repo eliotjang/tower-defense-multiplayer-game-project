@@ -1,7 +1,7 @@
 class MatchFoundNotification {
-  constructor() {
+  constructor(data) {
     //
-    this.timestamp = Date.now();
+    this.data;
   }
 }
 
