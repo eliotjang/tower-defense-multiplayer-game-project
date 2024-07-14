@@ -3,6 +3,8 @@ class UserData {
     if (UserData.instance) {
       return UserData.instance;
     }
+    this.userId = null;
+
     this.userGold = 0; // 유저 골드
     this.base = null; // 기지 객체
     this.baseHp = 0; // 기지 체력
@@ -17,8 +19,15 @@ class UserData {
     UserData.instance = this;
   }
 
+  /**
+   *
+   * @returns {UserData} singleton instance
+   */
   static getInstance() {
-    return UserData.instance;
+    if (UserData.instance) {
+      return UserData.instance;
+    }
+    return new UserData();
   }
 }
 

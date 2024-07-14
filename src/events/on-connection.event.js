@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const onConnection = (io) => async (socket) => {
   console.log('onConnection'); // 디버깅 콘솔 로그
+  // console.log(socket.handshake.auth.userId);
   // jwt verify
 
   // 아이디 임의 생성

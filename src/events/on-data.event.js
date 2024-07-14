@@ -1,49 +1,57 @@
-import { getProtoMessages } from '../init/proto.init.js';
 import { getHandlerByPacketType } from '../handlers/helper.js';
-import { matchRequestHandler } from '../handlers/game.handler.js';
-import packetTypeMappings from '../handlers/packetTypeMapping.js';
-import { deserializeRequest } from '../utils/packet-serializer.utils.js';
+import { deserialize } from '../utils/packet-serializer.utils.js';
+import configs from '../config/configs.js';
+import packetTypes from '../constants/packet-types.constants.js';
 
 let userId;
 
 const onData = (io, socket) => async (data) => {
   try {
-    // const decoded = deserializeRequest(data);
-    // const { packetType, token, clientVersion, payload } = decoded;
-    const { packetType, clientVersion, payload } = data;
+    const decoded = deserialize(data);
+    const packetType = data.packetType;
+    const { token, clientVersion } = decoded;
+    // const { packetType, clientVersion, payload } = data;
 
     // token 검증?
+    verifyToken(token);
 
     // clientVersion 검증
-    // verifyClientVersion(clientVersion);
+    verifyClientVersion(clientVersion);
+
+    // 유저 아이디 임시 저장
+    if (packetType === packetTypes.MATCH_REQUEST) {
+      userId = token.userId; // payload.userId;
+    }
 
     // packetType으로 handler 찾기
-    // const handler = getHandlerByPacketType(packetType);
+    const handler = getHandlerByPacketType(packetType);
 
     // 핸들러 임시 핸들링
-    const handler = packetTypeMappings[packetType];
+    // const handler = packetTypeMappings[packetType];
+
     if (!handler) {
       throw new Error('유효하지 않은 핸들러');
     }
-
-    if (!handler) {
-      // 핸들러 없음 (error)
-    }
-
-    // 유저 아이디 임시 저장
-    if (packetType === 3) {
-      userId = payload.userId;
-    }
+    console.log('packetType:', packetType, '  handler:', handler);
     // handler 실행
-    await handler(socket, userId, packetType, payload, io);
+    await handler(socket, userId, packetType, decoded, io);
   } catch (err) {
-    console.error(err); // 임시
+    console.error('onData:', err); // 임시
     // handleError(socket, err);
   }
 };
 
+const verifyToken = (token) => {
+  // 토큰 검증
+  // 실패 시 에러 발생
+};
+
 const verifyClientVersion = (clientVersion) => {
-  //
+  // 클라이언트 버전 검증
+  if (clientVersion !== configs.client.clientVersion) {
+    // 실패 시 에러 발생
+    throw new Error('클라이언트 버전 검증 실패');
+  }
 };
 
 export default onData;

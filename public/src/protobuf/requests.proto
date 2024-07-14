@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package request;
-
 message C2S_SignUpRequest {
     string id = 1;
     string password = 2;
@@ -13,8 +11,7 @@ message C2S_SignInRequest {
 }
 
 message C2S_MatchRequest {
-    string id = 1;
-		
+    uint64 timestamp = 1;
 }
 
 message C2S_TowerPurchaseRequest {
@@ -42,18 +39,17 @@ message C2S_GameEndRequest {
 }
 
 message RequestPacket {
-    uint32 packetType = 1;
-    string token = 2;
-    string clientVersion = 3;
+    string token = 1;
+    string clientVersion = 2;
     oneof payload {
-        C2S_SignUpRequest signUpRequest = 4;
-        C2S_SignInRequest signInRequest = 5;
-        C2S_MatchRequest matchRequest = 6;
-        C2S_TowerPurchaseRequest towerPurchaseRequest = 7;
-        C2S_TowerAttackRequest towerAttackRequest = 8;
-        C2S_MonsterSpawnRequest monsterSpawnRequest = 9;
-        C2S_MonsterKillRequest monsterKillRequest = 10;
-        C2S_BaseAttackedRequest baseAttackedRequest = 11;
-        C2S_GameEndRequest gameEndRequest = 12;
+        C2S_SignUpRequest signUpRequest = 3;
+        C2S_SignInRequest signInRequest = 4;
+        C2S_MatchRequest matchRequest = 5;
+        C2S_TowerPurchaseRequest towerPurchaseRequest = 6;
+        C2S_TowerAttackRequest towerAttackRequest = 7;
+        C2S_MonsterSpawnRequest monsterSpawnRequest = 8;
+        C2S_MonsterKillRequest monsterKillRequest = 9;
+        C2S_BaseAttackedRequest baseAttackedRequest = 10;
+        C2S_GameEndRequest gameEndRequest = 11;
     }
 }
