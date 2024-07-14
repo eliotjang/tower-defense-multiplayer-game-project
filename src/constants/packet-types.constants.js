@@ -1,5 +1,3 @@
-import protoTypeNames from "./proto-type-names.constants.js";
-
 const packetTypes = {
   SIGN_UP_REQUEST: 1,
   SIGN_UP_RESPONSE: 2,
@@ -33,18 +31,5 @@ const packetTypes = {
 
   CHAT: 40,
 };
-
-const packetMessageTypeNames = Object.fromEntries(
-  Object.entries(packetTypes).map(([key, value]) => {
-    if (key.endsWith("RESPONSE")) {
-      return [value, protoTypeNames.RESPONSE];
-    } else if (key.endsWith("REQUEST")) {
-      return [value, protoTypeNames.REQUEST];
-    }
-    return [value, protoTypeNames.NOTIFICATION];
-  }),
-);
-
-export const getMessageNameByPacketType = (packetType) => packetMessageTypeNames[packetType];
 
 export default packetTypes;
