@@ -1,5 +1,5 @@
 import packetTypes from '../constants/packet-types.constants.js';
-import Game from '../classes/game.class.js';
+import Game from '../game.js';
 import Socket from '../socket.js';
 
 const loadGame = (loginNumber) => {
