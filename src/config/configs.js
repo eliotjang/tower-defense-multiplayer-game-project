@@ -1,4 +1,5 @@
-import env from "../constants/env.constants.js";
+import constants from '../constants/constants.js';
+import env from '../constants/env.constants.js';
 
 const configs = {
   env: {
@@ -11,7 +12,8 @@ const configs = {
     jwtSecret: env.JWT_SECRET,
   },
   client: {
-    clientVersion: "1.0.0",
+    clientVersion: '1.0.0',
+    index: constants.INDEX_PATH,
   },
   server: {},
 };
