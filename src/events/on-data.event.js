@@ -3,7 +3,7 @@ import { deserialize } from '../utils/packet-serializer.utils.js';
 import configs from '../config/configs.js';
 import packetTypes from '../constants/packet-types.constants.js';
 
-const onData = (io, socket, uuid) => async (data) => {
+const onData = (io, socket) => async (data) => {
   try {
     const decoded = deserialize(data, true);
     const packetType = data.packetType;
@@ -25,7 +25,7 @@ const onData = (io, socket, uuid) => async (data) => {
     }
     console.log('packetType:', packetType, '  handler:', handler);
     // handler 실행
-    await handler(socket, uuid, packetType, payload, io);
+    await handler(socket, null, packetType, payload, io);
   } catch (err) {
     console.error('onData:', err); // 임시
     // handleError(socket, err);

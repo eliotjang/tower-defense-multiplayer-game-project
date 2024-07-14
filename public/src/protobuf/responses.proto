@@ -8,6 +8,7 @@ message S2C_SignUpResponse {
 // 서버 -> 클라이언트: 로그인 응답 패킷
 message S2C_SignInResponse {
     string token = 1; // 성공 시 발급되는 JWT 토큰
+    string userId = 2;
 }
 
 message S2C_TowerPurchaseResponse {

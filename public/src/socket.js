@@ -24,9 +24,9 @@ class Socket {
     this.socket = io(url);
 
     this.socket.on('connection', (data) => {
-      console.log('data.uuid : ', data.uuid);
-      const game = new Game(this.socket);
-      game.userId = data.uuid;
+      // console.log('data.uuid : ', data.uuid);
+      // const game = new Game(this.socket);
+      // game.userId = data.uuid;
     });
     this.socket.on('event', onEvent(this.socket));
     this.socket.on('error', () => {});
