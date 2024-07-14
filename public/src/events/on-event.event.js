@@ -7,6 +7,7 @@ const onEvent = (socket) => async (data) => {
     data.packet = new Uint8Array(data.packet);
     const packetType = data.packetType;
     const packet = deserialize(data, true);
+    const { timestamp, message, payload } = packet;
 
     // packetType으로 매핑된 핸들러 찾기
     const handler = getHandlerByPacketType(packetType);
@@ -16,7 +17,7 @@ const onEvent = (socket) => async (data) => {
       throw new Error('핸들러가 존재하지 않습니다.');
     }
 
-    await handler(socket, packetType, packet); // 임시, 필요한 인자 추가 예정
+    await handler({ socket, packetType, payload }); // 임시, 필요한 인자 추가 예정
   } catch (err) {
     console.error(err); // 임시
   }

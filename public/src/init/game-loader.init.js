@@ -7,7 +7,8 @@ const loadGame = (loginNumber) => {
   if (!socket) {
     console.error('game-loader.js: 소켓이 없습니다.');
   } else {
-    new Game(socket);
+    const game = new Game(socket);
+
     const packet = { timestamp: Date.now(), userId: Game.getInstance().userId };
     Socket.sendEventProto(packetTypes.MATCH_REQUEST, packet, `token${loginNumber ? loginNumber : ''}`);
     // Game.getInstance().socket.sendEventProto(

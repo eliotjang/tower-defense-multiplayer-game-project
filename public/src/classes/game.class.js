@@ -122,8 +122,8 @@ class Game {
 
   initMap() {
     this.ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height); // 배경 이미지 그리기
-    drawPath(this.monsterPath, ctx);
-    drawPath(this.opponentMonsterPath, this.opponentCtx);
+    this.drawPath(this.monsterPath, this.ctx);
+    this.drawPath(this.opponentMonsterPath, this.opponentCtx);
     placeInitialTowers(this.initialTowerCoords, this.towers, this.ctx); // 초기 타워 배치
     placeInitialTowers(this.opponentInitialTowerCoords, this.opponentTowers, this.opponentCtx); // 상대방 초기 타워 배치
     placeBase(this.basePosition, true);
@@ -223,8 +223,8 @@ class Game {
 
   gameLoop() {
     // 렌더링 시에는 항상 배경 이미지부터 그려야 합니다! 그래야 다른 이미지들이 배경 이미지 위에 그려져요!
-    ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height); // 배경 이미지 다시 그리기
-    drawPath(this.monsterPath, this.ctx); // 경로 다시 그리기
+    this.ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height); // 배경 이미지 다시 그리기
+    this.drawPath(this.monsterPath, this.ctx); // 경로 다시 그리기
 
     this.ctx.font = '25px Times New Roman';
     this.ctx.fillStyle = 'skyblue';
@@ -270,7 +270,7 @@ class Game {
 
     // 상대방 게임 화면 업데이트
     this.opponentCtx.drawImage(this.backgroundImage, 0, 0, this.opponentCanvas.width, this.opponentCanvas.height);
-    drawPath(this.opponentMonsterPath, this.opponentCtx); // 상대방 경로 다시 그리기
+    this.drawPath(this.opponentMonsterPath, this.opponentCtx); // 상대방 경로 다시 그리기
 
     this.opponentTowers.forEach((tower) => {
       tower.draw(this.opponentCtx, this.towerImage);
@@ -296,7 +296,7 @@ class Game {
     this.bgm.volume = 0;
     this.bgm.play();
 
-    initMap(); // 맵 초기화 (배경, 몬스터 경로 그리기)
+    this.initMap(); // 맵 초기화 (배경, 몬스터 경로 그리기)
 
     this.monsterSpawnInterval = 3000;
     setInterval(this.spawnMonster.bind(this), this.monsterSpawnInterval); // 설정된 몬스터 생성 주기마다 몬스터 생성

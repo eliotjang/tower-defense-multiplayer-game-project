@@ -36,7 +36,7 @@ const onConnection = (io) => async (socket) => {
 
   handleConnection(socket, userDB.uuid);
 
-  socket.on('event', onData(io, socket));
+  socket.on('event', onData(io, socket, uuid));
   // socket.on('disconnect', onDisconnect(socket));
 };
 

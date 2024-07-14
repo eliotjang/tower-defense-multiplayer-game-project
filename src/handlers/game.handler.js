@@ -42,22 +42,30 @@ export const matchRequestHandler = async (socket, uuid, packetType, payload, io)
 
 const matchFound = async (io, uuid) => {
   console.log('matchFound');
-  
-  await gameRedis.createGameData(uuid, userGold, baseHp);
-  // const gameRD = await gameRedis.getGameData(uuid);
-  // console.log(gameRD);
 
-  let payload = new Map();
-  payload.set(userQueue.pop(), userDataQueue.pop());
-  payload.set(userQueue.pop(), userDataQueue.pop());
+  let payload = {};
+  payload[userQueue.pop()] = userDataQueue.pop();
+  payload[userQueue.pop()] = userDataQueue.pop();
+
+  console.log(payload);
+
+  for (const key in payload) {
+    await gameRedis.createGameData(key, userGold, baseHp);
+    // const gameRD = await gameRedis.getGameData(key);
+    // console.log(gameRD);
+  }
 
   const resPacketType = packetTypes.MATCH_FOUND_NOTIFICATION;
-  const notificationPacket = new NotificationPacket('matchFound 임시 메세지', payload);
-  // 대결 시작 (통지 패킷)
+  const notificationPacket = new NotificationPacket('대결을 시작합니다!', payload);
 
   const packet = serialize(resPacketType, notificationPacket);
-  // console.log('decoded: ', deserialize(packet)); // 역직렬화 테스트
+  const decoded = deserialize(packet, true);
+  {
+    const { timestamp, message, payload } = decoded;
+    console.log(payload);
+  }
 
+  // 대결 시작 (통지 패킷)
   io.emit('event', packet);
 };
 
