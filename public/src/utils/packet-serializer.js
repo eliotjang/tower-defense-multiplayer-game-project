@@ -62,13 +62,27 @@ const serializers = {
 
 /**
  * 패킷의 페이로드를 역직렬화하고 반환하는 함수. 받은 데이터를 그대로 넣어주면 된다.
- * @param {Object} packet packet received
+ * @param {Object} data 수신한 데이터
+ * @param {boolean} sanitize payload의 key를 'payload'로 변환
  * @returns deserialied packet payload
  */
-export const deserialize = (data) => {
+export const deserialize = (data, sanitize) => {
   const { packetType, packet } = data;
   const MessageType = getProtoMessages()[getMessageNameByPacketType(packetType)];
   const deserialized = MessageType.decode(packet);
+
+  if (sanitize) {
+    const payloadKeyName = getPayloadKeyNameByPacketType(packetType);
+    const sanitized = Object.fromEntries(
+      Object.entries(deserialized).map(([key, value]) => {
+        if (key === payloadKeyName) {
+          return ['payload', value];
+        }
+        return [key, value];
+      })
+    );
+    return sanitized;
+  }
 
   return deserialized;
 };
