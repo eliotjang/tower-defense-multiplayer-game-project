@@ -13,9 +13,7 @@ import { getProtoMessages } from '../protobuf/load-proto.js';
  * @returns serialized payload (Buffer), or object in the form of { packetType, payload } if 'withHeader' is true.
  */
 export const serialize = (packetType, payloadData, withHeader) => {
-  console.log(serializers);
   const serializer = serializers[getMessageNameByPacketType(packetType)];
-  console.log(serializer);
   const encoded = serializer(packetType, payloadData);
 
   return withHeader ? { packetType, packet: encoded } : encoded;
