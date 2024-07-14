@@ -29,6 +29,7 @@ const serializeRequest = (packetType, { token, clientVersion, payload }) => {
     clientVersion,
     [getPayloadKeyNameByPacketType(packetType)]: payload,
   };
+  verifyPacket(RequestPacket, payloadData);
   const serialized = RequestPacket.encode(payloadData).finish();
   return serialized;
 };
@@ -41,6 +42,7 @@ const serializeResponse = (packetType, { success, failCode, message, payload }) 
     message,
     [getPayloadKeyNameByPacketType(packetType)]: payload,
   };
+  verifyPacket(ResponsePacket, payloadData);
   const serialized = ResponsePacket.encode(payloadData).finish();
   return serialized;
 };
@@ -52,7 +54,7 @@ const serializeNotification = (packetType, { timestamp, message, payload }) => {
     message,
     [getPayloadKeyNameByPacketType(packetType)]: payload,
   };
-
+  verifyPacket(NotificationPacket, payloadData);
   const serialized = NotificationPacket.encode(payloadData).finish();
   return serialized;
 };
@@ -106,4 +108,11 @@ const deserializeNotification = (packet) => {
   const NotificationPacket = getProtoMessages()[packetNames.NOTIFICATION];
   const deserialized = NotificationPacket.decode(packet);
   return deserialized;
+};
+
+const verifyPacket = (MessageType, payloadData) => {
+  const message = MessageType.verify(payloadData);
+  if (message) {
+    throw new Error(`Error | 직렬화 에러: ${message}`);
+  }
 };

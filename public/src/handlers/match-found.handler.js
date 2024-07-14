@@ -1,4 +1,4 @@
-import Game from '../classes/game.class.js';
+import Game from '../game.js';
 
 const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
   console.log('matchFoundHandler');
