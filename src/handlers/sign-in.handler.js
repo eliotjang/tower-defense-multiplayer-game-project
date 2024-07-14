@@ -1,4 +1,5 @@
 import packetTypes from '../constants/packet-types.constants.js';
+import ResponsePacket from '../protobuf/classes/response/response.proto.js';
 import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
 
 const signInHandler = (socket, userId, packetType, payload, io) => {
@@ -7,15 +8,17 @@ const signInHandler = (socket, userId, packetType, payload, io) => {
   // sign JWT token
   const signedToken = 'token';
 
-  // create packet
-  const data = {
-    success: true,
-    message: '로그인 성공',
-    failCode: 0,
-    payload: { token: signedToken },
-  };
+  // 패킷 생성
+  // const data = {
+  //   success: true,
+  //   message: '로그인 성공',
+  //   failCode: 0,
+  //   payload: { token: signedToken },
+  // };
 
-  const packet = serialize(packetTypes.SIGN_IN_RESPONSE, data, true);
+  const data = new ResponsePacket(0, '로그인 성공', { token: signedToken });
+
+  const packet = serialize(packetTypes.SIGN_IN_RESPONSE, data);
   console.log(deserialize(packet)); // 테스트용 역직렬화
   // console.log(packet.packet.constructor.name);
   socket.emit('event', packet);

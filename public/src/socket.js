@@ -41,6 +41,19 @@ class Socket {
     });
   }
 
+  static sendEventProto(packetType, payload, token) {
+    // 프로토콜 버퍼 적용된 sendEvent
+    const requestData = {
+      token: token ?? 'token',
+      clientVersion: '1.0.0',
+      payload,
+    };
+
+    const packet = serialize(packetType, requestData);
+
+    Socket.getInstance().socket.emit('event', packet);
+  }
+
   sendEventProto(packetType, payload, token) {
     // 프로토콜 버퍼 적용된 sendEvent
     const requestData = {
@@ -49,7 +62,7 @@ class Socket {
       payload,
     };
 
-    const packet = serialize(packetType, requestData, true);
+    const packet = serialize(packetType, requestData);
 
     this.socket.emit('event', packet);
   }

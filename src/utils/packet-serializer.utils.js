@@ -9,14 +9,14 @@ import { getProtoMessages } from '../init/proto.init.js';
  * 패킷 타입을 이용해 페이로드를 직렬화하여 반환하는 함수. 세 번째 인자를 true로 설정하면 packetType과 payload키를 가지는 객체를 반환한다.
  * @param {Number} packetType packet type number
  * @param {Object} payloadData payload data to be serialized
- * @param {Boolean} withHeader whether to attach packetType key to the returned object
+ * @param {Boolean} withoutHeader whether to attach packetType key to the returned object
  * @returns serialized payload (Buffer), or object in the form of { packetType, payload } if 'withHeader' is true.
  */
-export const serialize = (packetType, payloadData, withHeader) => {
+export const serialize = (packetType, payloadData, withoutHeader) => {
   const serializer = serializers[getMessageNameByPacketType(packetType)];
   const encoded = serializer(packetType, payloadData);
 
-  return withHeader ? { packetType, packet: encoded } : encoded;
+  return withoutHeader ? encoded : { packetType, packet: encoded };
 };
 
 const serializeRequest = (packetType, { token, clientVersion, payload }) => {

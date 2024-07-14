@@ -1,5 +1,6 @@
 import packetTypes from '../constants/packet-types.constants.js';
 import NotificationPacket from '../protobuf/classes/notification/notification.proto.js';
+import ResponsePacket from '../protobuf/classes/response/response.proto.js';
 import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
 
 const userQueue = [];
@@ -52,6 +53,7 @@ const matchFound = async (io, userId) => {
 
   const packet = serialize(resPacketType, notificationPacket);
   // console.log('decoded: ', deserialize(packet)); // 역직렬화 테스트
+
   io.emit('event', packet);
 };
 
