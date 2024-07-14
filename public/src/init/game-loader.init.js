@@ -9,7 +9,7 @@ const loadGame = (loginNumber) => {
   } else {
     const game = new Game(socket);
 
-    const packet = { timestamp: Date.now(), userId: Game.getInstance().userId };
+    const packet = { timestamp: Date.now() };
     Socket.sendEventProto(packetTypes.MATCH_REQUEST, packet, `token${loginNumber ? loginNumber : ''}`);
     // Game.getInstance().socket.sendEventProto(
     //   packetTypes.MATCH_REQUEST,

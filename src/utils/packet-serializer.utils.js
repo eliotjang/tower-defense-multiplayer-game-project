@@ -14,10 +14,7 @@ import { getProtoMessages } from '../init/proto.init.js';
  */
 export const serialize = (packetType, payloadData, withoutHeader) => {
   const serializer = serializers[getMessageNameByPacketType(packetType)];
-  // NotificationPacket
-  console.log('serializer', serializer);
   const encoded = serializer(packetType, payloadData);
-  console.log('payloadData', payloadData);
 
   return withoutHeader ? encoded : { packetType, packet: encoded };
 };

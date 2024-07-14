@@ -57,11 +57,6 @@ const matchFound = async (io, uuid) => {
   const notificationPacket = new NotificationPacket('대결을 시작합니다!', { data: payload });
 
   const packet = serialize(resPacketType, notificationPacket);
-  const decoded = deserialize(packet, true);
-  {
-    const { timestamp, message, payload } = decoded;
-    console.log(payload);
-  }
 
   // 대결 시작 (통지 패킷)
   io.emit('event', packet);

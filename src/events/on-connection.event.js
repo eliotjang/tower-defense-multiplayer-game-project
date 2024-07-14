@@ -28,15 +28,16 @@ const onConnection = (io) => async (socket) => {
   let userRD = await userRedis.getUserData(userId);
   if (!userRD) {
     console.log('새로운 Redis 데이터 생성');
-    await userRedis.createUserData(userId, uuid, token);
+    await userRedis.createUserData(userId, userDB.uuid, token);
     userRD = await userRedis.getUserData(userId);
   }
 
-  console.log(userRD);
+  console.log(userRD); // 레디스 생성 확인 로그
+  // console.log(userDB); // 데이터베이스 생성 확인 로그
 
   handleConnection(socket, userDB.uuid);
 
-  socket.on('event', onData(io, socket, uuid));
+  socket.on('event', onData(io, socket, userDB.uuid));
   // socket.on('disconnect', onDisconnect(socket));
 };
 

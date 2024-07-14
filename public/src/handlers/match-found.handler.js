@@ -2,22 +2,21 @@ import Game from '../game.js';
 
 const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
   console.log('matchFoundHandler');
-  console.log(packetType, payload);
-  console.log(payload.data);
+  const { data } = payload;
   const game = Game.getInstance();
 
   game.progressBar.textContent = '게임이 3초 뒤에 시작됩니다.';
   game.baseHp = 200;
-  for (const key in payload) {
+  for (const key in data) {
     if (key === game.userId) {
-      game.basePosition = payload[key].basePosition;
-      game.initialTowerCoords = payload[key].initialTowerCoords;
-      game.monsterPath = payload[key].monsterPath;
+      game.basePosition = data[key].basePosition;
+      game.initialTowerCoords = data[key].initialTowerCoords;
+      game.monsterPath = data[key].monsterPath;
       continue;
     } else {
-      game.opponentBasePosition = payload[key].basePosition;
-      game.opponentInitialTowerCoords = payload[key].initialTowerCoords;
-      game.opponentMonsterPath = payload[key].monsterPath;
+      game.opponentBasePosition = data[key].basePosition;
+      game.opponentInitialTowerCoords = data[key].initialTowerCoords;
+      game.opponentMonsterPath = data[key].monsterPath;
     }
   }
 
