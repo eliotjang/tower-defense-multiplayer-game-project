@@ -1,4 +1,9 @@
-class Notification {
+class NotificationPacket {
+  /**
+   *
+   * @param {String} message
+   * @param {*} payload
+   */
   constructor(message, payload) {
     this.timestamp = Date.now();
     this.message = message;
@@ -6,4 +11,4 @@ class Notification {
   }
 }
 
-export default Notification;
+export default NotificationPacket;

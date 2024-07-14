@@ -1,7 +1,9 @@
-import packetNames from "../constants/packet-names.constants.js";
-import { getMessageNameByPacketType } from "../constants/packet-types.constants.js";
-import protoTypeNames from "../constants/proto-type-names.constants.js";
-import { getProtoMessages } from "../init/proto.init.js";
+import {
+  getMessageNameByPacketType,
+  getPayloadKeyNameByPacketType,
+  packetNames,
+} from '../constants/proto.constants.js';
+import { getProtoMessages } from '../init/proto.init.js';
 
 /**
  * 패킷 타입을 이용해 페이로드를 직렬화하여 반환하는 함수. 세 번째 인자를 true로 설정하면 packetType과 payload키를 가지는 객체를 반환한다.
@@ -18,43 +20,44 @@ export const serialize = (packetType, payloadData, withHeader) => {
 };
 
 const serializeRequest = (packetType, { token, clientVersion, payload }) => {
-  const RequestPacket = getProtoMessages()[packetNames.packet.request];
+  const RequestPacket = getProtoMessages()[packetNames.REQUEST];
   const payloadData = {
     token,
     clientVersion,
-    [packetNames.payload[packetType]]: payload,
+    [getPayloadKeyNameByPacketType(packetType)]: payload,
   };
   const serialized = RequestPacket.encode(payloadData).finish();
   return serialized;
 };
 
 const serializeResponse = (packetType, { success, failCode, message, payload }) => {
-  const ResponsePacket = getProtoMessages()[packetNames.packet.response];
+  const ResponsePacket = getProtoMessages()[packetNames.RESPONSE];
   const payloadData = {
     success,
     failCode,
     message,
-    [packetNames.payload[packetType]]: payload,
+    [getPayloadKeyNameByPacketType(packetType)]: payload,
   };
   const serialized = ResponsePacket.encode(payloadData).finish();
   return serialized;
 };
 
 const serializeNotification = (packetType, { timestamp, message, payload }) => {
-  const NotificationPacket = getProtoMessages()[packetNames.packet.notification];
+  const NotificationPacket = getProtoMessages()[packetNames.NOTIFICATION];
   const payloadData = {
     timestamp,
     message,
-    [packetNames.payload[packetType]]: payload,
+    [getPayloadKeyNameByPacketType(packetType)]: payload,
   };
+
   const serialized = NotificationPacket.encode(payloadData).finish();
   return serialized;
 };
 
 const serializers = {
-  [protoTypeNames.REQUEST]: serializeRequest,
-  [protoTypeNames.RESPONSE]: serializeResponse,
-  [protoTypeNames.NOTIFICATION]: serializeNotification,
+  [packetNames.REQUEST]: serializeRequest,
+  [packetNames.RESPONSE]: serializeResponse,
+  [packetNames.NOTIFICATION]: serializeNotification,
 };
 
 /**
@@ -71,19 +74,19 @@ export const deserialize = (data) => {
 };
 
 const deserializeRequest = (packet) => {
-  const RequestPacket = getProtoMessages()[packetNames.packet.request];
+  const RequestPacket = getProtoMessages()[packetNames.REQUEST];
   const deserialized = RequestPacket.decode(packet);
   return deserialized;
 };
 
 const deserializeResponse = (packet) => {
-  const ResponsePacket = getProtoMessages()[packetNames.packet.response];
+  const ResponsePacket = getProtoMessages()[packetNames.RESPONSE];
   const deserialized = ResponsePacket.decode(packet);
   return deserialized;
 };
 
 const deserializeNotification = (packet) => {
-  const NotificationPacket = getProtoMessages()[packetNames.packet.notification];
+  const NotificationPacket = getProtoMessages()[packetNames.NOTIFICATION];
   const deserialized = NotificationPacket.decode(packet);
   return deserialized;
 };
