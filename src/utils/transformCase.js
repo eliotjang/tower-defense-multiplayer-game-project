@@ -9,10 +9,9 @@ import { caseTypes, lodashMappings } from '../constants/case.constants.js';
  */
 export const transformCase = (obj, caseType) => {
   if (!Object.values(caseTypes).includes(caseType)) {
-    console.error(`Error | transformCase failed: caseType ${caseType}`);
-    return;
+    throw new Error(`Error | transformCase failed: caseType ${caseType}`);
   }
-  transformCaseRec(obj, caseType);
+  return transformCaseRec(obj, caseType);
 };
 
 const transformCaseRec = (obj, caseType) => {

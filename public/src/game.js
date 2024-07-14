@@ -1,6 +1,6 @@
-import { Base } from '../base.js';
-import { Monster } from '../monster.js';
-import { Tower } from '../tower.js';
+import { Base } from './base.js';
+import { Monster } from './monster.js';
+import { Tower } from './tower.js';
 
 const gameConstants = {
   NUM_OF_MONSTERS: 5,
