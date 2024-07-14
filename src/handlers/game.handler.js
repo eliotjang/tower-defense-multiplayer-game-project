@@ -2,15 +2,18 @@ import packetTypes from '../constants/packet-types.constants.js';
 import NotificationPacket from '../protobuf/classes/notification/notification.proto.js';
 import ResponsePacket from '../protobuf/classes/response/response.proto.js';
 import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
+import { gameRedis } from '../utils/redis.utils.js';
 
 const userQueue = [];
 const userDataQueue = [];
 const numOfInitialTowers = 3;
 const canvasWidth = 1920;
 const canvasHeight = 1080;
+const userGold = 1000;
+const baseHp = 200;
 
-export const matchRequestHandler = async (socket, userId, packetType, payload, io) => {
-  console.log('matchRequestHandler', payload);
+export const matchRequestHandler = async (socket, uuid, packetType, payload, io) => {
+  console.log('matchRequestHandler');
   const { timestamp } = payload;
 
   const monsterPath = generateRandomMonsterPath();
@@ -26,26 +29,27 @@ export const matchRequestHandler = async (socket, userId, packetType, payload, i
   const userData = { monsterPath, initialTowerCoords, basePosition };
   // console.log(userData);
 
-  userQueue.push(userId);
+  userQueue.push(uuid);
   // console.log(userId);
   userDataQueue.push(userData);
   // console.log(userQueue.length);
 
   if (userQueue.length === 2) {
-    matchFound(io, userId);
+    matchFound(io, uuid);
   }
   // io.emit('data', { payload: 'payload' });
 };
 
-const matchFound = async (io, userId) => {
+const matchFound = async (io, uuid) => {
   console.log('matchFound');
+  
+  await gameRedis.createGameData(uuid, userGold, baseHp);
+  // const gameRD = await gameRedis.getGameData(uuid);
+  // console.log(gameRD);
 
   let payload = new Map();
   payload.set(userQueue.pop(), userDataQueue.pop());
   payload.set(userQueue.pop(), userDataQueue.pop());
-
-  console.log(payload);
-  console.log(payload.monsterPath);
 
   const resPacketType = packetTypes.MATCH_FOUND_NOTIFICATION;
   const notificationPacket = new NotificationPacket('matchFound 임시 메세지', payload);

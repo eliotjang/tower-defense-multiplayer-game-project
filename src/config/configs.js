@@ -16,6 +16,22 @@ const configs = {
     index: constants.INDEX_PATH,
   },
   server: {},
+  databases: {
+    GAME_DB: {
+      name: env.DB1_NAME,
+      user: env.DB1_USER,
+      password: env.DB1_PASSWORD,
+      host: env.DB1_HOST,
+      port: env.DB1_PORT,
+    },
+    USER_DB: {
+      name: env.DB2_NAME,
+      user: env.DB2_USER,
+      password: env.DB2_PASSWORD,
+      host: env.DB2_HOST,
+      port: env.DB2_PORT,
+    },
+  },
 };
 
 export default configs;
