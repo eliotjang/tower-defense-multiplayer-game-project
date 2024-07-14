@@ -1,12 +1,12 @@
-import { Base } from "./base.js";
-import GameData from "./classes/game-data.class.js";
-import OpponentData from "./classes/opponent-data.class.js";
-import UserData from "./classes/user-data.class.js";
-import packetNames from "./constants/packet-names.constants.js";
-import packetTypes from "./constants/packet-types.constants.js";
-import { Monster } from "./monster.js";
-import { Tower } from "./tower.js";
-import { serializeRequest } from "./utils/packet-serializer.js";
+import { Base } from './base.js';
+import GameData from './classes/game-data.class.js';
+import OpponentData from './classes/opponent-data.class.js';
+import UserData from './classes/user-data.class.js';
+import packetNames from './constants/packet-names.constants.js';
+import packetTypes from './constants/packet-types.constants.js';
+import { Monster } from './monster.js';
+import { Tower } from './tower.js';
+import { serializeRequest } from './utils/packet-serializer.js';
 
 // if (!localStorage.getItem("token")) {
 //   alert("로그인이 필요합니다.");
@@ -15,16 +15,16 @@ import { serializeRequest } from "./utils/packet-serializer.js";
 
 let serverSocket;
 let sendEvent;
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-const opponentCanvas = document.getElementById("opponentCanvas");
-const opponentCtx = opponentCanvas.getContext("2d");
+const opponentCanvas = document.getElementById('opponentCanvas');
+const opponentCtx = opponentCanvas.getContext('2d');
 
-const progressBarContainer = document.getElementById("progressBarContainer");
-const progressBarMessage = document.getElementById("progressBarMessage");
-const progressBar = document.getElementById("progressBar");
-const loader = document.getElementsByClassName("loader")[0];
+const progressBarContainer = document.getElementById('progressBarContainer');
+const progressBarMessage = document.getElementById('progressBarMessage');
+const progressBar = document.getElementById('progressBar');
+const loader = document.getElementsByClassName('loader')[0];
 
 const NUM_OF_MONSTERS = 5; // 몬스터 개수
 
@@ -60,16 +60,16 @@ let isInitGame = false;
 
 // 이미지 로딩 파트
 const backgroundImage = new Image();
-backgroundImage.src = "images/bg.webp";
+backgroundImage.src = 'images/bg.webp';
 
 const towerImage = new Image();
-towerImage.src = "images/tower.png";
+towerImage.src = 'images/tower.png';
 
 const baseImage = new Image();
-baseImage.src = "images/base.png";
+baseImage.src = 'images/base.png';
 
 const pathImage = new Image();
-pathImage.src = "images/path.png";
+pathImage.src = 'images/path.png';
 
 const monsterImages = [];
 for (let i = 1; i <= NUM_OF_MONSTERS; i++) {
@@ -154,7 +154,7 @@ function placeInitialTowers(initialTowerCoords, initialTowers, context) {
 function placeNewTower() {
   // 타워를 구입할 수 있는 자원이 있을 때 타워 구입 후 랜덤 배치
   if (userData.userGold < gameData.towerCost) {
-    alert("골드가 부족합니다.");
+    alert('골드가 부족합니다.');
     return;
   }
 
@@ -186,14 +186,14 @@ function gameLoop() {
   ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height); // 배경 이미지 다시 그리기
   drawPath(userData.monsterPath, ctx); // 경로 다시 그리기
 
-  ctx.font = "25px Times New Roman";
-  ctx.fillStyle = "skyblue";
+  ctx.font = '25px Times New Roman';
+  ctx.fillStyle = 'skyblue';
   ctx.fillText(`최고 기록: ${userData.highScore}`, 100, 50); // 최고 기록 표시
-  ctx.fillStyle = "white";
+  ctx.fillStyle = 'white';
   ctx.fillText(`점수: ${userData.score}`, 100, 100); // 현재 스코어 표시
-  ctx.fillStyle = "yellow";
+  ctx.fillStyle = 'yellow';
   ctx.fillText(`골드: ${userData.userGold}`, 100, 150); // 골드 표시
-  ctx.fillStyle = "black";
+  ctx.fillStyle = 'black';
   ctx.fillText(`현재 레벨: ${userData.monsterLevel}`, 100, 200); // 최고 기록 표시
 
   // 타워 그리기 및 몬스터 공격 처리
@@ -216,7 +216,7 @@ function gameLoop() {
     if (monster.hp > 0) {
       const Attacked = monster.move();
       if (Attacked) {
-        const attackedSound = new Audio("sounds/attacked.wav");
+        const attackedSound = new Audio('sounds/attacked.wav');
         attackedSound.volume = 0.3;
         attackedSound.play();
         // TODO. 몬스터가 기지를 공격했을 때 서버로 이벤트 전송
@@ -251,7 +251,7 @@ function initGame() {
   if (isInitGame) {
     return;
   }
-  bgm = new Audio("sounds/bgm.mp3");
+  bgm = new Audio('sounds/bgm.mp3');
   bgm.loop = true;
   bgm.volume = 0;
   bgm.play();
@@ -272,8 +272,8 @@ Promise.all([
   new Promise((resolve) => (pathImage.onload = resolve)),
   ...monsterImages.map((img) => new Promise((resolve) => (img.onload = resolve))),
 ]).then(() => {
-  console.log("loading");
-  serverSocket = io("http://127.0.0.1:5555", {
+  console.log('loading');
+  serverSocket = io('http://127.0.0.1:5555', {
     // auth: {
     //   token: localStorage.getItem('token'),
     // },
@@ -281,10 +281,10 @@ Promise.all([
 
   // 토큰과 클라이언트 버전 임의 생성
   sendEvent = (packetType, payload) => {
-    serverSocket.emit("event", {
+    serverSocket.emit('event', {
       packetType,
-      token: "token",
-      clientVersion: "1.0.0",
+      token: 'token',
+      clientVersion: '1.0.0',
       payload,
     });
   };
@@ -292,8 +292,8 @@ Promise.all([
   // 프로토콜 버퍼 적용된 sendEvent
   const sendEventProto = (packetType, payload) => {
     const requestData = {
-      token: "token",
-      clientVersion: "1.0.0",
+      token: 'token',
+      clientVersion: '1.0.0',
       payload,
     };
 
@@ -302,20 +302,20 @@ Promise.all([
       [packetNames.payload[packetType]]: serializeRequest(requestData),
     };
 
-    serverSocket.emit("event", packet);
+    serverSocket.emit('event', packet);
   };
 
-  serverSocket.on("connect_error", (err) => {
-    if (err.message === "Authentication error") {
-      alert("잘못된 토큰입니다.");
-      location.href = "/login";
+  serverSocket.on('connect_error', (err) => {
+    if (err.message === 'Authentication error') {
+      alert('잘못된 토큰입니다.');
+      location.href = '/login';
     }
   });
 
   let userId;
-  serverSocket.on("connection", (data) => {
+  serverSocket.on('connection', (data) => {
     // TODO. 서버와 연결되면 대결 대기열 큐 진입
-    console.log("서버 연결 완료");
+    console.log('서버 연결 완료');
     userId = data.uuid;
     // console.log(userData);
     const canvasWidth = canvas.width;
@@ -323,14 +323,14 @@ Promise.all([
   });
 
   // 패킷 타입을 확인하여 해당 핸들러에서 처리
-  serverSocket.on("data", (data) => {
+  serverSocket.on('data', (data) => {
     console.log(data.payload);
   });
 
-  serverSocket.on("matchFound", (data) => {
-    console.log("matchFound");
+  serverSocket.on('matchFound', (data) => {
+    console.log('matchFound');
     // 상대가 매치되면 3초 뒤 게임 시작
-    progressBarMessage.textContent = "게임이 3초 뒤에 시작됩니다.";
+    progressBarMessage.textContent = '게임이 3초 뒤에 시작됩니다.';
 
     userData.baseHp = 200;
     for (const key in data.payload) {
@@ -353,16 +353,16 @@ Promise.all([
     const progressInterval = setInterval(() => {
       progressValue += 10;
       progressBar.value = progressValue;
-      progressBar.style.display = "block";
-      loader.style.display = "none";
+      progressBar.style.display = 'block';
+      loader.style.display = 'none';
 
       if (progressValue >= 100) {
         clearInterval(progressInterval);
-        progressBarContainer.style.display = "none";
-        progressBar.style.display = "none";
-        buyTowerButton.style.display = "block";
-        canvas.style.display = "block";
-        opponentCanvas.style.display = "block";
+        progressBarContainer.style.display = 'none';
+        progressBar.style.display = 'none';
+        buyTowerButton.style.display = 'block';
+        canvas.style.display = 'block';
+        opponentCanvas.style.display = 'block';
 
         // TODO. 유저 및 상대방 유저 데이터 초기화
         if (!isInitGame) {
@@ -372,22 +372,22 @@ Promise.all([
     }, 300);
   });
 
-  serverSocket.on("gameOver", (data) => {
+  serverSocket.on('gameOver', (data) => {
     bgm.pause();
     const { isWin } = data;
-    const winSound = new Audio("sounds/win.wav");
-    const loseSound = new Audio("sounds/lose.wav");
+    const winSound = new Audio('sounds/win.wav');
+    const loseSound = new Audio('sounds/lose.wav');
     winSound.volume = 0.3;
     loseSound.volume = 0.3;
     if (isWin) {
       winSound.play().then(() => {
-        alert("당신이 게임에서 승리했습니다!");
+        alert('당신이 게임에서 승리했습니다!');
         // TODO. 게임 종료 이벤트 전송
         location.reload();
       });
     } else {
       loseSound.play().then(() => {
-        alert("아쉽지만 대결에서 패배하셨습니다! 다음 대결에서는 꼭 이기세요!");
+        alert('아쉽지만 대결에서 패배하셨습니다! 다음 대결에서는 꼭 이기세요!');
         // TODO. 게임 종료 이벤트 전송
         location.reload();
       });
@@ -395,16 +395,16 @@ Promise.all([
   });
 });
 
-const buyTowerButton = document.createElement("button");
-buyTowerButton.textContent = "타워 구입";
-buyTowerButton.style.position = "absolute";
-buyTowerButton.style.top = "10px";
-buyTowerButton.style.right = "10px";
-buyTowerButton.style.padding = "10px 20px";
-buyTowerButton.style.fontSize = "16px";
-buyTowerButton.style.cursor = "pointer";
-buyTowerButton.style.display = "none";
+const buyTowerButton = document.createElement('button');
+buyTowerButton.textContent = '타워 구입';
+buyTowerButton.style.position = 'absolute';
+buyTowerButton.style.top = '10px';
+buyTowerButton.style.right = '10px';
+buyTowerButton.style.padding = '10px 20px';
+buyTowerButton.style.fontSize = '16px';
+buyTowerButton.style.cursor = 'pointer';
+buyTowerButton.style.display = 'none';
 
-buyTowerButton.addEventListener("click", placeNewTower);
+buyTowerButton.addEventListener('click', placeNewTower);
 
 document.body.appendChild(buyTowerButton);
