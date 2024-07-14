@@ -3,8 +3,13 @@ import { SERVER_URL } from '../constants/constants.js';
 import Socket from '../socket.js';
 
 const init = () => {
-  loadProtoFile();
-  new Socket(SERVER_URL);
+  try {
+    loadProtoFile();
+    new Socket(SERVER_URL);
+    console.log('init complete');
+  } catch (err) {
+    console.error('init error');
+  }
 };
 
 export default init;

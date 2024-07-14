@@ -2,19 +2,18 @@ import packetTypes from '../constants/packet-types.constants.js';
 import loadGame from './game-loader.init.js';
 import init from './init.js';
 import Socket from '../socket.js';
+import { toggleCssClass } from '../utils/toggler.utils.js';
 
 init();
 const socket = Socket.getInstance();
 
 const initIndex = () => {
   document.getElementById('registerButton').addEventListener('click', () => {
-    document.getElementById('register-buttons-01').classList.toggle('hide');
-    document.getElementById('main-buttons-01').classList.toggle('hide');
+    toggleCssClass('hide', 'register-buttons-01', 'main-buttons-01');
   });
 
   document.getElementById('loginButton').addEventListener('click', () => {
-    document.getElementById('login-buttons-01').classList.toggle('hide');
-    document.getElementById('main-buttons-01').classList.toggle('hide');
+    toggleCssClass('hide', 'login-buttons-01', 'main-buttons-01');
   });
 
   document.getElementById('loginButton2').addEventListener('click', () => {
@@ -29,8 +28,8 @@ const initIndex = () => {
   });
 
   document.getElementById('matchButton2').addEventListener('click', () => {
-    document.getElementById('login-buttons-01').classList.toggle('hide');
-    document.getElementById('main-buttons-01').classList.toggle('hide');
+    document.querySelector('.button-container').style.display = 'none';
+    document.getElementById('progressBarContainer').style.display = 'block';
 
     loadGame();
   });
@@ -43,8 +42,7 @@ const initIndex = () => {
   });
 
   document.getElementById('login-back').addEventListener('click', () => {
-    document.getElementById('login-buttons-01').classList.toggle('hide');
-    document.getElementById('main-buttons-01').classList.toggle('hide');
+    toggleCssClass('hide', 'login-buttons-01', 'main-buttons-01');
   });
 
   document.getElementById('register').addEventListener('click', () => {
@@ -55,8 +53,7 @@ const initIndex = () => {
   });
 
   document.getElementById('register-back').addEventListener('click', () => {
-    document.getElementById('register-buttons-01').classList.toggle('hide');
-    document.getElementById('main-buttons-01').classList.toggle('hide');
+    toggleCssClass('hide', 'register-buttons-01', 'main-buttons-01');
   });
 };
 

@@ -1,11 +1,12 @@
 import { deserialize } from '../utils/packet-serializer.js';
-import { getMessageNameByPacketType } from '../constants/packet-types.constants.js';
 import { getHandlerByPacketType } from '../handlers/index.handler.js';
 
 const onEvent = (socket) => async (data) => {
   try {
     // 역직렬화
-    console.log(`data: ${data}`, data, data.packet.byteLength);
+    const packet = new Uint8Array(data.packet);
+    data.packet = packet;
+
     const packetType = data.packetType;
     const payload = deserialize(data);
 
@@ -17,7 +18,7 @@ const onEvent = (socket) => async (data) => {
       throw new Error('핸들러가 존재하지 않습니다.');
     }
 
-    await handler(socket, packetType, payload); // 인자 뭐 넣지?
+    await handler(socket, packetType, payload); // 임시, 필요한 인자 추가 예정
   } catch (err) {
     console.error(err); // 임시
   }

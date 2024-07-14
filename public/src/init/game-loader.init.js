@@ -2,9 +2,8 @@ import packetTypes from '../constants/packet-types.constants.js';
 import Game from '../classes/game.class.js';
 import Socket from '../socket.js';
 
-const socket = Socket.getInstance();
-
 const loadGame = (loginNumber) => {
+  const socket = Socket.getInstance();
   if (!socket) {
     console.error('game-loader.js: 소켓이 없습니다.');
   } else {
