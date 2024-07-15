@@ -6,8 +6,8 @@ export const addTower = (uuid, tower) => {
   }
   towers[uuid].push(tower);
 };
-export const redisAddTower = async (uuid, tower) => {
-  await redisClient.set(uuid, JSON.stringify(tower), (err, reply) => {
+export const redisAddTower = async (uuid, towerData, index) => {
+  await redisClient.set(`towers:${uuid}:${index}`, JSON.stringify(towerData), (err, reply) => {
     if (err) {
       console.log('Redis Set과정 중 오류 발생');
     } else {

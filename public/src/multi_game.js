@@ -16,6 +16,7 @@ import { serializeRequest } from "./utils/packet-serializer.js";
 let serverSocket;
 let sendEvent;
 let userId;
+let index = 0;
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -161,9 +162,10 @@ function placeNewTower() {
 
   const { x, y } = getRandomPositionNearPath(200);
   // const tower = new Tower(x, y, towerCost);
-  sendEvent(10, { x, y, userGold: userData.userGold, userId, towerCost: gameData.towerCost });
+  sendEvent(10, { x, y, userGold: userData.userGold, userId, towerCost: gameData.towerCost, index });
   //towers.push(tower);
   // tower.draw(ctx, towerImage);
+  index ++;
 }
 
 function placeBase(position, isPlayer) {
