@@ -1,28 +1,20 @@
 syntax = 'proto3';
 
-package notification;
-
 message S2C_MatchFoundNotification {
-		// string targetId = 1 // 상대 id
-    uint64 timestamp = 1; // 메시지 생성 타임스탬프 (Unix 타임스탬프)
-		// repeated UserData users = 2;
-		// message UserData {
-		// 	string id = 1;
-		// 	uint32 gold = 2;
-		// 	uint32 base_hp = 3;
-		// 	uint32 monsterLevel = 4;
-			
-		// 	repeated TowerCoordinates coords = 5;
-		// 	message TowerCoordinates { // ??
-		// 		uint32 x = 1;
-		// 		uint32 y = 2;
-		// 	}
-			
-		// }
+	map<string, UserData> data = 1;
+	message UserData {
+        repeated Coords monsterPath = 1;
+        repeated Coords initialTowerCoords = 2;
+        Coords basePosition = 3;
+        message Coords {
+            uint32 x = 1;
+            uint32 y = 2;
+        }
+	}
 }
 
 message S2C_TowerPurchaseNotification {
-
+    
 }
 
 message S2C_TowerAttackNotification {
@@ -42,15 +34,14 @@ message S2C_GameOverNotification {
 }
 
 message NotificationPacket {
-    uint32 packetType = 1;
-    uint64 timestamp = 2;
-    string message = 3;
+    uint64 timestamp = 1;
+    string message = 2;
     oneof payload {
-        S2C_MatchFoundNotification matchFoundNotification = 4;
-        S2C_TowerPurchaseNotification towerPurchaseNotification = 5;
-        S2C_TowerAttackNotification towerAttackNotification = 6;
-        S2C_MonsterSpawnNotification monsterSpawnNotification = 7;
-        S2C_MonsterKillNotification monsterKillNotification = 8;
-        S2C_GameOverNotification gameOverNotification = 9;
+        S2C_MatchFoundNotification matchFoundNotification = 3;
+        S2C_TowerPurchaseNotification towerPurchaseNotification = 4;
+        S2C_TowerAttackNotification towerAttackNotification = 5;
+        S2C_MonsterSpawnNotification monsterSpawnNotification = 6;
+        S2C_MonsterKillNotification monsterKillNotification = 7;
+        S2C_GameOverNotification gameOverNotification = 8;
     }
 }

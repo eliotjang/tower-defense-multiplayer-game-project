@@ -1,3 +1,7 @@
+import packetTypes from '../constants/packet-types.constants.js';
+import NotificationPacket from '../protobuf/classes/notification/notification.proto.js';
+import ResponsePacket from '../protobuf/classes/response/response.proto.js';
+import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
 import { gameRedis } from '../utils/redis.utils.js';
 
 const userQueue = [];
@@ -38,17 +42,23 @@ export const matchRequestHandler = async (socket, uuid, packetType, payload, io)
 
 const matchFound = async (io, uuid) => {
   console.log('matchFound');
-
+  
   await gameRedis.createGameData(uuid, userGold, baseHp);
   // const gameRD = await gameRedis.getGameData(uuid);
   // console.log(gameRD);
 
-  let payload = {};
-  payload[userQueue.pop()] = userDataQueue.pop();
-  payload[userQueue.pop()] = userDataQueue.pop();
+  let payload = new Map();
+  payload.set(userQueue.pop(), userDataQueue.pop());
+  payload.set(userQueue.pop(), userDataQueue.pop());
 
+  const resPacketType = packetTypes.MATCH_FOUND_NOTIFICATION;
+  const notificationPacket = new NotificationPacket('matchFound 임시 메세지', payload);
   // 대결 시작 (통지 패킷)
-  io.emit('matchFound', { packetType: 5, token: 'token', clientVersion: '1.0.0', payload });
+
+  const packet = serialize(resPacketType, notificationPacket);
+  // console.log('decoded: ', deserialize(packet)); // 역직렬화 테스트
+
+  io.emit('event', packet);
 };
 
 function generateRandomMonsterPath() {

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Changmin Kang" />
+    <title>내일배움캠프 Node.js 트랙 타워 디펜스 게임 온라인</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <link rel="stylesheet" href="/src/css/mystyle.css" />
+  </head>
+  <body>
+    <div class="button-container">
+      <img src="/images/logo.png" alt="logo" />
+      <div class="main-buttons" id="main-buttons-01">
+        <button id="registerButton">회원가입</button>
+        <button id="loginButton">로그인</button>
+        <button id="loginButton2">로그인2 (로컬에서 2인 테스트 할 때 사용)</button>
+        <button id="matchButton">다른 유저와 대결하기</button>
+        <button id="matchButton2">다른 유저와 대결하기2 (로컬에서 2인 테스트 할 때 사용)</button>
+      </div>
+      <div class="register-buttons hide" id="register-buttons-01">
+        <h2>회원가입</h2>
+        <input type="text" id="rusername" placeholder="아이디" />
+        <input type="password" id="rpassword" placeholder="비밀번호" />
+        <button id="register">회원가입</button>
+        <button id="register-back" style="margin-top: 50px">뒤로가기</button>
+      </div>
+      <div class="login-buttons hide" id="login-buttons-01">
+        <h2>로그인</h2>
+        <input type="text" id="username" placeholder="아이디" />
+        <input type="password" id="password" placeholder="비밀번호" />
+        <button id="login">로그인</button>
+        <button id="login-back" style="margin-top: 50px">뒤로가기</button>
+      </div>
+    </div>
+    <div id="progressBarContainer">
+      <h1 id="progressBarMessage" style="color: white">대결 상대를 탐색중입니다!</h1>
+      <div class="loader"></div>
+      <progress id="progressBar" max="100" value="0" style="display: none"></progress>
+    </div>
+    <canvas id="gameCanvas" width="1500" height="680"></canvas>
+    <canvas id="opponentCanvas" width="1500" height="680"></canvas>
+    <script
+      src="https://cdn.socket.io/4.7.5/socket.io.min.js"
+      integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO"
+      crossorigin="anonymous"
+    ></script>
+    <script src="//cdn.jsdelivr.net/npm/protobufjs@7.3.2/dist/protobuf.min.js"></script>
+    <script type="module">
+      import('./src/init/index.init.js');
+    </script>
+  </body>
+</html>
