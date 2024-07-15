@@ -1,5 +1,6 @@
 import packetTypes from '../constants/packet-types.constants.js';
 import matchFoundNotificationHandler from './match-found.handler.js';
+import monsterSpawnNotificationHandler from './monster-spawn.handler.js';
 import signInHandler from './sign-in.handler.js';
 import { towerNotificationHandler, towerResponseHandler } from './tower.handler.js';
 
@@ -11,7 +12,7 @@ const handlerMappings = {
   [packetTypes.MATCH_FOUND_NOTIFICATION]: matchFoundNotificationHandler,
   [packetTypes.TOWER_PURCHASE_RESPONSE]: towerResponseHandler,
   [packetTypes.TOWER_PURCHASE_NOTIFICATION]: towerNotificationHandler,
-
+  [packetTypes.MONSTER_SPAWN_NOTIFICATION]: monsterSpawnNotificationHandler,
   // ...
 };
 

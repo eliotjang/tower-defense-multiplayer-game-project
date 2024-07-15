@@ -389,6 +389,24 @@ Promise.all([
     }, 300);
   });
 
+  serverSocket.on('targetMonsterSpawn', (data) => {
+
+    const {packetType, path, monsterImages, level, monsterNumber } = data;
+    if (packetType === 21 ) {
+      const newMonster = new Monster(path, monsterImages, level, monsterNumber);
+      opponentMonsters.push(newMonster);
+    }
+  });
+
+  serverSocket.on('targetMonsterSpawn', (data) => {
+
+    const {packetType, path, monsterImages, level, monsterNumber } = data;
+    if (packetType === 21 ) {
+      const newMonster = new Monster(path, monsterImages, level, monsterNumber);
+      opponentMonsters.push(newMonster);
+    }
+  });
+
   serverSocket.on('gameOver', (data) => {
     bgm.pause();
     const { isWin } = data;

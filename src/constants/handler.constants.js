@@ -1,4 +1,5 @@
 import { matchRequestHandler } from '../handlers/game.handler.js';
+import { monsterSpawnHandler } from '../handlers/monster.handler.js';
 import signInHandler from '../handlers/sign-in.handler.js';
 import packetTypes from './packet-types.constants.js';
 import { purchaseTowerHandler } from '../handlers/tower.handler.js';
@@ -22,6 +23,9 @@ const handlerMappings = {
   },
   [packetTypes.TOWER_PURCHASE_REQUEST]: {
     handler: purchaseTowerHandler,
+  },
+  [packetTypes.MONSTER_SPAWN_REQUEST]: {
+    handler: monsterSpawnHandler,
   },
 };
 

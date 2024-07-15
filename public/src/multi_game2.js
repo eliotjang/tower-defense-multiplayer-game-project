@@ -176,8 +176,8 @@ function placeBase(position, isPlayer) {
 }
 
 function spawnMonster() {
-  const newMonster = new Monster(monsterPath, monsterImages, monsterLevel);
-  monsters.push(newMonster);
+  const newMonster = new Monster(userData.monsterPath, monsterImages, userData.monsterLevel);
+  userData.monsters.push(newMonster);
 
   // TODO. 서버로 몬스터 생성 이벤트 전송
 }
@@ -387,6 +387,15 @@ Promise.all([
         }
       }
     }, 300);
+  });
+
+  serverSocket.on('targetMonsterSpawn', (data) => {
+
+    const {packetType, path, monsterImages, level, monsterNumber } = data;
+    if (packetType === 21 ) {
+      const newMonster = new Monster(path, monsterImages, level, monsterNumber);
+      opponentMonsters.push(newMonster);
+    }
   });
 
   serverSocket.on('gameOver', (data) => {
