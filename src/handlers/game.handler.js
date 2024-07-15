@@ -17,7 +17,7 @@ export const matchRequestHandler = async (socket, uuid, packetType, payload, io)
   console.log('matchRequestHandler');
   // console.log('matchRequestHandler socket.uuid : ', socket.uuid);
   const { timestamp } = payload;
-
+  console.log(payload);
   const monsterPath = generateRandomMonsterPath();
 
   const initialTowerCoords = [];
@@ -52,7 +52,7 @@ const matchFound = async (io, uuid) => {
     // const gameRD = await gameRedis.getGameData(key);
     // console.log(gameRD);
   }
-
+  console.log(payload);
   const resPacketType = packetTypes.MATCH_FOUND_NOTIFICATION;
   const notificationPacket = new NotificationPacket('대결을 시작합니다!', { score: highScore, data: payload });
 
