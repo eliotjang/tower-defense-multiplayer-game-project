@@ -8,10 +8,12 @@ const onEvent = (socket) => async (data) => {
     const packetType = data.packetType;
     const packet = deserialize(data, true);
     const { timestamp, message, payload } = packet;
-    console.log(message);
+    // console.log(message);
 
     // packetType으로 매핑된 핸들러 찾기
     const handler = getHandlerByPacketType(packetType);
+
+    // console.log('packetType : ', packetType);
 
     // 핸들러 없을 시 에러
     if (!handler) {

@@ -1,4 +1,7 @@
 import { Base } from './base.js';
+import GameData from './classes/game-data.class.js';
+import OpponentData from './classes/opponent-data.class.js';
+import UserData from './classes/user-data.class.js';
 import packetNames from './constants/packet-names.constants.js';
 import packetTypes from './constants/packet-types.constants.js';
 import { Monster } from './monster.js';

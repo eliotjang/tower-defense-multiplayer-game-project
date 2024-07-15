@@ -24,7 +24,10 @@ message C2S_TowerPurchaseRequest {
 }
 
 message C2S_TowerAttackRequest {
-
+    uint64 timestamp = 1;
+    string userId = 2;
+    uint32 towerIndex = 3;
+    uint32 monsterIndex = 4;
 }
 
 message C2S_MonsterSpawnRequest {

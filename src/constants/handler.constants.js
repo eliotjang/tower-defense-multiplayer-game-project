@@ -1,6 +1,7 @@
 import { matchRequestHandler } from '../handlers/game.handler.js';
 import { monsterSpawnHandler } from '../handlers/monster.handler.js';
 import signInHandler from '../handlers/sign-in.handler.js';
+import { towerAttackRequestHandler } from '../handlers/tower.handler.js';
 import packetTypes from './packet-types.constants.js';
 import { purchaseTowerHandler } from '../handlers/tower.handler.js';
 
@@ -17,6 +18,9 @@ const handlerMappings = {
   },
   [packetTypes.MATCH_REQUEST]: {
     handler: matchRequestHandler,
+  },
+  [packetTypes.TOWER_ATTACK_REQUEST]: {
+    handler: towerAttackRequestHandler,
   },
   [packetTypes.BASE_ATTACKED_REQUEST]: {
     handler: dummyHandler, // baseAttackHandler,
