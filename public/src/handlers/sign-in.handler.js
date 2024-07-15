@@ -14,8 +14,11 @@ const signInHandler = ({ socket, packetType, payload }) => {
   toggleCssClass('hide', 'login-buttons-01', 'main-buttons-01');
 
   // 토큰 저장
+  // console.log('payload.userId : ', payload.userId);
   window.localStorage.setItem('token', payload.token);
   sessionStorage.setItem('userId', payload.userId);
+  socket.uuid = payload.userId;
+  console.log('signInHandler socket.uuid : ', socket.uuid);
 };
 
 export default signInHandler;

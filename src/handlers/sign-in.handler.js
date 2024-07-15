@@ -25,6 +25,7 @@ const signInHandler = async (socket, userId, packetType, payload, io) => {
     await updateUserLogin(userDB.userId);
     console.log('기존 유저 정보를 불러옵니다.');
   }
+  socket.uuid = userDB.uuid;
 
   // console.log(socket);
   let userRD = await userRedis.getUserData(uuid);
@@ -34,7 +35,8 @@ const signInHandler = async (socket, userId, packetType, payload, io) => {
     userRD = await userRedis.getUserData(uuid);
   }
 
-  console.log(userRD); // 레디스 생성 확인 로그
+  // console.log(userRD); // 레디스 생성 확인 로그
+  // console.log('userDB uuid : ', userDB.uuid);
   // console.log(userDB); // 데이터베이스 생성 확인 로그
 
   // 패킷 생성
@@ -45,9 +47,9 @@ const signInHandler = async (socket, userId, packetType, payload, io) => {
   //   payload: { token: signedToken },
   // };
 
-  socket.userId = uuid;
+  console.log('socket.uuid : ', socket.uuid);
 
-  const data = new ResponsePacket(0, '로그인 성공', { token: signedToken, userId: uuid });
+  const data = new ResponsePacket(0, '로그인 성공', { token: signedToken, userId: userDB.uuid });
 
   const packet = serialize(packetTypes.SIGN_IN_RESPONSE, data);
   // console.log(deserialize(packet)); // 테스트용 역직렬화

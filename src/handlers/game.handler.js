@@ -15,6 +15,7 @@ const highScore = 0;
 
 export const matchRequestHandler = async (socket, uuid, packetType, payload, io) => {
   console.log('matchRequestHandler');
+  // console.log('matchRequestHandler socket.uuid : ', socket.uuid);
   const { timestamp } = payload;
 
   const monsterPath = generateRandomMonsterPath();
@@ -28,17 +29,13 @@ export const matchRequestHandler = async (socket, uuid, packetType, payload, io)
   const basePosition = { x: lastPoint.x, y: lastPoint.y };
 
   const userData = { monsterPath, initialTowerCoords, basePosition };
-  // console.log(userData);
 
-  userQueue.push(socket.userId);
-  // console.log(userId);
+  userQueue.push(socket.uuid);
   userDataQueue.push(userData);
-  // console.log(userQueue.length);
 
   if (userQueue.length === 2) {
-    matchFound(io, socket.userId);
+    matchFound(io, socket.uuid);
   }
-  // io.emit('data', { payload: 'payload' });
 };
 
 const matchFound = async (io, uuid) => {
@@ -47,6 +44,8 @@ const matchFound = async (io, uuid) => {
   let payload = new Map();
   payload[userQueue.pop()] = userDataQueue.pop();
   payload[userQueue.pop()] = userDataQueue.pop();
+
+  // console.log(payload);
 
   for (const key in payload) {
     await gameRedis.createGameData(key, userGold, baseHp);

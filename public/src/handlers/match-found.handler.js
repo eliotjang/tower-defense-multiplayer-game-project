@@ -7,6 +7,8 @@ const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
   const game = Game.getInstance();
   game.highScore = score;
 
+  // console.log(data);
+
   game.progressBar.textContent = '게임이 3초 뒤에 시작됩니다.';
   game.baseHp = 200;
   for (const key in data) {

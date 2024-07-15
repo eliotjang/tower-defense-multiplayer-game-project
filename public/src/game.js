@@ -94,6 +94,8 @@ class Game {
     this.towers = []; // 유저 타워 목록
     this.score = 0; // 게임 점수
     this.highScore = 0; // 기존 최고 점수
+    this.myTowerIndex = 0;
+    this.myMonsterIndex = 0;
   }
 
   initOpponentData() {
@@ -103,6 +105,8 @@ class Game {
     this.opponentBasePosition = null; // 상대방 기지 좌표
     this.opponentMonsters = []; // 상대방 몬스터 목록
     this.opponentTowers = []; // 상대방 타워 목록
+    this.opponentTowerIndex = 0;
+    this.opponentMonsterIndex = 0;
   }
 
   initImages() {
@@ -130,8 +134,8 @@ class Game {
     this.ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height); // 배경 이미지 그리기
     this.drawPath(this.monsterPath, this.ctx);
     this.drawPath(this.opponentMonsterPath, this.opponentCtx);
-    this.placeInitialTowers(this.initialTowerCoords, this.towers, this.ctx); // 초기 타워 배치
-    this.placeInitialTowers(this.opponentInitialTowerCoords, this.opponentTowers, this.opponentCtx); // 상대방 초기 타워 배치
+    this.placeInitialTowers(this.initialTowerCoords, this.towers, this.ctx, 1); // 초기 타워 배치
+    this.placeInitialTowers(this.opponentInitialTowerCoords, this.opponentTowers, this.opponentCtx, 0); // 상대방 초기 타워 배치
     this.placeBase(this.basePosition, true);
     this.placeBase(this.opponentBasePosition, false);
   }
@@ -189,9 +193,14 @@ class Game {
     };
   }
 
-  placeInitialTowers(initialTowerCoords, initialTowers, context) {
+  placeInitialTowers(initialTowerCoords, initialTowers, context, isMyTower) {
     initialTowerCoords.forEach((towerCoords) => {
-      const tower = new Tower(towerCoords.x, towerCoords.y);
+      let tower;
+      if (isMyTower) {
+        tower = new Tower(towerCoords.x, towerCoords.y, this.myTowerIndex++);
+      } else {
+        tower = new Tower(towerCoords.x, towerCoords.y, this.opponentTowerIndex++);
+      }
       initialTowers.push(tower);
       tower.draw(context, this.towerImage);
     });
@@ -205,7 +214,7 @@ class Game {
     }
 
     const { x, y } = getRandomPositionNearPath(200);
-    const tower = new Tower(x, y);
+    const tower = new Tower(x, y, this.myTowerIndex++);
     this.towers.push(tower);
     tower.draw(this.ctx, this.towerImage);
   }
@@ -221,9 +230,14 @@ class Game {
   }
 
   spawnMonster() {
-    const newMonster = new Monster(this.monsterPath, this.monsterImages, this.monsterLevel);
+    const newMonster = new Monster(
+      this.monsterPath,
+      this.monsterImages,
+      this.monsterLevel,
+      null,
+      this.myMonsterIndex++
+    );
     this.monsters.push(newMonster);
-
     // TODO. 서버로 몬스터 생성 이벤트 전송
   }
 
@@ -283,6 +297,12 @@ class Game {
     this.opponentTowers.forEach((tower) => {
       tower.draw(this.opponentCtx, this.towerImage);
       tower.updateCooldown(); // 적 타워의 쿨다운 업데이트
+      this.opponentMonsters.forEach((monster) => {
+        const distance = Math.sqrt(Math.pow(tower.x - monster.x, 2) + Math.pow(tower.y - monster.y, 2));
+        if (distance < tower.range) {
+          tower.attack(monster);
+        }
+      });
     });
 
     this.opponentMonsters.forEach((monster) => {
