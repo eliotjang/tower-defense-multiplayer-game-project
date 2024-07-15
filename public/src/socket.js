@@ -46,10 +46,10 @@ class Socket {
     });
   }
 
-  static sendEventProto(packetType, payload, token) {
+  static sendEventProto(packetType, payload) {
     // 프로토콜 버퍼 적용된 sendEvent
     const requestData = {
-      token: token ?? 'token',
+      token: localStorage.getItem('token') ?? 'token',
       clientVersion: '1.0.0',
       payload,
     };
@@ -59,10 +59,10 @@ class Socket {
     Socket.getInstance().socket.emit('event', packet);
   }
 
-  sendEventProto(packetType, payload, token) {
+  sendEventProto(packetType, payload) {
     // 프로토콜 버퍼 적용된 sendEvent
     const requestData = {
-      token: token ?? 'token',
+      token: localStorage.getItem('token') ?? 'token',
       clientVersion: '1.0.0',
       payload,
     };
