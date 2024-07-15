@@ -1,25 +1,45 @@
 import redisClient from '../init/redis.js';
+import {
+  userRedisFields as urf,
+  gameRedisFields as grf,
+  isUserRedisField,
+  isGameRedisField,
+} from '../constants/redis.constants.js';
+import { transformCase } from './transformCase.js';
+import caseTypes from '../constants/case.constants.js';
 
 const USER_PREFIX = 'user:';
-const USER_FIELD_UUID = 'uuid';
-const USER_FIELD_TOKEN = 'token';
 const GAME_DATA_PREFIX = 'game:';
-const GAME_FIELD_GOLD = 'user_gold';
-const GAME_FIELD_TOWER = 'tower_coordinates';
-const GAME_FIELD_BASE_HP = 'base_hp';
-const GAME_FIELD_START_TIME = 'start_time';
 const TOWERS_PREFIX = 'towers:';
 
 export const userRedis = {
   createUserData: async function (userId, uuid, token) {
     try {
-      const keyUUID = `${USER_PREFIX}${userId}${USER_FIELD_UUID}`;
-      const keyToken = `${USER_PREFIX}${userId}${USER_FIELD_TOKEN}`;
+      const keyUUID = `${USER_PREFIX}${userId}:${urf.UUID}`;
+      const keyToken = `${USER_PREFIX}${userId}:${urf.TOKEN}`;
 
       await redisClient.set(keyUUID, JSON.stringify(uuid));
       await redisClient.set(keyToken, JSON.stringify(token));
     } catch (error) {
       console.error('createUserData Error Message : ', error);
+    }
+  },
+  /**
+   *
+   * @param {string} userId
+   * @param {Object} obj
+   */
+  setUserData: async function (userId, obj) {
+    try {
+      for (const [key, value] of Object.entries(obj)) {
+        const snakeKey = transformCase(key, caseTypes.SNAKE_CASE);
+        if (isUserRedisField(snakeKey)) {
+          const redisKey = `${USER_PREFIX}${userId}:${snakeKey}`;
+          await redisClient.set(redisKey, JSON.stringify(value));
+        }
+      }
+    } catch (err) {
+      console.error('setUserData failed:', err);
     }
   },
   getUserData: async function (userId) {
@@ -29,7 +49,7 @@ export const userRedis = {
 
       const values = {};
       for (let i = 0; i < keys.length; i++) {
-        const key = keys[i].replace(`${USER_PREFIX}${userId}`, '');
+        const key = keys[i].replace(`${USER_PREFIX}${userId}:`, '');
         values[key] = JSON.parse(await redisClient.get(keys[i]));
       }
       if (Object.keys(values).length === 0) {
@@ -40,28 +60,68 @@ export const userRedis = {
       console.error('getUserData Error Message : ', error);
     }
   },
+
+  getUserDataEx: async function (userId, arr) {
+    try {
+      const userData = {};
+      for (const keyName of arr) {
+        const snakeKey = transformCase(keyName, caseTypes.SNAKE_CASE);
+        if (isUserRedisField(snakeKey)) {
+          const redisKey = `${USER_PREFIX}${userId}:${snakeKey}`;
+          const result = JSON.parse(await redisClient.get(redisKey));
+          userData[transformCase(keyName, caseTypes.CAMEL_CASE)] = result;
+        }
+      }
+      return userData;
+    } catch (err) {
+      console.error('getUserDataEx failed:', err);
+    }
+  },
+  removeUserData: async function (userId) {
+    try {
+      // TODO: 유저 정보 제거 작업
+      const keys = await redisClient.keys(`${USER_PREFIX}${userId}:*`);
+      for (const key of keys) {
+        await redisClient.del(key);
+      }
+    } catch (err) {
+      console.error('removeUserData failed:', err);
+    }
+  },
 };
 
 export const gameRedis = {
   createGameData: async function (uuid, gold, baseHp) {
     try {
-      const keyGold = `${GAME_DATA_PREFIX}${uuid}${GAME_FIELD_GOLD}`;
-      const keyBaseHp = `${GAME_DATA_PREFIX}${uuid}${GAME_FIELD_BASE_HP}`;
+      const keyGold = `${GAME_DATA_PREFIX}${uuid}:${grf.GOLD}`;
+      const keyBaseHp = `${GAME_DATA_PREFIX}${uuid}:${grf.BASE_HP}`;
       await redisClient.set(keyGold, `${gold}`);
       await redisClient.set(keyBaseHp, `${baseHp}`);
     } catch (error) {
       console.error('createGameData Error Message : ', error);
     }
   },
-
+  setUserData: async function (uuid, obj) {
+    try {
+      for (const [key, value] of Object.entries(obj)) {
+        const snakeKey = transformCase(key, caseTypes.SNAKE_CASE);
+        if (isGameRedisField(snakeKey)) {
+          const redisKey = `${GAME_DATA_PREFIX}${userId}:${snakeKey}`;
+          await redisClient.set(redisKey, JSON.stringify(value));
+        }
+      }
+    } catch (err) {
+      console.error('setUserData failed:', err);
+    }
+  },
   getGameData: async function (uuid) {
     try {
-      const pattern = `${GAME_DATA_PREFIX}${uuid}*`;
+      const pattern = `${GAME_DATA_PREFIX}${uuid}:*`;
       const keys = await redisClient.keys(pattern);
 
       const values = {};
       for (let i = 0; i < keys.length; i++) {
-        const key = keys[i].replace(`${GAME_DATA_PREFIX}${uuid}`, '');
+        const key = keys[i].replace(`${GAME_DATA_PREFIX}${uuid}:`, '');
         values[key] = JSON.parse(await redisClient.get(keys[i]));
       }
       if (Object.keys(values).length === 0) {
@@ -71,6 +131,47 @@ export const gameRedis = {
     } catch (error) {
       console.error('getGameData Error Message : ', error);
       return null;
+    }
+  },
+
+  getUserDataEx: async function (userId, arr) {
+    try {
+      const gameData = {};
+      for (const keyName of arr) {
+        const snakeKey = transformCase(keyName, caseTypes.SNAKE_CASE);
+        if (isUserRedisField(snakeKey)) {
+          const redisKey = `${GAME_DATA_PREFIX}${userId}:${snakeKey}`;
+          const result = JSON.parse(await redisClient.get(redisKey));
+          gameData[transformCase(keyName, caseTypes.CAMEL_CASE)] = result;
+        }
+      }
+      return gameData;
+    } catch (err) {
+      console.error('getUserDataEx failed:', err);
+    }
+  },
+
+  patchGameDataGold: async function (uuid, byAmount) {
+    try {
+      if (typeof byAmount !== 'number') {
+        throw new Error('byAmount 값 오류:', byAmount);
+      }
+      const key = `${GAME_DATA_PREFIX}${uuid}:${grf.GOLD}`;
+      await redisClient.incrBy(key, byAmount);
+    } catch (err) {
+      console.error('patchGameDataGold failed:', err);
+    }
+  },
+
+  patchGameDataBaseHp: async function (uuid, byAmount) {
+    try {
+      if (typeof byAmount !== 'number') {
+        throw new Error('byAmount 값 오류:', byAmount);
+      }
+      const key = `${GAME_DATA_PREFIX}${uuid}:${grf.BASE_HP}`;
+      await redisClient.incrBy(key, byAmount);
+    } catch (err) {
+      console.error('patchGameDataBaseHp failed:', err);
     }
   },
 
@@ -90,7 +191,7 @@ export const gameRedis = {
 
   deleteGameDataTower: async function (uuid, towerData) {
     try {
-      const pattern = `${TOWERS_PREFIX}${uuid}*`;
+      const pattern = `${TOWERS_PREFIX}${uuid}:*`;
       const keys = await redisClient.keys(pattern);
 
       for (let i = 0; i < keys.length; i++) {
@@ -106,7 +207,7 @@ export const gameRedis = {
 
   deleteGameDataTowerList: async function (uuid) {
     try {
-      const pattern = `${TOWERS_PREFIX}${uuid}*`;
+      const pattern = `${TOWERS_PREFIX}${uuid}:*`;
       const keys = await redisClient.keys(pattern);
 
       for (let i = 0; i < keys.length; i++) {
@@ -119,12 +220,12 @@ export const gameRedis = {
 
   getGameDataTowerList: async function (uuid) {
     try {
-      const pattern = `${TOWERS_PREFIX}${uuid}*`;
+      const pattern = `${TOWERS_PREFIX}${uuid}:*`;
       const keys = await redisClient.keys(pattern);
 
       const values = {};
       for (let i = 0; i < keys.length; i++) {
-        const key = keys[i].replace(`${TOWERS_PREFIX}${uuid}`, '');
+        const key = keys[i].replace(`${TOWERS_PREFIX}${uuid}:`, '');
         values[key] = JSON.parse(await redisClient.get(keys[i]));
       }
       return values;
@@ -142,7 +243,7 @@ export const gameRedis = {
       if (!gameData) {
         throw new Error('해당 유저의 게임 데이터가 존재하지 않습니다');
       }
-      redisClient.hSet(key, GAME_FIELD_GOLD, JSON.stringify(newGold));
+      redisClient.hSet(key, grf.GOLD, JSON.stringify(newGold));
     } catch (error) {
       console.error('patchGameDataGold Error Message : ', error);
     }
@@ -150,7 +251,10 @@ export const gameRedis = {
 
   removeGameData: async function (uuid) {
     try {
-      await redisClient.del(`${GAME_DATA_PREFIX}${uuid}`);
+      const keys = await redisClient.keys(`${GAME_DATA_PREFIX}${uuid}:*`);
+      for (const key of keys) {
+        await redisClient.del(key);
+      }
     } catch (error) {
       console.error('removeGameData Error Message : ', error);
     }

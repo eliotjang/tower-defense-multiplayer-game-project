@@ -15,7 +15,7 @@ export const loadProtoFile = () => {
 
     Object.freeze(protoMessages);
     console.log('proto 파일 로드 성공.');
-    console.log(Object.entries(protoMessages).map((protoMessage) => protoMessage[1].name));
+    // console.log(Object.entries(protoMessages).map((protoMessage) => protoMessage[1].name));
   });
 };
 
