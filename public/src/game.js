@@ -261,6 +261,8 @@ class Game {
       const monster = this.monsters[i];
       if (monster.hp > 0) {
         const Attacked = monster.move();
+        monster.draw(this.ctx);
+
         if (Attacked) {
           const attackedSound = new Audio('sounds/attacked.wav');
           attackedSound.volume = 0.3;
