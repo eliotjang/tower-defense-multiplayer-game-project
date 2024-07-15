@@ -9,9 +9,10 @@ const loadGame = (loginNumber) => {
   } else {
     const game = new Game(socket);
     game.userId = sessionStorage.getItem('userId');
+    localStorage.setItem('token', `token${loginNumber ? loginNumber : ''}`);
 
     const packet = { timestamp: Date.now(), userId: game.userId };
-    Socket.sendEventProto(packetTypes.MATCH_REQUEST, packet, `token${loginNumber ? loginNumber : ''}`);
+    Socket.sendEventProto(packetTypes.MATCH_REQUEST, packet);
     // Game.getInstance().socket.sendEventProto(
     //   packetTypes.MATCH_REQUEST,
     //   packet,
