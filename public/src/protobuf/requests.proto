@@ -15,11 +15,19 @@ message C2S_MatchRequest {
 }
 
 message C2S_TowerPurchaseRequest {
-
+    float x = 1;
+    float y = 2;
+    uint32 userGold = 3;
+    string userId = 4;
+    uint32 towerCost = 5;
+    uint32 index = 6;
 }
 
 message C2S_TowerAttackRequest {
-
+    uint64 timestamp = 1;
+    string userId = 2;
+    uint32 towerIndex = 3;
+    uint32 monsterIndex = 4;
 }
 
 message C2S_MonsterSpawnRequest {
