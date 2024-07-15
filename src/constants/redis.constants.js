@@ -7,6 +7,7 @@ export const gameRedisFields = {
   GOLD: 'user_gold',
   TOWER: 'tower_coordinates',
   BASE_HP: 'base_hp',
+  SCORE: 'score',
   START_TIME: 'start_time',
 };
 
