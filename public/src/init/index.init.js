@@ -5,7 +5,6 @@ import Socket from '../socket.js';
 import { toggleCssClass } from '../utils/toggler.utils.js';
 
 init();
-const socket = Socket.getInstance();
 
 const initIndex = () => {
   document.getElementById('registerButton').addEventListener('click', () => {
@@ -38,7 +37,7 @@ const initIndex = () => {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     // 로그인 패킷 송신
-    socket.sendEventProto(packetTypes.SIGN_IN_REQUEST, { id: `${username}`, password: `${password}` });
+    Socket.sendEventProto(packetTypes.SIGN_IN_REQUEST, { id: `${username}`, password: `${password}` });
   });
 
   document.getElementById('login-back').addEventListener('click', () => {
@@ -49,7 +48,7 @@ const initIndex = () => {
     const username = document.getElementById('rusername').value;
     const password = document.getElementById('rpassword').value;
     // 회원 가입 패킷 송신
-    socket.sendEventProto(packetTypes.SIGN_UP_REQUEST, { id: `${username}`, password: `${password}` });
+    Socket.sendEventProto(packetTypes.SIGN_UP_REQUEST, { id: `${username}`, password: `${password}` });
   });
 
   document.getElementById('register-back').addEventListener('click', () => {

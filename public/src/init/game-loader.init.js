@@ -11,7 +11,7 @@ const loadGame = (loginNumber) => {
     game.userId = sessionStorage.getItem('userId');
     localStorage.setItem('token', `token${loginNumber ? loginNumber : ''}`);
 
-    const packet = { timestamp: Date.now(), userId: game.userId };
+    const packet = { timestamp: Date.now() };
     Socket.sendEventProto(packetTypes.MATCH_REQUEST, packet);
     // Game.getInstance().socket.sendEventProto(
     //   packetTypes.MATCH_REQUEST,
