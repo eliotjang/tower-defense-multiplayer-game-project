@@ -24,14 +24,14 @@ const initIndex = () => {
     document.querySelector('.button-container').style.display = 'none';
     document.getElementById('progressBarContainer').style.display = 'block';
 
-    loadGame();
+    loadGame(1);
   });
 
   document.getElementById('matchButton2').addEventListener('click', () => {
     document.querySelector('.button-container').style.display = 'none';
     document.getElementById('progressBarContainer').style.display = 'block';
 
-    loadGame();
+    loadGame(2);
   });
 
   document.getElementById('login').addEventListener('click', () => {

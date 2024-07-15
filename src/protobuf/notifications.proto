@@ -7,8 +7,8 @@ message S2C_MatchFoundNotification {
         repeated Coords initialTowerCoords = 2;
         Coords basePosition = 3;
         message Coords {
-            uint32 x = 1;
-            uint32 y = 2;
+            float x = 1;
+            float y = 2;
         }
 	}
 }

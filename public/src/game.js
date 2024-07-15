@@ -1,6 +1,6 @@
-import { Base } from '../base.js';
-import { Monster } from '../monster.js';
-import { Tower } from '../tower.js';
+import { Base } from './base.js';
+import { Monster } from './monster.js';
+import { Tower } from './tower.js';
 
 const gameConstants = {
   NUM_OF_MONSTERS: 5,
@@ -36,13 +36,17 @@ class Game {
    * @returns {Game} singleton instance
    */
   static getInstance() {
+    if (!Game.instance) {
+      Game.instance = new Game();
+    }
     return Game.instance;
   }
 
   initGameComponents() {
     this.canvas = document.getElementById('gameCanvas');
+    console.log(this.canvas);
     this.ctx = this.canvas.getContext('2d');
-
+    console.log(this.ctx);
     this.opponentCanvas = document.getElementById('opponentCanvas');
     this.opponentCtx = this.opponentCanvas.getContext('2d');
 
@@ -122,12 +126,12 @@ class Game {
 
   initMap() {
     this.ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height); // 배경 이미지 그리기
-    drawPath(this.monsterPath, ctx);
-    drawPath(this.opponentMonsterPath, this.opponentCtx);
-    placeInitialTowers(this.initialTowerCoords, this.towers, this.ctx); // 초기 타워 배치
-    placeInitialTowers(this.opponentInitialTowerCoords, this.opponentTowers, this.opponentCtx); // 상대방 초기 타워 배치
-    placeBase(this.basePosition, true);
-    placeBase(this.opponentBasePosition, false);
+    this.drawPath(this.monsterPath, this.ctx);
+    this.drawPath(this.opponentMonsterPath, this.opponentCtx);
+    this.placeInitialTowers(this.initialTowerCoords, this.towers, this.ctx); // 초기 타워 배치
+    this.placeInitialTowers(this.opponentInitialTowerCoords, this.opponentTowers, this.opponentCtx); // 상대방 초기 타워 배치
+    this.placeBase(this.basePosition, true);
+    this.placeBase(this.opponentBasePosition, false);
   }
 
   drawPath(path, context) {
@@ -150,7 +154,7 @@ class Game {
       for (let j = gap; j < distance - gap; j += segmentLength) {
         const x = startX + Math.cos(angle) * j; // 다음 이미지 x좌표 계산(각도의 코사인 값은 x축 방향의 단위 벡터 * j를 곱하여 경로를 따라 이동한 x축 좌표를 구함)
         const y = startY + Math.sin(angle) * j; // 다음 이미지 y좌표 계산(각도의 사인 값은 y축 방향의 단위 벡터 * j를 곱하여 경로를 따라 이동한 y축 좌표를 구함)
-        drawRotatedImage(this.pathImage, x, y, imageWidth, imageHeight, angle, context);
+        this.drawRotatedImage(this.pathImage, x, y, imageWidth, imageHeight, angle, context);
       }
     }
   }
@@ -223,8 +227,8 @@ class Game {
 
   gameLoop() {
     // 렌더링 시에는 항상 배경 이미지부터 그려야 합니다! 그래야 다른 이미지들이 배경 이미지 위에 그려져요!
-    ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height); // 배경 이미지 다시 그리기
-    drawPath(this.monsterPath, this.ctx); // 경로 다시 그리기
+    this.ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height); // 배경 이미지 다시 그리기
+    this.drawPath(this.monsterPath, this.ctx); // 경로 다시 그리기
 
     this.ctx.font = '25px Times New Roman';
     this.ctx.fillStyle = 'skyblue';
@@ -270,7 +274,7 @@ class Game {
 
     // 상대방 게임 화면 업데이트
     this.opponentCtx.drawImage(this.backgroundImage, 0, 0, this.opponentCanvas.width, this.opponentCanvas.height);
-    drawPath(this.opponentMonsterPath, this.opponentCtx); // 상대방 경로 다시 그리기
+    this.drawPath(this.opponentMonsterPath, this.opponentCtx); // 상대방 경로 다시 그리기
 
     this.opponentTowers.forEach((tower) => {
       tower.draw(this.opponentCtx, this.towerImage);
@@ -284,7 +288,7 @@ class Game {
 
     this.highScore.draw(this.opponentCtx, this.baseImage, true);
 
-    requestAnimationFrame(gameLoop); // 지속적으로 다음 프레임에 gameLoop 함수 호출할 수 있도록 함
+    requestAnimationFrame(this.gameLoop.bind(this)); // 지속적으로 다음 프레임에 gameLoop 함수 호출할 수 있도록 함
   }
 
   initGame() {
@@ -296,7 +300,7 @@ class Game {
     this.bgm.volume = 0;
     this.bgm.play();
 
-    initMap(); // 맵 초기화 (배경, 몬스터 경로 그리기)
+    this.initMap(); // 맵 초기화 (배경, 몬스터 경로 그리기)
 
     this.monsterSpawnInterval = 3000;
     setInterval(this.spawnMonster.bind(this), this.monsterSpawnInterval); // 설정된 몬스터 생성 주기마다 몬스터 생성

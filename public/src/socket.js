@@ -1,4 +1,5 @@
 import onEvent from './events/on-event.event.js';
+import Game from './game.js';
 import { serialize } from './utils/packet-serializer.js';
 
 class Socket {
@@ -22,7 +23,11 @@ class Socket {
   connect(url) {
     this.socket = io(url);
 
-    this.socket.on('connection', () => {});
+    this.socket.on('connection', (data) => {
+      // console.log('data.uuid : ', data.uuid);
+      // const game = new Game(this.socket);
+      // game.userId = data.uuid;
+    });
     this.socket.on('event', onEvent(this.socket));
     this.socket.on('error', () => {});
   }

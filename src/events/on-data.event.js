@@ -3,14 +3,13 @@ import { deserialize } from '../utils/packet-serializer.utils.js';
 import configs from '../config/configs.js';
 import packetTypes from '../constants/packet-types.constants.js';
 
-let userId;
-
 const onData = (io, socket) => async (data) => {
   try {
-    const decoded = deserialize(data);
+    const decoded = deserialize(data, true);
     const packetType = data.packetType;
-    const { token, clientVersion } = decoded;
-    // const { packetType, clientVersion, payload } = data;
+    const { token, clientVersion, payload } = decoded;
+    // console.log(decoded); // 공통 요청
+    // console.log(payload); // 페이로드 확인용 콘솔 로그
 
     // token 검증?
     verifyToken(token);
@@ -18,16 +17,8 @@ const onData = (io, socket) => async (data) => {
     // clientVersion 검증
     verifyClientVersion(clientVersion);
 
-    // 유저 아이디 임시 저장
-    if (packetType === packetTypes.MATCH_REQUEST) {
-      userId = token.userId; // payload.userId;
-    }
-
     // packetType으로 handler 찾기
     const handler = getHandlerByPacketType(packetType);
-
-    // 핸들러 임시 핸들링
-    // const handler = packetTypeMappings[packetType];
 
     if (!handler) {
       throw new Error('유효하지 않은 핸들러');
@@ -46,7 +37,7 @@ const onData = (io, socket) => async (data) => {
     }
     console.log('packetType:', packetType, '  handler:', handler);
     // handler 실행
-    await handler(socket, userId, packetType, decoded, io);
+    await handler(socket, null, packetType, payload, io);
   } catch (err) {
     console.error('onData:', err); // 임시
     // handleError(socket, err);

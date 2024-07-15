@@ -9,34 +9,9 @@ const onConnection = (io) => async (socket) => {
   // console.log(socket.handshake.auth.userId);
   // jwt verify
 
-  // 아이디 임의 생성
-  const password = '1234';
-  const userId = uuidv4();
-  const uuid = uuidv4();
-  const token = '임시 생성 토큰';
+  // handleConnection(socket, userDB.uuid);
 
-  let userDB = await findUserByUserId(userId);
-  if (!userDB) {
-    userDB = await createUser(userId, password);
-    console.log('새로운 유저가 DB에 등록되었습니다.');
-  } else {
-    await updateUserLogin(userDB.userId);
-    console.log('기존 유저 정보를 불러옵니다.');
-  }
-
-  // console.log(socket);
-  let userRD = await userRedis.getUserData(userId);
-  if (!userRD) {
-    console.log('새로운 Redis 데이터 생성');
-    await userRedis.createUserData(userId, uuid, token);
-    userRD = await userRedis.getUserData(userId);
-  }
-
-  console.log(userRD);
-
-  handleConnection(socket, userDB.uuid);
-
-  socket.on('event', onData(io, socket));
+  socket.on('event', onData(io, socket)); // , userDB.uuid));
   // socket.on('disconnect', onDisconnect(socket));
 };
 
