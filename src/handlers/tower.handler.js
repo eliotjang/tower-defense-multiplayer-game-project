@@ -2,7 +2,6 @@ import packetTypes from '../constants/packet-types.constants.js';
 import NotificationPacket from '../protobuf/classes/notification/notification.proto.js';
 import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
 import { gameRedis } from '../utils/redis.utils.js';
-import packetTypes from '../constants/packet-types.constants.js';
 import ResponsePacket from '../protobuf/classes/response/response.proto.js';
 
 export const towerAttackRequestHandler = async (socket, uuid, packetType, payload, io) => {
