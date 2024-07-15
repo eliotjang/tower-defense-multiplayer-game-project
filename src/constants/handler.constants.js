@@ -1,4 +1,5 @@
 import { matchRequestHandler } from '../handlers/game.handler.js';
+import { monsterSpawnHandler } from '../handlers/monster.handler.js';
 import signInHandler from '../handlers/sign-in.handler.js';
 import packetTypes from './packet-types.constants.js';
 
@@ -19,10 +20,9 @@ const handlerMappings = {
   [packetTypes.BASE_ATTACKED_REQUEST]: {
     handler: dummyHandler, // baseAttackHandler,
   },
-  // [packetTypes.MONSTER_SPAWN_REQUEST]: {
-  //   handler: monsterSpawnHandler, 
-  // },
-
+  [packetTypes.MONSTER_SPAWN_REQUEST]: {
+    handler: monsterSpawnHandler,
+  },
 };
 
 export default handlerMappings;

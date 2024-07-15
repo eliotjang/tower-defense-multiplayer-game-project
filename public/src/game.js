@@ -3,8 +3,6 @@ import packetTypes from './constants/packet-types.constants.js';
 import { Monster } from './monster.js';
 import Socket from './socket.js';
 import { Tower } from './tower.js';
-import Socket from './socket';
-import packetTypes from './constants/packet-types.constants.js';
 
 const gameConstants = {
   NUM_OF_MONSTERS: 5,
@@ -231,9 +229,8 @@ class Game {
       path: newMonster.path,
       level: newMonster.level,
       monsterNumber: newMonster.monsterNumber,
-  
     };
-  
+
     Socket.sendEventProto(packetTypes.MONSTER_SPAWN_REQUEST, monsterData);
   }
 
@@ -297,7 +294,7 @@ class Game {
 
     this.opponentMonsters.forEach((monster) => {
       monster.move();
-      monster.draw(this.opponentCtx, true);
+      monster.draw(this.opponentCtx, false);
     });
 
     // this.highScore.draw(this.opponentCtx, this.baseImage, true);
