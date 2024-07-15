@@ -23,7 +23,7 @@ const packetPayloadKeyNames = {
   [packetTypes.MATCH_REQUEST]: 'matchRequest',
   [packetTypes.MATCH_FOUND_NOTIFICATION]: 'matchFoundNotification',
   [packetTypes.TOWER_PURCHASE_REQUEST]: 'towerPurchaseRequest',
-  [packetTypes.TOWER_PURCHASE_RESPONSE]: 'towerPurchseResponse',
+  [packetTypes.TOWER_PURCHASE_RESPONSE]: 'towerPurchaseResponse',
   [packetTypes.TOWER_PURCHASE_NOTIFICATION]: 'towerPurchaseNotification',
   [packetTypes.TOWER_ATTACK_REQUEST]: 'towerAttackRequest',
   [packetTypes.TOWER_ATTACK_RESPONSE]: 'towerAttackResponse',

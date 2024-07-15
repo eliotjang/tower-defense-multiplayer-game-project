@@ -12,9 +12,10 @@ message S2C_SignInResponse {
 }
 
 message S2C_TowerPurchaseResponse {
-
+    uint32 newUserGold = 1;
+    float x = 2;
+    float y = 3;
 }
-
 message S2C_TowerAttackResponse {
 
 }
@@ -40,7 +41,7 @@ message ResponsePacket {
     oneof payload {
         S2C_SignUpResponse signUpResponse = 3;
         S2C_SignInResponse signInResponse = 4;
-        S2C_TowerPurchaseResponse towerPurchseResponse = 5;
+        S2C_TowerPurchaseResponse towerPurchaseResponse = 5;
         S2C_TowerAttackResponse towerAttackResponse = 6;
         S2C_MonsterSpawnResponse monsterSpawnResponse = 7;
         S2C_MonsterKillResponse monsterKillResponse = 8;

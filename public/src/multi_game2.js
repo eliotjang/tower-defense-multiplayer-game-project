@@ -1,6 +1,9 @@
 import { Base } from './base.js';
+import packetNames from './constants/packet-names.constants.js';
+import packetTypes from './constants/packet-types.constants.js';
 import { Monster } from './monster.js';
 import { Tower } from './tower.js';
+import { serializeRequest } from './utils/packet-serializer.js';
 
 // if (!localStorage.getItem("token")) {
 //   alert("로그인이 필요합니다.");
@@ -9,6 +12,8 @@ import { Tower } from './tower.js';
 
 let serverSocket;
 let sendEvent;
+let userId;
+let index = 0;
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -21,11 +26,14 @@ const progressBar = document.getElementById('progressBar');
 const loader = document.getElementsByClassName('loader')[0];
 
 const NUM_OF_MONSTERS = 5; // 몬스터 개수
+
 // 게임 데이터
+// const gameData = new GameData();
 let towerCost = 0; // 타워 구입 비용
 let monsterSpawnInterval = 0; // 몬스터 생성 주기
 
 // 유저 데이터
+// const userData = new UserData();
 let userGold = 0; // 유저 골드
 let base; // 기지 객체
 let baseHp = 0; // 기지 체력
@@ -39,6 +47,7 @@ let score = 0; // 게임 점수
 let highScore = 0; // 기존 최고 점수
 
 // 상대 데이터
+// const opponentData = new OpponentData();
 let opponentBase; // 상대방 기지 객체
 let opponentMonsterPath; // 상대방 몬스터 경로
 let opponentInitialTowerCoords; // 상대방 초기 타워 좌표
@@ -143,15 +152,17 @@ function placeInitialTowers(initialTowerCoords, initialTowers, context) {
 
 function placeNewTower() {
   // 타워를 구입할 수 있는 자원이 있을 때 타워 구입 후 랜덤 배치
-  if (userGold < towerCost) {
-    alert('골드가 부족합니다.');
-    return;
-  }
+  // if (userData.userGold < gameData.towerCost) {
+    // alert("골드가 부족합니다.");
+    // return;
+  // }
 
   const { x, y } = getRandomPositionNearPath(200);
-  const tower = new Tower(x, y);
-  towers.push(tower);
-  tower.draw(ctx, towerImage);
+  // const tower = new Tower(x, y, towerCost);
+  sendEvent(10, { x, y, userGold: userData.userGold, userId, towerCost: gameData.towerCost, index });
+  //towers.push(tower);
+  // tower.draw(ctx, towerImage);
+  index ++;
 }
 
 function placeBase(position, isPlayer) {
@@ -159,8 +170,8 @@ function placeBase(position, isPlayer) {
     base = new Base(position.x, position.y, baseHp);
     base.draw(ctx, baseImage);
   } else {
-    opponentBase = new Base(position.x, position.y, baseHp);
-    opponentBase.draw(opponentCtx, baseImage, true);
+    highScore = new Base(position.x, position.y, baseHp);
+    highScore.draw(opponentCtx, baseImage, true);
   }
 }
 
@@ -232,7 +243,7 @@ function gameLoop() {
     monster.draw(opponentCtx, true);
   });
 
-  opponentBase.draw(opponentCtx, baseImage, true);
+  highScore.draw(opponentCtx, baseImage, true);
 
   requestAnimationFrame(gameLoop); // 지속적으로 다음 프레임에 gameLoop 함수 호출할 수 있도록 함
 }
@@ -279,6 +290,22 @@ Promise.all([
     });
   };
 
+  // 프로토콜 버퍼 적용된 sendEvent
+  const sendEventProto = (packetType, payload) => {
+    const requestData = {
+      token: 'token',
+      clientVersion: '1.0.0',
+      payload,
+    };
+
+    const packet = {
+      packetType,
+      [packetNames.payload[packetType]]: serializeRequest(requestData),
+    };
+
+    serverSocket.emit('event', packet);
+  };
+
   serverSocket.on('connect_error', (err) => {
     if (err.message === 'Authentication error') {
       alert('잘못된 토큰입니다.');
@@ -286,17 +313,38 @@ Promise.all([
     }
   });
 
-  let userId;
   serverSocket.on('connection', (data) => {
     // TODO. 서버와 연결되면 대결 대기열 큐 진입
     console.log('서버 연결 완료');
     userId = data.uuid;
+    console.log(userId);
     sendEvent(3, { timestamp: Date.now(), userId });
   });
 
   // 패킷 타입을 확인하여 해당 핸들러에서 처리
   serverSocket.on('data', (data) => {
     console.log(data.payload);
+  });
+
+  serverSocket.on('newTower', (data) => {
+    //console.log(data);
+    const { packetType, newUserGold, x, y } = data;
+    if (packetType === 10) {
+      const tower = new Tower(x, y, gameData.towerCost);
+      userData.userGold = newUserGold;
+      userData.towers.push(tower);
+      tower.draw(ctx, towerImage);
+    }
+  });
+
+  serverSocket.on('targetNewTower', (data) => {
+    //console.log(data);
+    const { packetType, x, y } = data;
+    if (packetType === 11) {
+      const tower = new Tower(x, y, gameData.towerCost);
+      opponentData.opponentTowers.push(tower);
+      tower.draw(opponentCtx, towerImage);
+    }
   });
 
   serverSocket.on('matchFound', (data) => {

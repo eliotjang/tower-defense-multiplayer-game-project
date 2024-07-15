@@ -12,6 +12,8 @@ import { serializeRequest } from './utils/packet-serializer.js';
 
 let serverSocket;
 let sendEvent;
+let userId;
+let index = 0;
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -150,15 +152,17 @@ function placeInitialTowers(initialTowerCoords, initialTowers, context) {
 
 function placeNewTower() {
   // 타워를 구입할 수 있는 자원이 있을 때 타워 구입 후 랜덤 배치
-  if (userGold < towerCost) {
-    alert('골드가 부족합니다.');
-    return;
-  }
+  // if (userData.userGold < gameData.towerCost) {
+    // alert("골드가 부족합니다.");
+    // return;
+  // }
 
   const { x, y } = getRandomPositionNearPath(200);
-  const tower = new Tower(x, y);
-  towers.push(tower);
-  tower.draw(ctx, towerImage);
+  // const tower = new Tower(x, y, towerCost);
+  sendEvent(10, { x, y, userGold: userData.userGold, userId, towerCost: gameData.towerCost, index });
+  //towers.push(tower);
+  // tower.draw(ctx, towerImage);
+  index ++;
 }
 
 function placeBase(position, isPlayer) {
@@ -309,19 +313,38 @@ Promise.all([
     }
   });
 
-  let userId;
   serverSocket.on('connection', (data) => {
     // TODO. 서버와 연결되면 대결 대기열 큐 진입
     console.log('서버 연결 완료');
     userId = data.uuid;
-    // console.log(userData);
-    const canvasWidth = canvas.width;
-    sendEvent(packetTypes.MATCH_REQUEST, { timestamp: Date.now(), userId });
+    console.log(userId);
+    sendEvent(3, { timestamp: Date.now(), userId });
   });
 
   // 패킷 타입을 확인하여 해당 핸들러에서 처리
   serverSocket.on('data', (data) => {
     console.log(data.payload);
+  });
+
+  serverSocket.on('newTower', (data) => {
+    //console.log(data);
+    const { packetType, newUserGold, x, y } = data;
+    if (packetType === 10) {
+      const tower = new Tower(x, y, gameData.towerCost);
+      userData.userGold = newUserGold;
+      userData.towers.push(tower);
+      tower.draw(ctx, towerImage);
+    }
+  });
+
+  serverSocket.on('targetNewTower', (data) => {
+    //console.log(data);
+    const { packetType, x, y } = data;
+    if (packetType === 11) {
+      const tower = new Tower(x, y, gameData.towerCost);
+      opponentData.opponentTowers.push(tower);
+      tower.draw(opponentCtx, towerImage);
+    }
   });
 
   serverSocket.on('matchFound', (data) => {
@@ -342,9 +365,6 @@ Promise.all([
         opponentMonsterPath = data.payload[key].monsterPath;
       }
     }
-
-    // console.log(monsterPath);
-    // console.log(opponentMonsterPath);
 
     let progressValue = 0;
     const progressInterval = setInterval(() => {
