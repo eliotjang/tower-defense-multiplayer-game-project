@@ -1,6 +1,7 @@
 import { matchRequestHandler } from '../handlers/game.handler.js';
 import signInHandler from '../handlers/sign-in.handler.js';
 import signUpHandler from '../handlers/sign-up.handler.js';
+import { towerAttackRequestHandler } from '../handlers/tower.handler.js';
 import packetTypes from './packet-types.constants.js';
 
 const dummyHandler = () => {

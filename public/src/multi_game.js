@@ -149,15 +149,17 @@ function placeInitialTowers(initialTowerCoords, initialTowers, context) {
 
 function placeNewTower() {
   // 타워를 구입할 수 있는 자원이 있을 때 타워 구입 후 랜덤 배치
-  if (userGold < towerCost) {
-    alert('골드가 부족합니다.');
-    return;
-  }
+  // if (userData.userGold < gameData.towerCost) {
+  // alert("골드가 부족합니다.");
+  // return;
+  // }
 
   const { x, y } = getRandomPositionNearPath(200);
-  const tower = new Tower(x, y);
-  towers.push(tower);
-  tower.draw(ctx, towerImage);
+  // const tower = new Tower(x, y, towerCost);
+  sendEvent(10, { x, y, userGold: userData.userGold, userId, towerCost: gameData.towerCost, index });
+  //towers.push(tower);
+  // tower.draw(ctx, towerImage);
+  index++;
 }
 
 function placeBase(position, isPlayer) {
@@ -313,6 +315,7 @@ Promise.all([
     // TODO. 서버와 연결되면 대결 대기열 큐 진입
     console.log('서버 연결 완료');
     userId = data.uuid;
+    console.log(userId);
     sendEvent(3, { timestamp: Date.now(), userId });
   });
 
@@ -361,6 +364,22 @@ Promise.all([
         }
       }
     }, 300);
+  });
+
+  serverSocket.on('targetMonsterSpawn', (data) => {
+    const { packetType, path, monsterImages, level, monsterNumber } = data;
+    if (packetType === 21) {
+      const newMonster = new Monster(path, monsterImages, level, monsterNumber);
+      opponentMonsters.push(newMonster);
+    }
+  });
+
+  serverSocket.on('targetMonsterSpawn', (data) => {
+    const { packetType, path, monsterImages, level, monsterNumber } = data;
+    if (packetType === 21) {
+      const newMonster = new Monster(path, monsterImages, level, monsterNumber);
+      opponentMonsters.push(newMonster);
+    }
   });
 
   serverSocket.on('gameOver', (data) => {
