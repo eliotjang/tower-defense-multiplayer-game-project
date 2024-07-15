@@ -23,12 +23,14 @@ message C2S_TowerAttackRequest {
 }
 
 message C2S_MonsterSpawnRequest {
-    uint32 monsterNumber = 1;
+    repeated Coords paths = 1;
+    uint32 monsterLevel = 2;
+    uint32 monsterNumber = 3;
+    message Coords {
+        float x = 1;
+        float y = 2;
+    }
 }
-// path: newMonster.path,
-// monsterImages: newMonster.monsterImages,
-// level: newMonster.level,
-// monsterNumber: newMonster.monsterNumber,
 
 message C2S_MonsterKillRequest {
 

@@ -31,21 +31,27 @@ const signUpHandler = async (socket, userId, packetType, payload, io) => {
       throw new Error('비밀번호는 최소 6자 이상이고 영어 소문자와 숫자의 조합이어야 합니다.');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 1);
 
-    const user = { userId: id, password: hashedPassword };
-    createUser(user, hashedPassword);
+    let userDB = await findUserByUserId(id);
+    if (!userDB) {
+      userDB = await createUser(id, hashedPassword);
+      console.log('새로운 유저가 DB에 등록되었습니다.');
+    } else {
+      await updateUserLogin(userDB.userId);
+      console.log('기존 유저 정보를 불러옵니다.');
+    }
 
     const data = new ResponsePacket(0, '회원가입 완료');
 
     const packet = serialize(packetTypes.SIGN_UP_RESPONSE, data);
     console.log(deserialize(packet)); // 테스트용 역직렬화
-    socket.emit('signUpHandler', packet);
+    socket.emit('event', packet);
   } catch (err) {
     console.error('회원가입 중 오류 발생', err);
-    const errorData = new ResponsePacket(1, err);
+    const errorData = new ResponsePacket(1, '회원가입 실패');
     const errorPacket = serialize(packetTypes.SIGN_UP_RESPONSE, errorData);
-    socket.emit('signUpHandler', errorPacket);
+    socket.emit('event', errorPacket);
   }
 };
 

@@ -1,5 +1,5 @@
-import { signUpHandler } from './sign-up.handler.js';
-import { signInHandler } from './sign-in.handler.js';
+import signUpHandler from './sign-up.handler.js';
+import signInHandler from './sign-in.handler.js';
 import { matchRequestHandler } from './game.handler.js';
 
 const packetTypeMappings = {

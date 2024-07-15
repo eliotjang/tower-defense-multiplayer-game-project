@@ -7,14 +7,15 @@ import { gameRedis } from '../utils/redis.utils.js';
 const userQueue = [];
 const userDataQueue = [];
 const numOfInitialTowers = 3;
-const canvasWidth = 1920;
-const canvasHeight = 1080;
+const canvasWidth = 1500;
+const canvasHeight = 540;
 const userGold = 1000;
 const baseHp = 200;
+const highScore = 0;
 
 export const matchRequestHandler = async (socket, uuid, packetType, payload, io) => {
   console.log('matchRequestHandler');
-  const { timestamp, userId } = payload;
+  const { timestamp } = payload;
 
   const monsterPath = generateRandomMonsterPath();
 
@@ -29,13 +30,13 @@ export const matchRequestHandler = async (socket, uuid, packetType, payload, io)
   const userData = { monsterPath, initialTowerCoords, basePosition };
   // console.log(userData);
 
-  userQueue.push(userId);
+  userQueue.push(socket.userId);
   // console.log(userId);
   userDataQueue.push(userData);
   // console.log(userQueue.length);
 
   if (userQueue.length === 2) {
-    matchFound(io, userId);
+    matchFound(io, socket.userId);
   }
   // io.emit('data', { payload: 'payload' });
 };
@@ -54,9 +55,11 @@ const matchFound = async (io, uuid) => {
   }
 
   const resPacketType = packetTypes.MATCH_FOUND_NOTIFICATION;
-  const notificationPacket = new NotificationPacket('대결을 시작합니다!', { data: payload });
+  const notificationPacket = new NotificationPacket('대결을 시작합니다!', { score: highScore, data: payload });
 
   const packet = serialize(resPacketType, notificationPacket);
+  // const test = deserialize(packet, true);
+  // console.log(test);
 
   // 대결 시작 (통지 패킷)
   io.emit('event', packet);
