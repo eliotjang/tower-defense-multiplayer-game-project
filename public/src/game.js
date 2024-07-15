@@ -3,7 +3,6 @@ import packetTypes from './constants/packet-types.constants.js';
 import { Monster } from './monster.js';
 import Socket from './socket.js';
 import { Tower } from './tower.js';
-import packetTypes from './constants/packet-types.constants.js';
 
 const gameConstants = {
   NUM_OF_MONSTERS: 5,
@@ -216,10 +215,10 @@ class Game {
       towerCost: this.towerCost,
       index: this.towersIndex,
     };
-    console.log(payload);
+    // console.log(payload);
     Socket.sendEventProto(packetTypes.TOWER_PURCHASE_REQUEST, payload);
     this.towersIndex = this.nextIndex();
-    console.log(this.towersIndex);
+    // console.log(this.towersIndex);
     //towers.push(tower);
     // tower.draw(ctx, towerImage);
     // index++;
