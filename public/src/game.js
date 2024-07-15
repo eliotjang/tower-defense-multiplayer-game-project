@@ -225,6 +225,13 @@ class Game {
     this.monsters.push(newMonster);
 
     // TODO. 서버로 몬스터 생성 이벤트 전송
+    const monsterData = {
+      path: newMonster.path,
+      level: newMonster.level,
+      monsterNumber: newMonster.monsterNumber,
+    };
+
+    Socket.sendEventProto(packetTypes.MONSTER_SPAWN_REQUEST, monsterData);
   }
 
   gameLoop() {
@@ -287,7 +294,7 @@ class Game {
 
     this.opponentMonsters.forEach((monster) => {
       monster.move();
-      monster.draw(this.opponentCtx, true);
+      monster.draw(this.opponentCtx, false);
     });
 
     // this.highScore.draw(this.opponentCtx, this.baseImage, true);
