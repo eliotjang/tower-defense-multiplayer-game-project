@@ -2,7 +2,6 @@ import { Base } from './base.js';
 import { Monster } from './monster.js';
 import Socket from './socket.js';
 import { Tower } from './tower.js';
-import Socket from './socket.js';
 import packetTypes from './constants/packet-types.constants.js';
 
 const gameConstants = {
@@ -71,7 +70,7 @@ class Game {
     this.buyTowerButton.style.cursor = 'pointer';
     this.buyTowerButton.style.display = 'none';
 
-    this.buyTowerButton.addEventListener('click', this.placeNewTower);
+    this.buyTowerButton.addEventListener('click', this.placeNewTower.bind(this));
     document.body.appendChild(this.buyTowerButton);
   }
 
@@ -96,6 +95,7 @@ class Game {
     this.towers = []; // 유저 타워 목록
     this.score = 0; // 게임 점수
     this.highScore = 0; // 기존 최고 점수
+    this.towersIndex = 0;
   }
 
   initOpponentData() {
@@ -202,11 +202,12 @@ class Game {
   placeNewTower() {
     // 타워를 구입할 수 있는 자원이 있을 때 타워 구입 후 랜덤 배치
     // if (this.userGold < this.towerCost) {
-      // alert('골드가 부족합니다.');
-      // return;
+    // alert('골드가 부족합니다.');
+    // return;
     // }
-
-    const { x, y } = getRandomPositionNearPath(200);
+    // console.log('11:', this.userId);
+    // console.log('22:', this.getRandomPositionNearPath);
+    const { x, y } = this.getRandomPositionNearPath(200);
     // const tower = new Tower(x, y, towerCost);
     const payload = {
       x,
@@ -214,11 +215,18 @@ class Game {
       userGold: this.userGold,
       userId: this.userId,
       towerCost: this.towerCost,
+      index: this.towersIndex,
     };
+    console.log(payload);
     Socket.sendEventProto(packetTypes.TOWER_PURCHASE_REQUEST, payload);
+    this.towersIndex = this.nextIndex();
+    console.log(this.towersIndex);
     //towers.push(tower);
     // tower.draw(ctx, towerImage);
     // index++;
+  }
+  nextIndex() {
+    return ++this.towersIndex;
   }
 
   placeBase(position, isPlayer) {

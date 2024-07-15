@@ -19,9 +19,6 @@ const onData = (io, socket) => async (data) => {
 
     // packetType으로 handler 찾기
     const handler = getHandlerByPacketType(packetType);
-    if (packetType === 3) {
-      console.log('여기까진 됨');
-    }
 
     if (!handler) {
       throw new Error('유효하지 않은 핸들러');

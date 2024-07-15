@@ -1,3 +1,5 @@
+import redisClient from '../init/redis.js';
+
 export const towers = {};
 
 export const addTower = (uuid, tower) => {
@@ -16,10 +18,20 @@ export const redisAddTower = async (uuid, towerData, index) => {
   });
 };
 
+export const towerRedis = {
+  createTowerData: async function (uuid, towerData, index) {
+    try {
+      const keyTowerData = `towers:${uuid}:${index}`;
+      await redisClient.set(keyTowerData, JSON.stringify(towerData));
+    } catch (error) {
+      console.error('createTowerData Error Message : ', error);
+    }
+  },
+};
+
 // 유저의 타워 목록을 가져오는 함수
 export const getUserTowers = (uuid) => {
   return towers[uuid] || [];
 };
 
-export const getRedisUserTowers = (uuid) => {
-  };
+export const getRedisUserTowers = (uuid) => {};
