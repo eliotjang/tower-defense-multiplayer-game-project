@@ -13,13 +13,13 @@ const signInHandler = async (socket, userId, packetType, payload, io) => {
 
   // 아이디 임의 생성
   const password = '1234';
-  userId = uuidv4();
+  // userId = uuidv4();
   const uuid = uuidv4();
   const token = '임시 생성 토큰';
 
-  let userDB = await findUserByUserId(userId);
+  let userDB = await findUserByUserId(uuid);
   if (!userDB) {
-    userDB = await createUser(userId, password);
+    userDB = await createUser(uuid, password);
     console.log('새로운 유저가 DB에 등록되었습니다.');
   } else {
     await updateUserLogin(userDB.userId);
@@ -27,11 +27,11 @@ const signInHandler = async (socket, userId, packetType, payload, io) => {
   }
 
   // console.log(socket);
-  let userRD = await userRedis.getUserData(userId);
+  let userRD = await userRedis.getUserData(uuid);
   if (!userRD) {
     console.log('새로운 Redis 데이터 생성');
-    await userRedis.createUserData(userId, userDB.uuid, token);
-    userRD = await userRedis.getUserData(userId);
+    await userRedis.createUserData(uuid, userDB.uuid, token);
+    userRD = await userRedis.getUserData(uuid);
   }
 
   console.log(userRD); // 레디스 생성 확인 로그
@@ -45,7 +45,9 @@ const signInHandler = async (socket, userId, packetType, payload, io) => {
   //   payload: { token: signedToken },
   // };
 
-  const data = new ResponsePacket(0, '로그인 성공', { token: signedToken, userId });
+  socket.userId = uuid;
+
+  const data = new ResponsePacket(0, '로그인 성공', { token: signedToken, userId: uuid });
 
   const packet = serialize(packetTypes.SIGN_IN_RESPONSE, data);
   console.log(deserialize(packet)); // 테스트용 역직렬화

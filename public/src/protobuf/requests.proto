@@ -12,7 +12,6 @@ message C2S_SignInRequest {
 
 message C2S_MatchRequest {
     uint64 timestamp = 1;
-    string userId = 2;
 }
 
 message C2S_TowerPurchaseRequest {
@@ -24,7 +23,13 @@ message C2S_TowerAttackRequest {
 }
 
 message C2S_MonsterSpawnRequest {
-
+    repeated Coords paths = 1;
+    uint32 monsterLevel = 2;
+    uint32 monsterNumber = 3;
+    message Coords {
+        float x = 1;
+        float y = 2;
+    }
 }
 
 message C2S_MonsterKillRequest {

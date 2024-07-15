@@ -1,5 +1,6 @@
 import { Base } from './base.js';
 import { Monster } from './monster.js';
+import Socket from './socket.js';
 import { Tower } from './tower.js';
 import Socket from './socket.js';
 import packetTypes from './constants/packet-types.constants.js';
