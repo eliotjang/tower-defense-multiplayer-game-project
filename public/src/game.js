@@ -229,7 +229,6 @@ class Game {
     // TODO. 서버로 몬스터 생성 이벤트 전송
     const monsterData = {
       path: newMonster.path,
-      monsterImages: newMonster.monsterImages,
       level: newMonster.level,
       monsterNumber: newMonster.monsterNumber,
   
