@@ -12,7 +12,6 @@ message C2S_SignInRequest {
 
 message C2S_MatchRequest {
     uint64 timestamp = 1;
-    string userId = 2;
 }
 
 message C2S_TowerPurchaseRequest {
