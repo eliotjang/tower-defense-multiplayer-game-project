@@ -3,6 +3,8 @@ import packetTypes from './constants/packet-types.constants.js';
 import { Monster } from './monster.js';
 import Socket from './socket.js';
 import { Tower } from './tower.js';
+import Socket from './socket';
+import packetTypes from './constants/packet-types.constants.js';
 
 const gameConstants = {
   NUM_OF_MONSTERS: 5,
@@ -225,6 +227,15 @@ class Game {
     this.monsters.push(newMonster);
 
     // TODO. 서버로 몬스터 생성 이벤트 전송
+    const monsterData = {
+      path: newMonster.path,
+      monsterImages: newMonster.monsterImages,
+      level: newMonster.level,
+      monsterNumber: newMonster.monsterNumber,
+  
+    };
+  
+    Socket.sendEventProto(packetTypes.MONSTER_SPAWN_REQUEST, monsterData);
   }
 
   gameLoop() {

@@ -19,6 +19,10 @@ const handlerMappings = {
   [packetTypes.BASE_ATTACKED_REQUEST]: {
     handler: dummyHandler, // baseAttackHandler,
   },
+  // [packetTypes.MONSTER_SPAWN_REQUEST]: {
+  //   handler: monsterSpawnHandler, 
+  // },
+
 };
 
 export default handlerMappings;
