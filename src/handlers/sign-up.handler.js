@@ -6,9 +6,6 @@ import bcrypt from 'bcrypt';
 
 const signUpHandler = async (socket, userId, packetType, payload, io) => {
   try {
-    console.log('signUpHandler');
-    console.log(payload);
-
     const { id, password } = payload;
     console.log(id, password);
     if (!id) {

@@ -5,7 +5,6 @@ import { toggleCssClass } from '../utils/toggler.utils.js';
 
 const signInHandler = ({ socket, packetType, payload }) => {
   console.log('signUpHandler');
-  console.log(payload);
   // console.log(Object.keys(payload));
   // console.log(getPayloadKeyNameByPacketType(packetType));
   // console.log(payload[getPayloadKeyNameByPacketType(packetType)]);
