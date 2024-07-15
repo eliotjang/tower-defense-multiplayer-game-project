@@ -1,8 +1,10 @@
+import { signUpHandler } from './sign-up.handler.js';
+import { signInHandler } from './sign-in.handler.js';
 import { matchRequestHandler } from './game.handler.js';
 
 const packetTypeMappings = {
-  // 1: signUpHandler,
-  // 2: loginHandler,
+  1: signUpHandler,
+  2: signInHandler,
   3: matchRequestHandler,
   // 4: matchFoundHandler,
   // 5: stateSyncHandler,

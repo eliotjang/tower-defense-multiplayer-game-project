@@ -2,7 +2,6 @@ syntax = "proto3";
 
 // 서버 -> 클라이언트: 회원가입 응답 패킷
 message S2C_SignUpResponse {
-    
 }
 
 // 서버 -> 클라이언트: 로그인 응답 패킷

@@ -1,5 +1,6 @@
 import { matchRequestHandler } from '../handlers/game.handler.js';
 import signInHandler from '../handlers/sign-in.handler.js';
+import signUpHandler from '../handlers/sign-up.handler.js';
 import packetTypes from './packet-types.constants.js';
 
 const dummyHandler = () => {
@@ -8,7 +9,7 @@ const dummyHandler = () => {
 
 const handlerMappings = {
   [packetTypes.SIGN_UP_REQUEST]: {
-    handler: dummyHandler,
+    handler: signUpHandler,
   },
   [packetTypes.SIGN_IN_REQUEST]: {
     handler: signInHandler,

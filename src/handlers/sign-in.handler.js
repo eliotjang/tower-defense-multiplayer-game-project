@@ -8,6 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
 const signInHandler = async (socket, userId, packetType, payload, io) => {
   console.log('signInHandler');
   console.log(payload);
+  /// 아이디/비번 체크
+
   // sign JWT token
   const signedToken = 'token';
 
@@ -45,7 +47,7 @@ const signInHandler = async (socket, userId, packetType, payload, io) => {
   //   payload: { token: signedToken },
   // };
 
-  const data = new ResponsePacket(0, '로그인 성공', { token: signedToken, userId });
+  const data = new ResponsePacket(0, '로그인 성공', { token: signedToken, userId: uuid });
 
   const packet = serialize(packetTypes.SIGN_IN_RESPONSE, data);
   console.log(deserialize(packet)); // 테스트용 역직렬화

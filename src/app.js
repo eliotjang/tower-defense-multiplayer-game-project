@@ -1,20 +1,20 @@
 import express from 'express';
 import { createServer } from 'http';
-import config from './config/configs.js';
+import configs from './config/configs.js';
 import initServer from './init/init.js';
+import initSocket from './init/socket.js';
 
 const app = express();
 const server = createServer(app);
 const PORT = configs.env.serverPort;
 
 // static file(html, css, js) serve middleware
-app.use(express.static('public', { index: config.client.index }));
+app.use(express.static('public', { index: configs.client.index }));
 // body parser middleware
 app.use(express.json());
 // content-type이 form인 경우, body data 가져옴
 app.use(express.urlencoded({ extended: false }));
 // app.use('/api', accountRouter);
-app.use('/api', router);
 initSocket(server);
 
 app.get('/', (req, res) => {
