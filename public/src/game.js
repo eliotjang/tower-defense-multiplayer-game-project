@@ -70,6 +70,8 @@ class Game {
     this.buyTowerButton.style.display = 'none';
 
     this.buyTowerButton.addEventListener('click', this.placeNewTower);
+
+    document.body.appendChild(this.buyTowerButton);
   }
 
   initGameData() {
