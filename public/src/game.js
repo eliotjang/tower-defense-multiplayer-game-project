@@ -1,6 +1,8 @@
 import { Base } from './base.js';
 import { Monster } from './monster.js';
 import { Tower } from './tower.js';
+import Socket from './socket.js';
+import packetTypes from './constants/packet-types.constants.js';
 
 const gameConstants = {
   NUM_OF_MONSTERS: 5,
@@ -203,9 +205,18 @@ class Game {
     }
 
     const { x, y } = getRandomPositionNearPath(200);
-    const tower = new Tower(x, y);
-    this.towers.push(tower);
-    tower.draw(this.ctx, this.towerImage);
+    // const tower = new Tower(x, y, towerCost);
+    const payload = {
+      x,
+      y,
+      userGold: this.userGold,
+      userId: this.userId,
+      towerCost: this.towerCost,
+    };
+    Socket.sendEventProto(packetTypes.TOWER_PURCHASE_REQUEST, payload);
+    //towers.push(tower);
+    // tower.draw(ctx, towerImage);
+    index++;
   }
 
   placeBase(position, isPlayer) {
