@@ -301,17 +301,21 @@ class Game {
         const Attacked = monster.move();
         monster.draw(this.ctx);
 
-        if (Attacked) {
-          const attackedSound = new Audio('sounds/attacked.wav');
-          attackedSound.volume = 0.3;
-          attackedSound.play();
-          // TODO. 몬스터가 기지를 공격했을 때 서버로 이벤트 전송
-          this.monsters.splice(i, 1);
+        if (!Attacked) {
+          continue;
         }
-      } else {
-        // TODO. 몬스터 사망 이벤트 전송
-        this.monsters.splice(i, 1);
+
+        const attackedSound = new Audio('sounds/attacked.wav');
+        attackedSound.volume = 0.3;
+        attackedSound.play();
+        // TODO. 몬스터가 기지를 공격했을 때 서버로 이벤트 전송
+        const payload = {
+          monsterDamage: monster.attackPower,
+        };
+        Socket.sendEventProto(packetTypes.BASE_ATTACKED_REQUEST, payload);
       }
+      // TODO. 몬스터 사망 이벤트 전송
+      this.monsters.splice(i, 1);
     }
 
     // 상대방 게임 화면 업데이트
@@ -358,6 +362,3 @@ class Game {
 }
 
 export default Game;
-
-// let serverSocket;
-// let sendEvent;

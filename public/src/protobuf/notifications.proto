@@ -2,7 +2,7 @@ syntax = 'proto3';
 
 message S2C_MatchFoundNotification {
     uint32 score = 1;
-	map<string, UserData> data = 2;
+	map<string, UserData> data = 2; // 변경 필요
 	message UserData {
         repeated Coords monsterPath = 1;
         repeated Coords initialTowerCoords = 2;
@@ -33,7 +33,7 @@ message S2C_MonsterKillNotification {
 }
 
 message S2C_GameOverNotification {
-
+    boolean isWin = 1;
 }
 
 message NotificationPacket {
