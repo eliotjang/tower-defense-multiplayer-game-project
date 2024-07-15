@@ -1,3 +1,7 @@
+import packetTypes from '../constants/packet-types.constants.js';
+import NotificationPacket from '../protobuf/classes/notification/notification.proto.js';
+import ResponsePacket from '../protobuf/classes/response/response.proto.js';
+import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
 import { gameRedis } from '../utils/redis.utils.js';
 
 const userQueue = [];
@@ -10,7 +14,7 @@ const baseHp = 200;
 
 export const matchRequestHandler = async (socket, uuid, packetType, payload, io) => {
   console.log('matchRequestHandler');
-  const { timestamp } = payload;
+  const { timestamp, userId } = payload;
 
   const monsterPath = generateRandomMonsterPath();
 
@@ -25,13 +29,13 @@ export const matchRequestHandler = async (socket, uuid, packetType, payload, io)
   const userData = { monsterPath, initialTowerCoords, basePosition };
   // console.log(userData);
 
-  userQueue.push(uuid);
+  userQueue.push(userId);
   // console.log(userId);
   userDataQueue.push(userData);
   // console.log(userQueue.length);
 
   if (userQueue.length === 2) {
-    matchFound(io, uuid);
+    matchFound(io, userId);
   }
   // io.emit('data', { payload: 'payload' });
 };
@@ -39,16 +43,23 @@ export const matchRequestHandler = async (socket, uuid, packetType, payload, io)
 const matchFound = async (io, uuid) => {
   console.log('matchFound');
 
-  await gameRedis.createGameData(uuid, userGold, baseHp);
-  // const gameRD = await gameRedis.getGameData(uuid);
-  // console.log(gameRD);
+  let payload = new Map();
+  payload[userQueue.pop()] = userDataQueue.pop();
+  payload[userQueue.pop()] = userDataQueue.pop();
 
-  let payload = {};
-  payload[userQueue.pop()] = userDataQueue.pop();
-  payload[userQueue.pop()] = userDataQueue.pop();
+  for (const key in payload) {
+    await gameRedis.createGameData(key, userGold, baseHp);
+    // const gameRD = await gameRedis.getGameData(key);
+    // console.log(gameRD);
+  }
+
+  const resPacketType = packetTypes.MATCH_FOUND_NOTIFICATION;
+  const notificationPacket = new NotificationPacket('대결을 시작합니다!', { data: payload });
+
+  const packet = serialize(resPacketType, notificationPacket);
 
   // 대결 시작 (통지 패킷)
-  io.emit('matchFound', { packetType: 5, token: 'token', clientVersion: '1.0.0', payload });
+  io.emit('event', packet);
 };
 
 function generateRandomMonsterPath() {
