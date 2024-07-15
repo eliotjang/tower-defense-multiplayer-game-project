@@ -14,7 +14,7 @@ const baseHp = 200;
 
 export const matchRequestHandler = async (socket, uuid, packetType, payload, io) => {
   console.log('matchRequestHandler');
-  const { timestamp, userId } = payload;
+  const { timestamp } = payload;
 
   const monsterPath = generateRandomMonsterPath();
 
@@ -29,13 +29,13 @@ export const matchRequestHandler = async (socket, uuid, packetType, payload, io)
   const userData = { monsterPath, initialTowerCoords, basePosition };
   // console.log(userData);
 
-  userQueue.push(userId);
+  userQueue.push(socket.userId);
   // console.log(userId);
   userDataQueue.push(userData);
   // console.log(userQueue.length);
 
   if (userQueue.length === 2) {
-    matchFound(io, userId);
+    matchFound(io, socket.userId);
   }
   // io.emit('data', { payload: 'payload' });
 };
