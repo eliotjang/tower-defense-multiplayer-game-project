@@ -241,8 +241,8 @@ class Game {
       this.base = new Base(position.x, position.y, this.baseHp);
       this.base.draw(this.ctx, this.baseImage);
     } else {
-      // this.highScore = new Base(position.x, position.y, this.baseHp);
-      // this.highScore.draw(this.opponentCtx, this.baseImage, true);
+      this.opponentBase = new Base(position.x, position.y, this.baseHp);
+      this.opponentBase.draw(this.opponentCtx, this.baseImage, true);
     }
   }
 
@@ -334,7 +334,7 @@ class Game {
       monster.draw(this.opponentCtx, false);
     });
 
-    // this.highScore.draw(this.opponentCtx, this.baseImage, true);
+    this.opponentBase.draw(this.opponentCtx, this.baseImage);
 
     requestAnimationFrame(this.gameLoop.bind(this)); // 지속적으로 다음 프레임에 gameLoop 함수 호출할 수 있도록 함
   }
