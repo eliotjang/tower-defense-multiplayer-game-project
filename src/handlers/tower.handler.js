@@ -24,11 +24,11 @@ export const purchaseTowerHandler = (socket, token, packetType, payload, io) => 
   // if (index !== serverIndex) {
   // console.log('비정상적인 index값입니다');
   // }
-  console.log(index);
+  // console.log(index);
   let newUserGold = userGold + 50;
   // towerRedis.createTowerData(userId, towerData, serverIndex);
   gameRedis.patchGameDataTower(userId, towerData, index);
-  console.log(`${userId}님 타워 추가`);
+  // console.log(`${userId}님 타워 추가`);
   // console.log(towers);
   //응답 패킷 인코딩
   const resPacketType = packetTypes.TOWER_PURCHASE_RESPONSE;
