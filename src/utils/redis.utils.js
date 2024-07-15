@@ -13,10 +13,10 @@ const GAME_DATA_PREFIX = 'game:';
 const TOWERS_PREFIX = 'towers:';
 
 export const userRedis = {
-  createUserData: async function (userId, uuid, token) {
+  createUserData: async function (uuid, token) {
     try {
-      const keyUUID = `${USER_PREFIX}${userId}:${urf.UUID}`;
-      const keyToken = `${USER_PREFIX}${userId}:${urf.TOKEN}`;
+      const keyUUID = `${USER_PREFIX}${uuid}:${urf.UUID}`;
+      const keyToken = `${USER_PREFIX}${uuid}:${urf.TOKEN}`;
 
       await redisClient.set(keyUUID, JSON.stringify(uuid));
       await redisClient.set(keyToken, JSON.stringify(token));
@@ -26,15 +26,15 @@ export const userRedis = {
   },
   /**
    *
-   * @param {string} userId
+   * @param {string} uuid
    * @param {Object} obj
    */
-  setUserData: async function (userId, obj) {
+  setUserData: async function (uuid, obj) {
     try {
       for (const [key, value] of Object.entries(obj)) {
         const snakeKey = transformCase(key, caseTypes.SNAKE_CASE);
         if (isUserRedisField(snakeKey)) {
-          const redisKey = `${USER_PREFIX}${userId}:${snakeKey}`;
+          const redisKey = `${USER_PREFIX}${uuid}:${snakeKey}`;
           await redisClient.set(redisKey, JSON.stringify(value));
         }
       }
@@ -42,14 +42,14 @@ export const userRedis = {
       console.error('setUserData failed:', err);
     }
   },
-  getUserData: async function (userId) {
+  getUserData: async function (uuid) {
     try {
-      const pattern = `${USER_PREFIX}${userId}*`;
+      const pattern = `${USER_PREFIX}${uuid}*`;
       const keys = await redisClient.keys(pattern);
 
       const values = {};
       for (let i = 0; i < keys.length; i++) {
-        const key = keys[i].replace(`${USER_PREFIX}${userId}:`, '');
+        const key = keys[i].replace(`${USER_PREFIX}${uuid}:`, '');
         values[key] = JSON.parse(await redisClient.get(keys[i]));
       }
       if (Object.keys(values).length === 0) {
@@ -61,13 +61,13 @@ export const userRedis = {
     }
   },
 
-  getUserDataEx: async function (userId, arr) {
+  getUserDataEx: async function (uuid, arr) {
     try {
       const userData = {};
       for (const keyName of arr) {
         const snakeKey = transformCase(keyName, caseTypes.SNAKE_CASE);
         if (isUserRedisField(snakeKey)) {
-          const redisKey = `${USER_PREFIX}${userId}:${snakeKey}`;
+          const redisKey = `${USER_PREFIX}${uuid}:${snakeKey}`;
           const result = JSON.parse(await redisClient.get(redisKey));
           userData[transformCase(keyName, caseTypes.CAMEL_CASE)] = result;
         }
@@ -77,10 +77,10 @@ export const userRedis = {
       console.error('getUserDataEx failed:', err);
     }
   },
-  removeUserData: async function (userId) {
+  removeUserData: async function (uuid) {
     try {
       // TODO: 유저 정보 제거 작업
-      const keys = await redisClient.keys(`${USER_PREFIX}${userId}:*`);
+      const keys = await redisClient.keys(`${USER_PREFIX}${uuid}:*`);
       for (const key of keys) {
         await redisClient.del(key);
       }
@@ -106,7 +106,7 @@ export const gameRedis = {
       for (const [key, value] of Object.entries(obj)) {
         const snakeKey = transformCase(key, caseTypes.SNAKE_CASE);
         if (isGameRedisField(snakeKey)) {
-          const redisKey = `${GAME_DATA_PREFIX}${userId}:${snakeKey}`;
+          const redisKey = `${GAME_DATA_PREFIX}${uuid}:${snakeKey}`;
           await redisClient.set(redisKey, JSON.stringify(value));
         }
       }
@@ -134,13 +134,13 @@ export const gameRedis = {
     }
   },
 
-  getUserDataEx: async function (userId, arr) {
+  getUserDataEx: async function (uuid, arr) {
     try {
       const gameData = {};
       for (const keyName of arr) {
         const snakeKey = transformCase(keyName, caseTypes.SNAKE_CASE);
         if (isUserRedisField(snakeKey)) {
-          const redisKey = `${GAME_DATA_PREFIX}${userId}:${snakeKey}`;
+          const redisKey = `${GAME_DATA_PREFIX}${uuid}:${snakeKey}`;
           const result = JSON.parse(await redisClient.get(redisKey));
           gameData[transformCase(keyName, caseTypes.CAMEL_CASE)] = result;
         }
