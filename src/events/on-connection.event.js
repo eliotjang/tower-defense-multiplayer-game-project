@@ -1,4 +1,6 @@
+import { createUser, findUserByUserId, findUserByUUID, updateUserLogin } from '../db/user/user.db.js';
 import { handleConnection } from '../handlers/helper.js';
+import { userRedis } from '../utils/redis.utils.js';
 import onData from './on-data.event.js';
 import onDisconnect from './on-disconnect.event.js';
 import jwt from 'jsonwebtoken';
@@ -18,6 +20,31 @@ const onConnection = (io) => async (socket) => {
     if (!user) {
       throw new Error('토큰 사용자가 존재하지 않습니다.');
     }
+    // 아이디 임의 생성
+    const password = '1234';
+    const userId = uuidv4();
+    const uuid = uuidv4();
+
+    let userDB = await findUserByUserId(userId);
+    if (!userDB) {
+      userDB = await createUser(userId, password);
+      console.log('새로운 유저가 DB에 등록되었습니다.');
+    } else {
+      await updateUserLogin(userDB.userId);
+      console.log('기존 유저 정보를 불러옵니다.');
+    }
+
+    // console.log(socket);
+    let userRD = await userRedis.getUserData(userId);
+    if (!userRD) {
+      console.log('새로운 Redis 데이터 생성');
+      await userRedis.createUserData(userId, uuid, token);
+      userRD = await userRedis.getUserData(userId);
+    }
+
+    console.log(userRD);
+
+    handleConnection(socket, userDB.uuid);
 
     const socketId = socket.id;
     const player = { username: user.username, uuid: user.uuid, token: token, socketId: socketId };

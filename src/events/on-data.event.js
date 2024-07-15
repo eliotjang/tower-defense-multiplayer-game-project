@@ -25,6 +25,7 @@ const onData = (io, socket) => async (data) => {
     if (!user) {
       throw new Error('토큰 사용자가 존재하지 않습니다.');
     }
+
     // clientVersion 검증
     // verifyClientVersion(clientVersion);
 
