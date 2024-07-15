@@ -68,8 +68,7 @@ class Game {
     this.buyTowerButton.style.cursor = 'pointer';
     this.buyTowerButton.style.display = 'none';
 
-    this.buyTowerButton.addEventListener('click', this.placeNewTower);
-
+    this.buyTowerButton.addEventListener('click', this.placeNewTower.bind(this));
     document.body.appendChild(this.buyTowerButton);
   }
 
@@ -96,6 +95,7 @@ class Game {
     this.highScore = 0; // 기존 최고 점수
     this.myTowerIndex = 0;
     this.myMonsterIndex = 0;
+    this.towersIndex = 0;
   }
 
   initOpponentData() {
@@ -208,15 +208,32 @@ class Game {
 
   placeNewTower() {
     // 타워를 구입할 수 있는 자원이 있을 때 타워 구입 후 랜덤 배치
-    if (this.userGold < this.towerCost) {
-      alert('골드가 부족합니다.');
-      return;
-    }
-
-    const { x, y } = getRandomPositionNearPath(200);
-    const tower = new Tower(x, y, this.myTowerIndex++);
-    this.towers.push(tower);
-    tower.draw(this.ctx, this.towerImage);
+    // if (this.userGold < this.towerCost) {
+    // alert('골드가 부족합니다.');
+    // return;
+    // }
+    // console.log('11:', this.userId);
+    // console.log('22:', this.getRandomPositionNearPath);
+    const { x, y } = this.getRandomPositionNearPath(200);
+    // const tower = new Tower(x, y, towerCost);
+    const payload = {
+      x,
+      y,
+      userGold: this.userGold,
+      userId: this.userId,
+      towerCost: this.towerCost,
+      index: this.towersIndex,
+    };
+    // console.log(payload);
+    Socket.sendEventProto(packetTypes.TOWER_PURCHASE_REQUEST, payload);
+    this.towersIndex = this.nextIndex();
+    // console.log(this.towersIndex);
+    //towers.push(tower);
+    // tower.draw(ctx, towerImage);
+    // index++;
+  }
+  nextIndex() {
+    return ++this.towersIndex;
   }
 
   placeBase(position, isPlayer) {
@@ -239,6 +256,13 @@ class Game {
     );
     this.monsters.push(newMonster);
     // TODO. 서버로 몬스터 생성 이벤트 전송
+    const monsterData = {
+      path: newMonster.path,
+      level: newMonster.level,
+      monsterNumber: newMonster.monsterNumber,
+    };
+
+    Socket.sendEventProto(packetTypes.MONSTER_SPAWN_REQUEST, monsterData);
   }
 
   gameLoop() {
@@ -307,7 +331,7 @@ class Game {
 
     this.opponentMonsters.forEach((monster) => {
       monster.move();
-      monster.draw(this.opponentCtx, true);
+      monster.draw(this.opponentCtx, false);
     });
 
     // this.highScore.draw(this.opponentCtx, this.baseImage, true);

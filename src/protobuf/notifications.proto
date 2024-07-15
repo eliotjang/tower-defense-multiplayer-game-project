@@ -15,7 +15,8 @@ message S2C_MatchFoundNotification {
 }
 
 message S2C_TowerPurchaseNotification {
-    
+    float x = 1;
+    float y = 2;
 }
 
 message S2C_TowerAttackNotification {
@@ -24,7 +25,7 @@ message S2C_TowerAttackNotification {
 }
 
 message S2C_MonsterSpawnNotification {
-
+    uint32 monsterNumber = 1;
 }
 
 message S2C_MonsterKillNotification {
