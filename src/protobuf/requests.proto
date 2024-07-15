@@ -19,7 +19,7 @@ message C2S_TowerPurchaseRequest {
 }
 
 message C2S_TowerAttackRequest {
-
+    uint64 timestamp = 1;
 }
 
 message C2S_MonsterSpawnRequest {

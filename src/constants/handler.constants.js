@@ -1,5 +1,6 @@
 import { matchRequestHandler } from '../handlers/game.handler.js';
 import signInHandler from '../handlers/sign-in.handler.js';
+import { towerAttackRequestHandler } from '../handlers/tower.handler.js';
 import packetTypes from './packet-types.constants.js';
 
 const dummyHandler = () => {
@@ -15,6 +16,9 @@ const handlerMappings = {
   },
   [packetTypes.MATCH_REQUEST]: {
     handler: matchRequestHandler,
+  },
+  [packetTypes.TOWER_ATTACK_REQUEST]: {
+    handler: towerAttackRequestHandler,
   },
   [packetTypes.BASE_ATTACKED_REQUEST]: {
     handler: dummyHandler, // baseAttackHandler,

@@ -1,3 +1,6 @@
+import packetTypes from './constants/packet-types.constants.js';
+import Socket from './socket.js';
+
 export class Tower {
   constructor(x, y) {
     // 생성자 안에서 타워들의 속성을 정의한다고 생각하시면 됩니다!
@@ -17,11 +20,8 @@ export class Tower {
     if (this.beamDuration > 0 && this.target) {
       ctx.beginPath();
       ctx.moveTo(this.x + this.width / 2, this.y + this.height / 2);
-      ctx.lineTo(
-        this.target.x + this.target.width / 2,
-        this.target.y + this.target.height / 2
-      );
-      ctx.strokeStyle = "skyblue";
+      ctx.lineTo(this.target.x + this.target.width / 2, this.target.y + this.target.height / 2);
+      ctx.strokeStyle = 'skyblue';
       ctx.lineWidth = 10;
       ctx.stroke();
       ctx.closePath();
@@ -32,6 +32,9 @@ export class Tower {
   attack(monster) {
     // 타워가 타워 사정거리 내에 있는 몬스터를 공격하는 메소드이며 사정거리에 닿는지 여부는 game.js에서 확인합니다.
     if (this.cooldown <= 0) {
+      const packet = { timestamp: Date.now() };
+      console.log(this.userId);
+      Socket.sendEventProto(packetTypes.TOWER_ATTACK_REQUEST, packet);
       monster.hp -= this.attackPower;
       this.cooldown = 180; // 3초 쿨타임 (초당 60프레임)
       this.beamDuration = 30; // 광선 지속 시간 (0.5초)
