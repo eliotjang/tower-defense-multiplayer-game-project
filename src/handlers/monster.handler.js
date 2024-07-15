@@ -25,7 +25,6 @@ export const monsterSpawnHandler = async (socket, userId, packetType, payload, i
   saveUserData(userId, packetType, payload);
 
   let payload = new Map();
-  payload.set()
   payload.set(userPrivacyId.pop(), userPrivacyData.pop());
 
   const notificationMonsterSpawnPacket = new NotificationPacket('상대방의 몬스터 데이터가 전송되었습니다.', payload);
