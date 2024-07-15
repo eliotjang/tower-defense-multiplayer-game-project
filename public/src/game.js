@@ -71,6 +71,7 @@ class Game {
     this.buyTowerButton.style.display = 'none';
 
     this.buyTowerButton.addEventListener('click', this.placeNewTower);
+    document.body.appendChild(this.buyTowerButton);
   }
 
   initGameData() {
@@ -199,10 +200,10 @@ class Game {
 
   placeNewTower() {
     // 타워를 구입할 수 있는 자원이 있을 때 타워 구입 후 랜덤 배치
-    if (this.userGold < this.towerCost) {
-      alert('골드가 부족합니다.');
-      return;
-    }
+    // if (this.userGold < this.towerCost) {
+      // alert('골드가 부족합니다.');
+      // return;
+    // }
 
     const { x, y } = getRandomPositionNearPath(200);
     // const tower = new Tower(x, y, towerCost);
@@ -216,7 +217,7 @@ class Game {
     Socket.sendEventProto(packetTypes.TOWER_PURCHASE_REQUEST, payload);
     //towers.push(tower);
     // tower.draw(ctx, towerImage);
-    index++;
+    // index++;
   }
 
   placeBase(position, isPlayer) {

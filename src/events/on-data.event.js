@@ -19,21 +19,12 @@ const onData = (io, socket) => async (data) => {
 
     // packetType으로 handler 찾기
     const handler = getHandlerByPacketType(packetType);
+    if (packetType === 3) {
+      console.log('여기까진 됨');
+    }
 
     if (!handler) {
       throw new Error('유효하지 않은 핸들러');
-    }
-
-    if (!handler) {
-      // 핸들러 없음 (error)
-    }
-
-    // 유저 아이디 임시 저장
-    if (packetType === 3) {
-      userId = payload.userId;
-    }
-    if (packetType === 10) {
-      userId = payload.userId;
     }
     console.log('packetType:', packetType, '  handler:', handler);
     // handler 실행
