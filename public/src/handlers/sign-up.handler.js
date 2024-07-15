@@ -3,7 +3,7 @@ import { getPayloadKeyNameByPacketType, packetNames } from '../constants/proto.c
 import Game from '../game.js';
 import { toggleCssClass } from '../utils/toggler.utils.js';
 
-const signInHandler = ({ socket, packetType, payload }) => {
+const signUpHandler = ({ socket, packetType, payload }) => {
   console.log('signUpHandler');
   // console.log(Object.keys(payload));
   // console.log(getPayloadKeyNameByPacketType(packetType));
@@ -14,4 +14,4 @@ const signInHandler = ({ socket, packetType, payload }) => {
   toggleCssClass('hide', 'register-buttons-01', 'main-buttons-01');
 };
 
-export default signInHandler;
+export default signUpHandler;
