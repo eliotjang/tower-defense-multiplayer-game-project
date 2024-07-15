@@ -2,8 +2,10 @@ import Game from '../game.js';
 
 const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
   console.log('matchFoundHandler');
-  const { data } = payload;
+  const { score, data } = payload;
+
   const game = Game.getInstance();
+  game.highScore = score;
 
   game.progressBar.textContent = '게임이 3초 뒤에 시작됩니다.';
   game.baseHp = 200;

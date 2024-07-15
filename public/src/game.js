@@ -45,9 +45,7 @@ class Game {
 
   initGameComponents() {
     this.canvas = document.getElementById('gameCanvas');
-    console.log(this.canvas);
     this.ctx = this.canvas.getContext('2d');
-    console.log(this.ctx);
     this.opponentCanvas = document.getElementById('opponentCanvas');
     this.opponentCtx = this.opponentCanvas.getContext('2d');
 
@@ -216,8 +214,8 @@ class Game {
       this.base = new Base(position.x, position.y, this.baseHp);
       this.base.draw(this.ctx, this.baseImage);
     } else {
-      this.highScore = new Base(position.x, position.y, this.baseHp);
-      this.highScore.draw(this.opponentCtx, this.baseImage, true);
+      // this.highScore = new Base(position.x, position.y, this.baseHp);
+      // this.highScore.draw(this.opponentCtx, this.baseImage, true);
     }
   }
 
@@ -289,7 +287,7 @@ class Game {
       monster.draw(this.opponentCtx, true);
     });
 
-    this.highScore.draw(this.opponentCtx, this.baseImage, true);
+    // this.highScore.draw(this.opponentCtx, this.baseImage, true);
 
     requestAnimationFrame(this.gameLoop.bind(this)); // 지속적으로 다음 프레임에 gameLoop 함수 호출할 수 있도록 함
   }
