@@ -1,3 +1,4 @@
+import constants from '../constants/constants.js';
 import env from '../constants/env.constants.js';
 
 const configs = {
@@ -10,6 +11,11 @@ const configs = {
     redisPassword: env.REDIS_PASSWORD,
     jwtSecret: env.JWT_SECRET,
   },
+  client: {
+    clientVersion: '1.0.0',
+    index: constants.INDEX_PATH,
+  },
+  server: {},
   databases: {
     GAME_DB: {
       name: env.DB1_NAME,

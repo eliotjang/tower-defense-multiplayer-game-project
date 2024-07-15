@@ -20,8 +20,6 @@ export const userRedis = {
       await redisClient.set(keyToken, JSON.stringify(token));
     } catch (error) {
       console.error('createUserData Error Message : ', error);
-    } finally {
-      await redisClient.unwatch();
     }
   },
   getUserData: async function (userId) {
@@ -47,41 +45,29 @@ export const userRedis = {
 export const gameRedis = {
   createGameData: async function (uuid, gold, baseHp) {
     try {
-      const key = `${GAME_DATA_PREFIX}${uuid}`;
-      const data = await redisClient.hVals(key);
-      await redisClient.wait(key);
-      const transaction = redisClient.multi();
-      if (!data || data.length === 0) {
-        transaction.hSet(key, `${GAME_FIELD_GOLD}`, `${gold}`);
-        transaction.hSet(key, `${GAME_FIELD_BASE_HP}`, `${baseHp}`);
-        while (true) {
-          const result = await transaction.exec();
-          if (result) {
-            console.log('게임 데이터 저장 성공');
-            break;
-          }
-        }
-      }
+      const keyGold = `${GAME_DATA_PREFIX}${uuid}${GAME_FIELD_GOLD}`;
+      const keyBaseHp = `${GAME_DATA_PREFIX}${uuid}${GAME_FIELD_BASE_HP}`;
+      await redisClient.set(keyGold, `${gold}`);
+      await redisClient.set(keyBaseHp, `${baseHp}`);
     } catch (error) {
       console.error('createGameData Error Message : ', error);
-    } finally {
-      await redisClient.unwatch();
     }
   },
 
   getGameData: async function (uuid) {
     try {
-      const key = `${GAME_DATA_PREFIX}${uuid}`;
-      const data = await redisClient.hGetAll(key);
-      const keys = Object.keys(data);
-      if (keys.length === 0) {
-        throw new Error('해당 유저의 게임 데이터가 존재하지 않습니다.');
-      }
-      for (let i = 0; i < keys.length; i++) {
-        data[keys[i]] = +data[keys[i]];
-      }
+      const pattern = `${GAME_DATA_PREFIX}${uuid}*`;
+      const keys = await redisClient.keys(pattern);
 
-      return data;
+      const values = {};
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i].replace(`${GAME_DATA_PREFIX}${uuid}`, '');
+        values[key] = JSON.parse(await redisClient.get(keys[i]));
+      }
+      if (Object.keys(values).length === 0) {
+        return null;
+      }
+      return values;
     } catch (error) {
       console.error('getGameData Error Message : ', error);
       return null;

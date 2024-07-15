@@ -1,6 +1,14 @@
 import { Base } from './base.js';
+<<<<<<< HEAD
 import { Monster } from './monster.js';
 import { Tower } from './tower.js';
+=======
+import packetNames from './constants/packet-names.constants.js';
+import packetTypes from './constants/packet-types.constants.js';
+import { Monster } from './monster.js';
+import { Tower } from './tower.js';
+import { serializeRequest } from './utils/packet-serializer.js';
+>>>>>>> 6865b735dc00290369e7e8f10226378b9b0d2a91
 
 if (!localStorage.getItem('token')) {
   alert('로그인이 필요합니다.');
@@ -22,10 +30,18 @@ const loader = document.getElementsByClassName('loader')[0];
 
 const NUM_OF_MONSTERS = 5; // 몬스터 개수
 // 게임 데이터
+<<<<<<< HEAD
+=======
+// const gameData = new GameData();
+>>>>>>> 6865b735dc00290369e7e8f10226378b9b0d2a91
 let towerCost = 0; // 타워 구입 비용
 let monsterSpawnInterval = 0; // 몬스터 생성 주기
 
 // 유저 데이터
+<<<<<<< HEAD
+=======
+// const userData = new UserData();
+>>>>>>> 6865b735dc00290369e7e8f10226378b9b0d2a91
 let userGold = 0; // 유저 골드
 let base; // 기지 객체
 let baseHp = 0; // 기지 체력
@@ -39,6 +55,10 @@ let score = 0; // 게임 점수
 let highScore = 0; // 기존 최고 점수
 
 // 상대 데이터
+<<<<<<< HEAD
+=======
+// const opponentData = new OpponentData();
+>>>>>>> 6865b735dc00290369e7e8f10226378b9b0d2a91
 let opponentBase; // 상대방 기지 객체
 let opponentMonsterPath; // 상대방 몬스터 경로
 let opponentInitialTowerCoords; // 상대방 초기 타워 좌표
@@ -159,8 +179,13 @@ function placeBase(position, isPlayer) {
     base = new Base(position.x, position.y, baseHp);
     base.draw(ctx, baseImage);
   } else {
+<<<<<<< HEAD
     opponentBase = new Base(position.x, position.y, baseHp);
     opponentBase.draw(opponentCtx, baseImage, true);
+=======
+    highScore = new Base(position.x, position.y, baseHp);
+    highScore.draw(opponentCtx, baseImage, true);
+>>>>>>> 6865b735dc00290369e7e8f10226378b9b0d2a91
   }
 }
 
@@ -232,7 +257,11 @@ function gameLoop() {
     monster.draw(opponentCtx, true);
   });
 
+<<<<<<< HEAD
   opponentBase.draw(opponentCtx, baseImage, true);
+=======
+  highScore.draw(opponentCtx, baseImage, true);
+>>>>>>> 6865b735dc00290369e7e8f10226378b9b0d2a91
 
   requestAnimationFrame(gameLoop); // 지속적으로 다음 프레임에 gameLoop 함수 호출할 수 있도록 함
 }
@@ -264,9 +293,15 @@ Promise.all([
 ]).then(() => {
   console.log('loading');
   serverSocket = io('http://127.0.0.1:5555', {
+<<<<<<< HEAD
     auth: {
       token: localStorage.getItem('token'),
     },
+=======
+    // auth: {
+    //   token: localStorage.getItem('token'),
+    // },
+>>>>>>> 6865b735dc00290369e7e8f10226378b9b0d2a91
   });
 
   // 토큰과 클라이언트 버전 임의 생성
@@ -279,6 +314,25 @@ Promise.all([
     });
   };
 
+<<<<<<< HEAD
+=======
+  // 프로토콜 버퍼 적용된 sendEvent
+  const sendEventProto = (packetType, payload) => {
+    const requestData = {
+      token: 'token',
+      clientVersion: '1.0.0',
+      payload,
+    };
+
+    const packet = {
+      packetType,
+      [packetNames.payload[packetType]]: serializeRequest(requestData),
+    };
+
+    serverSocket.emit('event', packet);
+  };
+
+>>>>>>> 6865b735dc00290369e7e8f10226378b9b0d2a91
   serverSocket.on('connect_error', (err) => {
     if (err.message === 'Authentication error') {
       alert('잘못된 토큰입니다.');

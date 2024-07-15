@@ -1,12 +1,12 @@
-import fs from "fs";
-import path from "path";
-import url from "url";
-import protobuf from "protobufjs";
-import protoTypeNames from "../constants/proto-type-names.constants.js";
+import fs from 'fs';
+import path from 'path';
+import url from 'url';
+import protobuf from 'protobufjs';
+import { packetNames } from '../constants/proto.constants.js';
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const protoDirname = path.join(__dirname, "../protobuf");
+const protoDirname = path.join(__dirname, '../protobuf');
 
 const protoMessages = {};
 
@@ -17,7 +17,7 @@ const getAllProtoFilePaths = (dir, fileList = []) => {
     const filePath = path.join(dir, file);
     if (fs.statSync(filePath).isDirectory()) {
       getAllProtoFilePaths(filePath, fileList);
-    } else if (path.extname(file) === ".proto") {
+    } else if (path.extname(file) === '.proto') {
       fileList.push(filePath);
     }
   });
@@ -32,7 +32,7 @@ export const loadProtoFiles = async () => {
     const root = new protobuf.Root();
     protoFiles.forEach((file) => root.loadSync(file));
 
-    for (const [packetType, typeName] of Object.entries(protoTypeNames)) {
+    for (const typeName of Object.values(packetNames)) {
       protoMessages[typeName] = root.lookupType(typeName);
     }
 
