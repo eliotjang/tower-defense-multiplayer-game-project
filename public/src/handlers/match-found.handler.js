@@ -1,13 +1,10 @@
 import Game from '../game.js';
 
 const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
-  console.log('matchFoundHandler');
   const { score, data } = payload;
 
   const game = Game.getInstance();
   game.highScore = score;
-
-  // console.log(data);
 
   game.progressBar.textContent = '게임이 3초 뒤에 시작됩니다.';
   game.baseHp = 200;
@@ -23,9 +20,6 @@ const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
       game.opponentMonsterPath = data[key].monsterPath;
     }
   }
-
-  // console.log(monsterPath);
-  // console.log(opponentMonsterPath);
 
   let progressValue = 0;
   const progressInterval = setInterval(() => {

@@ -42,8 +42,7 @@ export class Tower {
         towerIndex: this.index,
         monsterIndex: monster.index,
       };
-      // console.log(packet);
-      // console.log(game.userId);
+      
       Socket.sendEventProto(packetTypes.TOWER_ATTACK_REQUEST, packet);
       monster.hp -= this.attackPower;
       this.cooldown = 180; // 3초 쿨타임 (초당 60프레임)

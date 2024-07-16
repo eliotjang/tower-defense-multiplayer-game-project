@@ -208,14 +208,7 @@ class Game {
 
   placeNewTower() {
     // 타워를 구입할 수 있는 자원이 있을 때 타워 구입 후 랜덤 배치
-    // if (this.userGold < this.towerCost) {
-    // alert('골드가 부족합니다.');
-    // return;
-    // }
-    // console.log('11:', this.userId);
-    // console.log('22:', this.getRandomPositionNearPath);
     const { x, y } = this.getRandomPositionNearPath(200);
-    // const tower = new Tower(x, y, towerCost);
     const payload = {
       x,
       y,
@@ -224,13 +217,8 @@ class Game {
       towerCost: this.towerCost,
       index: this.towersIndex,
     };
-    // console.log(payload);
     Socket.sendEventProto(packetTypes.TOWER_PURCHASE_REQUEST, payload);
     this.towersIndex = this.nextIndex();
-    // console.log(this.towersIndex);
-    //towers.push(tower);
-    // tower.draw(ctx, towerImage);
-    // index++;
   }
   nextIndex() {
     return ++this.towersIndex;
@@ -358,6 +346,3 @@ class Game {
 }
 
 export default Game;
-
-// let serverSocket;
-// let sendEvent;
