@@ -39,6 +39,10 @@ message S2C_GameOverNotification {
     bool isWin = 1;
 }
 
+message S2C_ChattingNotification {
+    string chat = 1;
+}
+
 message NotificationPacket {
     uint64 timestamp = 1;
     string message = 2;
@@ -49,5 +53,6 @@ message NotificationPacket {
         S2C_MonsterSpawnNotification monsterSpawnNotification = 6;
         S2C_MonsterKillNotification monsterKillNotification = 7;
         S2C_GameOverNotification gameOverNotification = 8;
+        S2C_ChattingNotification chattingNotification = 9;
     }
 }

@@ -1,6 +1,8 @@
+import chattingRequestHandler from '../../../src/handlers/chatting.handler.js';
 import signUpHandler from '../../../src/handlers/sign-up.handler.js';
 import packetTypes from '../constants/packet-types.constants.js';
 import baseHandler from './base.handler.js';
+import chattingNotificationHandler from './chatting.handler.js';
 import gameOverHandler from './game-over.handler.js';
 import matchFoundNotificationHandler from './match-found.handler.js';
 import monsterKillNotificationHandler from './monster-kill.handler.js';
@@ -20,8 +22,7 @@ const handlerMappings = {
   [packetTypes.MONSTER_KILL_NOTIFICATION]: monsterKillNotificationHandler,
   [packetTypes.BASE_ATTACKED_RESPONSE]: baseHandler,
   [packetTypes.GAME_OVER_NOTIFICATION]: gameOverHandler,
-
-  // ...
+  [packetTypes.CHATTING_NOTIFICATION]: chattingNotificationHandler,
 };
 
 export const getHandlerByPacketType = (packetType) => {

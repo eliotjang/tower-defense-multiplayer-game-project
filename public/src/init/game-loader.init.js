@@ -1,3 +1,4 @@
+import { displayChat } from '../chatting.js';
 import packetTypes from '../constants/packet-types.constants.js';
 import Game from '../game.js';
 import Socket from '../socket.js';
@@ -12,6 +13,8 @@ const loadGame = (loginNumber) => {
 
     const packet = { timestamp: Date.now() };
     Socket.sendEventProto(packetTypes.MATCH_REQUEST, packet);
+
+    displayChat();
   }
 
   chatContainer.style.display = 'flex';

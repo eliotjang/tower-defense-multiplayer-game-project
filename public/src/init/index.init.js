@@ -3,6 +3,7 @@ import loadGame from './game-loader.init.js';
 import init from './init.js';
 import Socket from '../socket.js';
 import { toggleCssClass } from '../utils/toggler.utils.js';
+import { addMessage } from '../chatting.js';
 
 init();
 
@@ -42,6 +43,19 @@ const initIndex = () => {
 
   document.getElementById('register-back').addEventListener('click', () => {
     toggleCssClass('hide', 'register-buttons-01', 'main-buttons-01');
+  });
+
+  const inputField = document.querySelector('.chat-input input');
+  document.getElementById('chat').addEventListener('click', () => {
+    const messageText = inputField.value.trim();
+    if (messageText) {
+      addMessage(messageText, 'user');
+      const payload = {
+        chat: messageText,
+      };
+      Socket.sendEventProto(packetTypes.CHATTING_REQUEST, payload);
+      inputField.value = '';
+    }
   });
 };
 
