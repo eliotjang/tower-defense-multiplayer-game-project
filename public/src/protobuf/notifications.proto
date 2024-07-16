@@ -33,7 +33,7 @@ message S2C_MonsterKillNotification {
 }
 
 message S2C_GameOverNotification {
-    boolean isWin = 1;
+    bool isWin = 1;
 }
 
 message NotificationPacket {

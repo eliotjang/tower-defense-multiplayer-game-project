@@ -1,12 +1,13 @@
 import packetTypes from '../constants/packet-types.constants.js';
 import NotificationPacket from '../protobuf/classes/notification/notification.proto.js';
-import ResponsePacket from '../protobuf/classes/response/response.proto.js';
+import { gameSessionsManager } from '../sessions/game.session.js';
 import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
 import { gameRedis } from '../utils/redis.utils.js';
+import { userSessionsObjManager } from '../sessions/user.session.js';
 
 const userQueue = [];
 const userDataQueue = [];
-const numOfInitialTowers = 3;
+const numOfInitialTowers = 1;
 const canvasWidth = 1500;
 const canvasHeight = 540;
 const userGold = 1000;
@@ -15,7 +16,6 @@ const highScore = 0;
 
 export const matchRequestHandler = async (socket, uuid, packetType, payload, io) => {
   console.log('matchRequestHandler');
-  // console.log('matchRequestHandler socket.uuid : ', socket.uuid);
   const { timestamp } = payload;
   const monsterPath = generateRandomMonsterPath();
 
@@ -38,29 +38,44 @@ export const matchRequestHandler = async (socket, uuid, packetType, payload, io)
 };
 
 const matchFound = async (io, uuid) => {
-  console.log('matchFound');
+  try {
+    console.log('matchFound');
 
-  let payload = new Map();
-  payload[userQueue.pop()] = userDataQueue.pop();
-  payload[userQueue.pop()] = userDataQueue.pop();
+    let payload = new Map();
+    const uuid1 = userQueue.pop();
+    const uuid2 = userQueue.pop();
+    const userData1 = userDataQueue.pop();
+    const userData2 = userDataQueue.pop();
+    payload[uuid1] = userData1;
+    payload[uuid2] = userData2;
 
-  // console.log(payload);
+    const game = gameSessionsManager.createGame();
+    userSessionsObjManager.getUserByUuid(uuid1);
+    const user1 = userSessionsObjManager.getUserByUuid(uuid1);
+    const user2 = userSessionsObjManager.getUserByUuid(uuid2);
+    // console.lo;
 
-  for (const key in payload) {
-    await gameRedis.createGameData(key, userGold, baseHp);
-    // const gameRD = await gameRedis.getGameData(key);
-    // console.log(gameRD);
+    game.addUser(user1);
+    game.addUser(user2);
+
+    // console.log(payload);
+
+    for (const key in payload) {
+      await gameRedis.createGameData(key, userGold, baseHp);
+      // const gameRD = await gameRedis.getGameData(key);
+      // console.log(gameRD);
+    }
+    const resPacketType = packetTypes.MATCH_FOUND_NOTIFICATION;
+    const notificationPacket = new NotificationPacket('대결을 시작합니다!', { score: highScore, data: payload });
+
+    const packet = serialize(resPacketType, notificationPacket);
+    // console.log(deserialize(packet, true));
+
+    // 대결 시작 (통지 패킷)
+    io.emit('event', packet);
+  } catch (err) {
+    console.error(err);
   }
-  // console.log(payload);
-  const resPacketType = packetTypes.MATCH_FOUND_NOTIFICATION;
-  const notificationPacket = new NotificationPacket('대결을 시작합니다!', { score: highScore, data: payload });
-
-  const packet = serialize(resPacketType, notificationPacket);
-  // const test = deserialize(packet, true);
-  // console.log(test);
-
-  // 대결 시작 (통지 패킷)
-  io.emit('event', packet);
 };
 
 function generateRandomMonsterPath() {

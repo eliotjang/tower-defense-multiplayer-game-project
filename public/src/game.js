@@ -265,7 +265,34 @@ class Game {
     Socket.sendEventProto(packetTypes.MONSTER_SPAWN_REQUEST, monsterData);
   }
 
-  gameLoop() {
+  pause() {
+    console.log('pause:', this);
+    this.bgm.pause();
+    this.isInitGame = false;
+  }
+
+  resume() {
+    this.bgm.play();
+    this.isInitGame = true;
+  }
+
+  wait(milliSeconds) {
+    return new Promise((resolve) => {
+      const waitForResume = () => {
+        if (this.isInitGame) {
+          resolve();
+        } else {
+          setTimeout(waitForResume.bind(this), milliSeconds);
+        }
+      };
+      waitForResume();
+    });
+  }
+
+  async gameLoop() {
+    if (!this.isInitGame) {
+      await this.wait(1000);
+    }
     // 렌더링 시에는 항상 배경 이미지부터 그려야 합니다! 그래야 다른 이미지들이 배경 이미지 위에 그려져요!
     this.ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height); // 배경 이미지 다시 그리기
     this.drawPath(this.monsterPath, this.ctx); // 경로 다시 그리기
