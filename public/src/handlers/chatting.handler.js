@@ -1,8 +1,8 @@
 import { addMessage } from '../chatting.js';
 
-const chattingHandler = ({ socket, packetType, payload }) => {
-  const { chattingMessage } = payload;
-  addMessage(chattingMessage, 'enemy');
+const chattingNotificationHandler = ({ socket, packetType, payload }) => {
+  const { chat } = payload;
+  addMessage(chat, 'enemy');
 };
 
-export default chattingHandler;
+export default chattingNotificationHandler;

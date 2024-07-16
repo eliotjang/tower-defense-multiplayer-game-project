@@ -329,8 +329,9 @@ class Game {
         const payload = {
           monsterDamage: monster.attackPower,
         };
-        Socket.sendEventProto(packetTypes.BASE_ATTACKED_REQUEST, payload);
-        this.monsters.splice(i, 1);
+        // 채팅 기능 구현을 위해 임시 제거
+        // Socket.sendEventProto(packetTypes.BASE_ATTACKED_REQUEST, payload);
+        // this.monsters.splice(i, 1);
       } else {
         const payload = {
           monsterIndex: monster.index,

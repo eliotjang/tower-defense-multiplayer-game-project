@@ -48,7 +48,7 @@ message C2S_GameEndRequest {
 }
 
 message C2S_ChattingRequest {
-    string chattingMessage = 1;
+    string chat = 1;
 }
 
 message RequestPacket {

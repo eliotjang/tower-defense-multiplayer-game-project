@@ -1,13 +1,22 @@
 import packetTypes from '../constants/packet-types.constants.js';
 import NotificationPacket from '../protobuf/classes/notification/notification.proto.js';
+import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
 
-const chattingHandler = async (socket, userId, packetType, payload, io) => {
-  const { chattingMessage } = payload;
-  console.log(chattingMessage);
-  const packet = serialize(packetTypes.CHATTING_NOTIFICATION, { chattingMessage });
-  // console.log(deserialize(packet)); // 테스트용 역직렬화
-  // console.log(packet.packet.constructor.name);
+const chattingRequestHandler = async (socket, userId, packetType, payload, io) => {
+  const { chat } = payload;
+
+  chattingNotification(socket, chat);
+};
+
+const chattingNotification = (socket, chat) => {
+  const packetType = packetTypes.CHATTING_NOTIFICATION;
+  const notificationPacket = new NotificationPacket('채팅 전송', { chat });
+
+  const packet = serialize(packetType, notificationPacket);
+  // const test = deserialize(packet, true);
+  // console.log(test);
+
   socket.broadcast.emit('event', packet);
 };
 
-export default chattingHandler;
+export default chattingRequestHandler;

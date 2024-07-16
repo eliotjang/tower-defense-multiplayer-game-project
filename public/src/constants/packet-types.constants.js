@@ -29,7 +29,8 @@ const packetTypes = {
   GAME_OVER_NOTIFICATION: 32,
   GAME_END_REQUEST: 33,
 
-  CHATTING_NOTIFICATION: 40,
+  CHATTING_REQUEST: 40,
+  CHATTING_NOTIFICATION: 41,
 };
 
 export default packetTypes;

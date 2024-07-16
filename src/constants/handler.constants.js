@@ -7,7 +7,7 @@ import { towerAttackRequestHandler } from '../handlers/tower.handler.js';
 import packetTypes from './packet-types.constants.js';
 import { purchaseTowerHandler } from '../handlers/tower.handler.js';
 import signUpHandler from '../handlers/sign-up.handler.js';
-import chattingHandler from '../handlers/chatting.handler.js';
+import chattingRequestHandler from '../handlers/chatting.handler.js';
 
 const dummyHandler = () => {
   // temp
@@ -38,8 +38,8 @@ const handlerMappings = {
   [packetTypes.MONSTER_SPAWN_REQUEST]: {
     handler: monsterSpawnHandler,
   },
-  [packetTypes.CHATTING_NOTIFICATION]: {
-    handler: chattingHandler,
+  [packetTypes.CHATTING_REQUEST]: {
+    handler: chattingRequestHandler,
   },
   [packetTypes.MONSTER_KILL_REQUEST]: {
     handler: monsterKillRequestHandler,

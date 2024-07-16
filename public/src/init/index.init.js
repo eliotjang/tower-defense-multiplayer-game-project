@@ -50,7 +50,10 @@ const initIndex = () => {
     const messageText = inputField.value.trim();
     if (messageText) {
       addMessage(messageText, 'user');
-      Socket.sendEventProto(packetTypes.CHATTING_NOTIFICATION, { chattingMessage: messageText });
+      const payload = {
+        chat: messageText,
+      };
+      Socket.sendEventProto(packetTypes.CHATTING_REQUEST, payload);
       inputField.value = '';
     }
   });

@@ -40,7 +40,7 @@ message S2C_GameOverNotification {
 }
 
 message S2C_ChattingNotification {
-    string chattingMessage = 1;
+    string chat = 1;
 }
 
 message NotificationPacket {
