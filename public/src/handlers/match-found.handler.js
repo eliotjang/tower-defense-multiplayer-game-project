@@ -2,12 +2,12 @@ import Game from '../game.js';
 
 const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
   console.log('matchFoundHandler');
-  const { score, data } = payload;
+  const { score, gold, towerCost, data } = payload;
 
   const game = Game.getInstance();
   game.highScore = score;
-
-  // console.log(data);
+  game.userGold = gold;
+  game.towerCost = towerCost;
 
   game.progressBar.textContent = '게임이 3초 뒤에 시작됩니다.';
   game.baseHp = 200;
@@ -24,9 +24,6 @@ const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
     }
   }
 
-  // console.log(monsterPath);
-  // console.log(opponentMonsterPath);
-
   let progressValue = 0;
   const progressInterval = setInterval(() => {
     progressValue += 10;
@@ -42,7 +39,6 @@ const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
       game.canvas.style.display = 'block';
       game.opponentCanvas.style.display = 'block';
 
-      // TODO. 유저 및 상대방 유저 데이터 초기화
       if (!game.isInitGame) {
         game.initGame();
       }

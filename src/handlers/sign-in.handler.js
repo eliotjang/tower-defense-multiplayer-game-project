@@ -33,7 +33,7 @@ const signInHandler = async (socket, userId, packetType, payload, io) => {
     userSessionsObjManager.addUser(userDB.uuid, socket);
 
     const data = new ResponsePacket(0, '로그인 성공', { token: token, userId: userDB.uuid });
-    console.log(data);
+    // console.log(data);
     const packet = serialize(packetTypes.SIGN_IN_RESPONSE, data);
     socket.emit('event', packet);
   } catch (err) {

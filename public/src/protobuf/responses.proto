@@ -16,6 +16,7 @@ message S2C_TowerPurchaseResponse {
     uint32 newUserGold = 1;
     float x = 2;
     float y = 3;
+    uint32 index = 4;
 }
 message S2C_TowerAttackResponse {
 
