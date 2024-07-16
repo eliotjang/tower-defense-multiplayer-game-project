@@ -31,7 +31,7 @@ const baseHandler = async (socket, userId, packetType, payload, io) => {
 
     // 통지
     socket.emit('event', mySerialized);
-    game.getOtherUserByMyUuid(socket.uuid).socket.emit('event', opSerialized);
+    game.emitToOther(socket.uuid, 'event', opSerialized);
 
     return;
   }
@@ -44,7 +44,7 @@ const baseHandler = async (socket, userId, packetType, payload, io) => {
 
   // 패킷 전송
   socket.emit('event', mySerialized);
-  game.getOtherUserByMyUuid(socket.uuid).socket.emit('event', opSerialized);
+  game.emitToOther(socket.uuid, 'event', opSerialized);
 };
 
 export default baseHandler;

@@ -116,6 +116,41 @@ class Game {
     return otherUser?.socket;
   }
 
+  /**
+   * 게임 세션 내 모든 유저에게 broadcast하는 기능
+   * @param {string} event 이벤트 명
+   * @param {object} data 보낼 데이터
+   */
+  broadcast(event, data) {
+    if (this.users.length === 0) {
+      console.error('broadcast: 게임 세션에 유저가 없습니다.');
+      return false;
+    }
+    for (const user of this.users) {
+      user.socket.emit(event, data);
+    }
+    return true;
+  }
+
+  /**
+   * 상대에게 emit하는 기능
+   * @param {string} uuid 자신의 uuid
+   * @param {string} event 이벤트 명
+   * @param {object} data 보낼 데이터
+   * @returns 성공 시 true, 실패 시 false를 반환
+   */
+  emitToOther(uuid, event, data) {
+    if (this.users.length < 2) {
+      console.error('emitToOther: 보낼 상대가 없습니다.');
+      return false;
+    }
+    if (this.users[0].uuid !== uuid) {
+      this.users[0].socket.emit(event, data);
+    }
+    this.users[1].socket.emit(event, data);
+    return true;
+  }
+
   setGameState(gameState) {
     this.gameState = gameState;
   }

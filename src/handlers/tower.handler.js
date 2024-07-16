@@ -3,6 +3,7 @@ import NotificationPacket from '../protobuf/classes/notification/notification.pr
 import { serialize } from '../utils/packet-serializer.utils.js';
 import { gameRedis } from '../utils/redis.utils.js';
 import ResponsePacket from '../protobuf/classes/response/response.proto.js';
+import { gameSessionsManager as gsm } from '../sessions/game.session.js';
 export const towerAttackRequestHandler = async (socket, uuid, packetType, payload, io) => {
   const { timestamp, userId, towerIndex, monsterIndex } = payload;
 
@@ -10,15 +11,29 @@ export const towerAttackRequestHandler = async (socket, uuid, packetType, payloa
 };
 
 const towerAttackNotification = (socket, towerIndex, monsterIndex) => {
+  const game = gsm.getGame(socket.gameId);
+
+  // 게임이 진행 중이 아닐 때 정보 갱신 방지
+  if (!game.isPlaying()) {
+    return;
+  }
+
   const packetType = packetTypes.TOWER_ATTACK_NOTIFICATION;
   const notificationPacket = new NotificationPacket('적 타워가 적 몬스터 공격 메세지', { towerIndex, monsterIndex });
 
   const packet = serialize(packetType, notificationPacket);
 
-  socket.broadcast.emit('event', packet);
+  game.emitToOther(socket.uuid, 'event', packet);
 };
 
 export const purchaseTowerHandler = async (socket, token, packetType, payload, io) => {
+  const game = gsm.getGame(socket.gameId);
+
+  // 게임이 진행 중이 아닐 때 정보 갱신 방지
+  if (!game.isPlaying()) {
+    return;
+  }
+
   const resPacketType = packetTypes.TOWER_PURCHASE_RESPONSE;
   const notificationPacketType = packetTypes.TOWER_PURCHASE_NOTIFICATION;
   const { x, y, userGold, userId, towerCost, index } = payload;
@@ -55,5 +70,6 @@ export const purchaseTowerHandler = async (socket, token, packetType, payload, i
   const encodeResPacket = serialize(resPacketType, resPacket);
   const encodeNotificationPacket = serialize(notificationPacketType, notificationPacket);
   socket.emit('event', encodeResPacket); //패킷응답
-  socket.broadcast.emit('event', encodeNotificationPacket); //패킷통지
+
+  game.emitToOther(socket.uuid, 'event', encodeNotificationPacket); //패킷통지
 };
