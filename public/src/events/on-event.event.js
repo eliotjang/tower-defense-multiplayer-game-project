@@ -8,12 +8,10 @@ const onEvent = (socket) => async (data) => {
     const packetType = data.packetType;
     const packet = deserialize(data, true);
     const { code, message, payload } = packet;
-    // console.log('code:', code, '  | message:', message);
+    // console.log('code:', code, '  | message:', message); //수신받은 코드(성공 0,실패 그 외 다른 값)와 메세지 출력 콘솔
 
     // packetType으로 매핑된 핸들러 찾기
     const handler = getHandlerByPacketType(packetType);
-
-    // console.log('packetType : ', packetType);
 
     // 핸들러 없을 시 에러
     if (!handler) {
@@ -22,7 +20,7 @@ const onEvent = (socket) => async (data) => {
 
     await handler({ socket, packetType, payload }); // 임시, 필요한 인자 추가 예정
   } catch (err) {
-    console.error(err); // 임시
+    console.error(err);
   }
 };
 

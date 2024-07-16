@@ -214,10 +214,7 @@ class Game {
       alert('골드가 부족합니다.');
       return;
     }
-    // console.log('11:', this.userId);
-    // console.log('22:', this.getRandomPositionNearPath);
     const { x, y } = this.getRandomPositionNearPath(200);
-    // const tower = new Tower(x, y, towerCost);
     const payload = {
       x,
       y,
@@ -226,12 +223,8 @@ class Game {
       towerCost: this.towerCost,
       index: this.myTowerIndex,
     };
-    // console.log(payload);
     Socket.sendEventProto(packetTypes.TOWER_PURCHASE_REQUEST, payload);
-    // console.log(this.towersIndex);
-    //towers.push(tower);
-    // tower.draw(ctx, towerImage);
-    // index++;
+    // this.towersIndex = this.nextIndex();
   }
 
   placeBase(position, isPlayer) {

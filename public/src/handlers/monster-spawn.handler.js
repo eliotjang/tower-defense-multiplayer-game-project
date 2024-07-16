@@ -2,7 +2,7 @@ import Game from '../game.js';
 import { Monster } from '../monster.js';
 
 const monsterSpawnNotificationHandler = ({ socket, packetType, payload }) => {
-  // console.log('monsterSpawnNotificationHandler');
+  console.log('monsterSpawnNotificationHandler');
   const { monsterNumber, monsterIndex } = payload;
 
   const game = Game.getInstance();

@@ -13,11 +13,7 @@ const loadGame = (loginNumber) => {
 
     const packet = { timestamp: Date.now() };
     Socket.sendEventProto(packetTypes.MATCH_REQUEST, packet);
-    // Game.getInstance().socket.sendEventProto(
-    //   packetTypes.MATCH_REQUEST,
-    //   packet,
-    //   `token${loginNumber ? loginNumber : ''}`
-    // );
+
     displayChat();
   }
 

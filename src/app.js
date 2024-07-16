@@ -13,7 +13,6 @@ app.use(express.static('public', { index: config.client.index }));
 app.use(express.json());
 // content-type이 form인 경우, body data 가져옴
 app.use(express.urlencoded({ extended: false }));
-// app.use('/api', accountRouter);
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello World</h1>');
