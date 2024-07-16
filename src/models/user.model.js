@@ -2,29 +2,39 @@
 // 이때 유저는 객체 형태로 저장
 // { uuid: string; socketId: string };
 
-const users = [];
+// const users = [];
 
-export const addUser = async (user) => {
-  users.push(user);
-};
-
-// 유저 삭제
-export const removeUser = async (uuid) => {
-  const index = users.findIndex((user) => user.socketId === uuid);
-  if (index !== -1) {
-    return users.splice(index, 1)[0];
+class User {
+  constructor(uuid, socket) {
+    this.uuid = uuid;
+    this.socket = socket;
+    this.gameId = null;
   }
-};
+}
 
-// 유저 조회
-export const findUser = async (uuid) => {
-  const index = users.findIndex((user) => user.socketId === uuid);
-  if (index != -1) {
-    return users[index];
-  }
-};
+export default User;
 
-// 전체 유저 조회
-export const getUsers = async () => {
-  return users;
-};
+// export const addUser = async (user) => {
+//   users.push(user);
+// };
+
+// // 유저 삭제
+// export const removeUser = async (uuid) => {
+//   const index = users.findIndex((user) => user.socketId === uuid);
+//   if (index !== -1) {
+//     return users.splice(index, 1)[0];
+//   }
+// };
+
+// // 유저 조회
+// export const findUser = async (uuid) => {
+//   const index = users.findIndex((user) => user.socketId === uuid);
+//   if (index != -1) {
+//     return users[index];
+//   }
+// };
+
+// // 전체 유저 조회
+// export const getUsers = async () => {
+//   return users;
+// };

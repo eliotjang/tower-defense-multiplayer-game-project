@@ -15,22 +15,11 @@ const initIndex = () => {
     toggleCssClass('hide', 'login-buttons-01', 'main-buttons-01');
   });
 
-  document.getElementById('loginButton2').addEventListener('click', () => {
-    window.location.href = 'login2.html'; // href 제거 필요
-  });
-
   document.getElementById('matchButton').addEventListener('click', () => {
     document.querySelector('.button-container').style.display = 'none';
     document.getElementById('progressBarContainer').style.display = 'block';
 
     loadGame(1);
-  });
-
-  document.getElementById('matchButton2').addEventListener('click', () => {
-    document.querySelector('.button-container').style.display = 'none';
-    document.getElementById('progressBarContainer').style.display = 'block';
-
-    loadGame(2);
   });
 
   document.getElementById('login').addEventListener('click', () => {

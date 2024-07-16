@@ -40,15 +40,15 @@ message C2S_MonsterKillRequest {
 }
 
 message C2S_BaseAttackedRequest {
-
+    uint32 monsterDamage = 1;
 }
 
 message C2S_GameEndRequest {
-    
+    uint64 timestamp = 1;
 }
 
 message RequestPacket {
-    string token = 1;
+    string token = 1; // 제거
     string clientVersion = 2;
     oneof payload {
         C2S_SignUpRequest signUpRequest = 3;
