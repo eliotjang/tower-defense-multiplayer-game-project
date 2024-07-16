@@ -9,6 +9,8 @@ export const gameRedisFields = {
   BASE_HP: 'base_hp',
   SCORE: 'score',
   START_TIME: 'start_time',
+  BASE_POSITION: 'base_position',
+  MONSTER_PATH: 'monster_path',
 };
 
 Object.freeze(userRedisFields);

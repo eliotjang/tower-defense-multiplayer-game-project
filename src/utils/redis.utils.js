@@ -4,6 +4,7 @@ import {
   gameRedisFields as grf,
   isUserRedisField,
   isGameRedisField,
+  gameRedisFields,
 } from '../constants/redis.constants.js';
 import { transformCase } from './transformCase.js';
 import caseTypes from '../constants/case.constants.js';
@@ -101,7 +102,7 @@ export const gameRedis = {
       console.error('createGameData Error Message : ', error);
     }
   },
-  setUserData: async function (uuid, obj) {
+  setGameData: async function (uuid, obj) {
     try {
       for (const [key, value] of Object.entries(obj)) {
         const snakeKey = transformCase(key, caseTypes.SNAKE_CASE);
@@ -189,6 +190,7 @@ export const gameRedis = {
     }
   },
 
+  // tower index를 인자로 받아서 찾도록 변경 필요
   deleteGameDataTower: async function (uuid, towerData) {
     try {
       const pattern = `${TOWERS_PREFIX}${uuid}:*`;

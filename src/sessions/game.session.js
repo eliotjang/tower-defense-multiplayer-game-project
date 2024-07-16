@@ -32,13 +32,20 @@ export const gameSessionsManager = {
    * @returns {string} gameId, or null if failed to join any games
    */
   joinWaitingGame: function (user) {
-    for (const [gameId, game] of Object.entries(gameSessions)) {
+    let foundGame;
+    for (const game of Object.values(gameSessions)) {
       if (game.gameState === gameStates.WAITING) {
-        game.addUser(user);
-        return gameId;
+        foundGame = game;
+        break;
       }
     }
-    return null;
+    if (!foundGame) {
+      foundGame = this.createGame();
+    }
+    // 유저 참가
+    foundGame.addUser(user);
+
+    return foundGame;
   },
 
   getOtherGameUserByMyUuid: function (gameId, myUuid) {
@@ -51,24 +58,17 @@ export const gameSessionsManager = {
 
   removeUser: function (gameId, uuid) {
     const game = this.getGame(gameId);
-    game.removeUserByUuid(uuid);
-    if (game.users.length === 0) {
+    game.removeUserByUuId(uuid);
+    if (game.users.length === 0 && game.isEnding()) {
       delete gameSessions[gameId];
     }
   },
 
   removeGameSessionByGameId: function (gameId) {
     if (gameSessions[gameId]) {
+      gameSessions[gameId].endGame();
       delete gameSessions[gameId];
       console.log('게임 세션 제거 완료, ID:', gameId);
     }
-    console.log('존재하지 않는 세션 ID:', gameId);
-
-    // const index = gameSessions.findIndex((game) => game.gameId === gameId);
-    // if (index === -1) {
-    //   return false;
-    // }
-    // gameSessions.splice(index, 1);
-    // return true;
   },
 };

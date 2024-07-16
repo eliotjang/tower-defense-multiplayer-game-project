@@ -133,6 +133,7 @@ class Game {
 
   initMap() {
     this.ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height); // 배경 이미지 그리기
+    this.opponentCtx.drawImage(this.backgroundImage, 0, 0, this.opponentCanvas.width, this.opponentCanvas.height);
     this.drawPath(this.monsterPath, this.ctx);
     this.drawPath(this.opponentMonsterPath, this.opponentCtx);
     this.placeInitialTowers(this.initialTowerCoords, this.towers, this.ctx, 1); // 초기 타워 배치
@@ -251,7 +252,6 @@ class Game {
   }
 
   pause() {
-    console.log('pause:', this);
     this.bgm.pause();
     this.isInitGame = false;
   }
