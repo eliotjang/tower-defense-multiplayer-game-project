@@ -1,9 +1,7 @@
 import packetTypes from '../constants/packet-types.constants.js';
-import { createUser, findUserByUserId, updateUserLogin } from '../db/user/user.db.js';
+import { findUserByUserId } from '../db/user/user.db.js';
 import ResponsePacket from '../protobuf/classes/response/response.proto.js';
-import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
-import { userRedis } from '../utils/redis.utils.js';
-import { v4 as uuidv4 } from 'uuid';
+import { serialize } from '../utils/packet-serializer.utils.js';
 import jwt from 'jsonwebtoken';
 import configs from '../config/configs.js';
 import bcrypt from 'bcrypt';
@@ -11,7 +9,6 @@ import { userSessionsObjManager } from '../sessions/user.session.js';
 
 const signInHandler = async (socket, userId, packetType, payload, io) => {
   try {
-    console.log('signInHandler');
     /// 아이디/비번 체크
     const { id, password } = payload;
     const userDB = await findUserByUserId(id);

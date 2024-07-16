@@ -1,6 +1,5 @@
 import { Server as SocketIO } from 'socket.io';
 import onConnection from '../events/on-connection.event.js';
-// import registerHandler from '../handlers/register.handler.js';
 
 const initSocket = (server) => {
   const io = new SocketIO();

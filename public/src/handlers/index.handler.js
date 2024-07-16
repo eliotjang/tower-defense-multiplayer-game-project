@@ -9,8 +9,6 @@ import signInHandler from './sign-in.handler.js';
 import towerAttackNotificationHandler from './tower-attack.handler.js';
 import { towerNotificationHandler, towerResponseHandler } from './tower.handler.js';
 
-const dummyHandler = () => {};
-
 const handlerMappings = {
   [packetTypes.SIGN_UP_RESPONSE]: signUpHandler,
   [packetTypes.SIGN_IN_RESPONSE]: signInHandler,

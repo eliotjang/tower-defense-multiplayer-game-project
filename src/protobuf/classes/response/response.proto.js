@@ -1,21 +1,3 @@
-// class ResponsePacket {
-//   /**
-//    *
-//    * @param {Boolean} success
-//    * @param {String} message
-//    * @param {*} payload
-//    * @param {Int} failCode automatically set to 0 if not set
-//    */
-//   constructor(success, message, payload, failCode) {
-//     this.success = success;
-//     this.message = message;
-//     this.failCode = failCode ?? 0;
-//     this.payload = payload;
-//   }
-// }
-
-// export default ResponsePacket;
-
 class ResponsePacket {
   /**
    *

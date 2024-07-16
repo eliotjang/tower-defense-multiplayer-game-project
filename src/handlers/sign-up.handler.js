@@ -1,13 +1,12 @@
 import packetTypes from '../constants/packet-types.constants.js';
 import { createUser, findUserByUserId, updateUserLogin } from '../db/user/user.db.js';
 import ResponsePacket from '../protobuf/classes/response/response.proto.js';
-import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
+import { serialize } from '../utils/packet-serializer.utils.js';
 import bcrypt from 'bcrypt';
 
 const signUpHandler = async (socket, userId, packetType, payload, io) => {
   try {
     const { id, password } = payload;
-    // console.log(id, password);
     if (!id) {
       throw new Error('아이디를 입력해주세요.');
     }
@@ -40,13 +39,9 @@ const signUpHandler = async (socket, userId, packetType, payload, io) => {
       console.log('기존 유저 정보를 불러옵니다.');
     }
 
-    // socket.uuid = userDB.uuid;
-    // console.log('socket uuid : ', socket.uuid);
-
     const data = new ResponsePacket(0, '회원가입 완료');
 
     const packet = serialize(packetTypes.SIGN_UP_RESPONSE, data);
-    // console.log(deserialize(packet)); // 테스트용 역직렬화
     socket.emit('event', packet);
   } catch (err) {
     console.error('회원가입 중 오류 발생', err);

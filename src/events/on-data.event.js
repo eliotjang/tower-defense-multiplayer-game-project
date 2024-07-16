@@ -24,12 +24,10 @@ const onData = (io, socket) => async (data) => {
     if (!handler) {
       throw new Error('유효하지 않은 핸들러');
     }
-    // console.log('packetType:', packetType, '  handler:', handler);
     // handler 실행
     await handler(socket, null, packetType, payload, io);
   } catch (err) {
     console.error('onData:', err); // 임시
-    // handleError(socket, err);
   }
 };
 

@@ -11,8 +11,6 @@ export const monsterSpawnHandler = async (socket, userId, packetType, payload, i
   const notificationPacket = new NotificationPacket('적 몬스터 생성', { monsterNumber, monsterIndex });
 
   const packet = serialize(notPacketType, notificationPacket);
-  // const test = deserialize(packet, true);
-  // console.log(test);
 
   socket.broadcast.emit('event', packet);
 };
