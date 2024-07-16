@@ -91,10 +91,7 @@ class Game {
 
   getOtherUserSocketByMyUuid(myUuid) {
     const otherUser = this.getOtherUserByMyUuid(myUuid);
-    if (otherUser) {
-      return otherUser.socket;
-    }
-    return null;
+    return otherUser?.socket;
   }
 
   setGameState(gameState) {

@@ -316,15 +316,15 @@ class Game {
         if (!Attacked) {
           continue;
         }
-        // const attackedSound = new Audio('sounds/attacked.wav');
-        // attackedSound.volume = 0.3;
-        // attackedSound.play();
+        const attackedSound = new Audio('sounds/attacked.wav');
+        attackedSound.volume = 0.3;
+        attackedSound.play();
         const payload = {
           monsterDamage: monster.attackPower,
         };
-        // 채팅 기능 구현을 위해 임시 제거
-        // Socket.sendEventProto(packetTypes.BASE_ATTACKED_REQUEST, payload);
-        // this.monsters.splice(i, 1);
+
+        Socket.sendEventProto(packetTypes.BASE_ATTACKED_REQUEST, payload);
+        this.monsters.splice(i, 1);
       } else {
         const payload = {
           monsterIndex: monster.index,
