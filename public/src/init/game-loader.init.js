@@ -18,6 +18,8 @@ const loadGame = (loginNumber) => {
     //   `token${loginNumber ? loginNumber : ''}`
     // );
   }
+
+  chatContainer.style.display = 'flex';
 };
 
 export default loadGame;
