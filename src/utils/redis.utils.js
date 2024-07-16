@@ -169,7 +169,7 @@ export const gameRedis = {
         throw new Error('byAmount 값 오류:', byAmount);
       }
       const key = `${GAME_DATA_PREFIX}${uuid}:${grf.BASE_HP}`;
-      await redisClient.incrBy(key, byAmount);
+      return await redisClient.incrBy(key, byAmount);
     } catch (err) {
       console.error('patchGameDataBaseHp failed:', err);
     }
@@ -234,21 +234,6 @@ export const gameRedis = {
       return null;
     }
   },
-
-  // patchGameDataGold: async function (uuid, newGold) {
-    // try {
-      // const key = `${GAME_DATA_PREFIX}${uuid}`;
-// 
-      // const gameData = await this.getGameData();
-      // if (!gameData) {
-        // throw new Error('해당 유저의 게임 데이터가 존재하지 않습니다');
-      // }
-      // redisClient.hSet(key, grf.GOLD, JSON.stringify(newGold));
-    // } catch (error) {
-      // console.error('patchGameDataGold Error Message : ', error);
-    // }
-  // },
-
   removeGameData: async function (uuid) {
     try {
       const keys = await redisClient.keys(`${GAME_DATA_PREFIX}${uuid}:*`);

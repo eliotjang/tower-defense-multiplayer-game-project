@@ -257,7 +257,34 @@ class Game {
     Socket.sendEventProto(packetTypes.MONSTER_SPAWN_REQUEST, monsterData);
   }
 
-  gameLoop() {
+  pause() {
+    console.log('pause:', this);
+    this.bgm.pause();
+    this.isInitGame = false;
+  }
+
+  resume() {
+    this.bgm.play();
+    this.isInitGame = true;
+  }
+
+  wait(milliSeconds) {
+    return new Promise((resolve) => {
+      const waitForResume = () => {
+        if (this.isInitGame) {
+          resolve();
+        } else {
+          setTimeout(waitForResume.bind(this), milliSeconds);
+        }
+      };
+      waitForResume();
+    });
+  }
+
+  async gameLoop() {
+    if (!this.isInitGame) {
+      await this.wait(1000);
+    }
     // 렌더링 시에는 항상 배경 이미지부터 그려야 합니다! 그래야 다른 이미지들이 배경 이미지 위에 그려져요!
     this.ctx.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height); // 배경 이미지 다시 그리기
     this.drawPath(this.monsterPath, this.ctx); // 경로 다시 그리기
@@ -293,17 +320,21 @@ class Game {
         const Attacked = monster.move();
         monster.draw(this.ctx);
 
-        if (Attacked) {
-          const attackedSound = new Audio('sounds/attacked.wav');
-          attackedSound.volume = 0.3;
-          attackedSound.play();
-          // TODO. 몬스터가 기지를 공격했을 때 서버로 이벤트 전송
-          this.monsters.splice(i, 1);
+        if (!Attacked) {
+          continue;
         }
-      } else {
-        // TODO. 몬스터 사망 이벤트 전송
-        this.monsters.splice(i, 1);
+
+        const attackedSound = new Audio('sounds/attacked.wav');
+        attackedSound.volume = 0.3;
+        attackedSound.play();
+        // TODO. 몬스터가 기지를 공격했을 때 서버로 이벤트 전송
+        const payload = {
+          monsterDamage: monster.attackPower,
+        };
+        Socket.sendEventProto(packetTypes.BASE_ATTACKED_REQUEST, payload);
       }
+      // TODO. 몬스터 사망 이벤트 전송
+      this.monsters.splice(i, 1);
     }
 
     // 상대방 게임 화면 업데이트
@@ -356,6 +387,3 @@ class Game {
 }
 
 export default Game;
-
-// let serverSocket;
-// let sendEvent;
