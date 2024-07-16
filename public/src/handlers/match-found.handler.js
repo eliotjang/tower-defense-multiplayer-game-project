@@ -2,7 +2,7 @@ import Game from '../game.js';
 
 const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
   console.log('matchFoundHandler');
-  const { score, gold, towerCost, data } = payload;
+  const { score, gold, towerCost, baseHp, data } = payload;
 
   const game = Game.getInstance();
   game.highScore = score;
@@ -10,7 +10,7 @@ const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
   game.towerCost = towerCost;
 
   game.progressBar.textContent = '게임이 3초 뒤에 시작됩니다.';
-  game.baseHp = 200;
+  game.baseHp = baseHp;
   for (const key in data) {
     if (key === game.userId) {
       game.basePosition = data[key].basePosition;

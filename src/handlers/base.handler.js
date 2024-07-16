@@ -10,15 +10,10 @@ const baseHandler = async (socket, userId, packetType, payload, io) => {
   const game = gsm.getGame(socket.gameId);
 
   // 게임이 진행 중이 아닐 때 정보 갱신 방지
-  // if (!game.isPlaying()) {
-  //   return;
-  // }
-
-  // await userRedis.setUserData(userDB.userId, { test: 'temp' });
+  if (!game.isPlaying()) {
+    return;
+  }
   const { monsterDamage } = payload;
-  // console.log(`monsterDamage: ${monsterDamage}`);
-
-  // 몬스터 제거 처리? 는 사망 이벤트에서 처리
 
   // 베이스 체력 감소
   const baseHp = await gameRedis.patchGameDataBaseHp(socket.uuid, -monsterDamage);

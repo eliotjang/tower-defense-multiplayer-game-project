@@ -5,7 +5,7 @@ import { serialize } from '../utils/packet-serializer.utils.js';
 import jwt from 'jsonwebtoken';
 import configs from '../config/configs.js';
 import bcrypt from 'bcrypt';
-import { userSessionsObjManager } from '../sessions/user.session.js';
+import { userSessionsManager } from '../sessions/user.session.js';
 
 const signInHandler = async (socket, userId, packetType, payload, io) => {
   try {
@@ -27,7 +27,7 @@ const signInHandler = async (socket, userId, packetType, payload, io) => {
     );
     socket.uuid = userDB.uuid;
 
-    userSessionsObjManager.addUser(userDB.uuid, socket);
+    userSessionsManager.addUser(userDB.uuid, socket);
 
     const data = new ResponsePacket(0, '로그인 성공', { token: token, userId: userDB.uuid });
     // console.log(data);
