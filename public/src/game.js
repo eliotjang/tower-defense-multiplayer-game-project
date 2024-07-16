@@ -75,14 +75,14 @@ class Game {
   initGameData() {
     this.isInitGame = false;
 
-    this.towerCost = 0; // 타워 구입 비용
+    this.towerCost = 500; // 타워 구입 비용
     this.monsterSpawnInterval = 0; // 몬스터 생성 주기
   }
 
   initUserData() {
     this.userId = null;
 
-    this.userGold = 0; // 유저 골드
+    this.userGold = 1000; // 유저 골드
     this.base = null; // 기지 객체
     this.baseHp = 0; // 기지 체력
     this.monsterLevel = 0; // 몬스터 레벨
