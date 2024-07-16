@@ -38,6 +38,14 @@
       <div class="loader"></div>
       <progress id="progressBar" max="100" value="0" style="display: none"></progress>
     </div>
+    <div class="chat-container" id="chatContainer">
+      <div class="chat-header">채팅</div>
+      <div class="chat-messages"></div>
+      <div class="chat-input">
+        <input type="text" placeholder="메시지를 입력하세요..." />
+        <button id="chat">보내기</button>
+      </div>
+    </div>
     <canvas id="gameCanvas" width="1500" height="680"></canvas>
     <canvas id="opponentCanvas" width="1500" height="680"></canvas>
     <script
@@ -49,5 +57,6 @@
     <script type="module">
       import('./src/init/index.init.js');
     </script>
+    <script type="module" src="./src/chatting.js"></script>
   </body>
 </html>

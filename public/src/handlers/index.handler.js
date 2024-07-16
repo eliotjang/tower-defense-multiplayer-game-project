@@ -1,3 +1,4 @@
+import chattingHandler from '../../../src/handlers/chatting.handler.js';
 import signUpHandler from '../../../src/handlers/sign-up.handler.js';
 import packetTypes from '../constants/packet-types.constants.js';
 import matchFoundNotificationHandler from './match-found.handler.js';
@@ -16,6 +17,7 @@ const handlerMappings = {
   [packetTypes.TOWER_PURCHASE_RESPONSE]: towerResponseHandler,
   [packetTypes.TOWER_PURCHASE_NOTIFICATION]: towerNotificationHandler,
   [packetTypes.MONSTER_SPAWN_NOTIFICATION]: monsterSpawnNotificationHandler,
+  [packetTypes.CHATTING_NOTIFICATION]: chattingHandler,
   // ...
 };
 

@@ -1,3 +1,4 @@
+import { displayChat } from '../chatting.js';
 import packetTypes from '../constants/packet-types.constants.js';
 import Game from '../game.js';
 import Socket from '../socket.js';
@@ -9,7 +10,7 @@ const loadGame = (loginNumber) => {
   } else {
     const game = new Game(socket);
     game.userId = sessionStorage.getItem('userId');
-    localStorage.setItem('token', `token${loginNumber ? loginNumber : ''}`);
+    // localStorage.setItem('token', `token${loginNumber ? loginNumber : ''}`);
 
     const packet = { timestamp: Date.now() };
     Socket.sendEventProto(packetTypes.MATCH_REQUEST, packet);
@@ -18,6 +19,7 @@ const loadGame = (loginNumber) => {
     //   packet,
     //   `token${loginNumber ? loginNumber : ''}`
     // );
+    displayChat();
   }
 };
 

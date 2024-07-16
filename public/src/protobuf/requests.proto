@@ -52,6 +52,10 @@ message C2S_GameEndRequest {
     
 }
 
+message C2S_ChattingRequest {
+    string chattingMessage = 1;
+}
+
 message RequestPacket {
     string token = 1;
     string clientVersion = 2;
@@ -65,5 +69,6 @@ message RequestPacket {
         C2S_MonsterKillRequest monsterKillRequest = 9;
         C2S_BaseAttackedRequest baseAttackedRequest = 10;
         C2S_GameEndRequest gameEndRequest = 11;
+        C2S_ChattingRequest chattingRequest = 12;
     }
 }

@@ -29,6 +29,7 @@ const packetPayloadKeyNames = {
   [packetTypes.BASE_ATTACKED_RESPONSE]: 'baseAttackedResponse',
   [packetTypes.GAME_OVER_NOTIFICATION]: 'gameOverNotification',
   [packetTypes.GAME_END_REQUEST]: 'gameEndRequest',
+  [packetTypes.CHATTING_NOTIFICATION]: 'chattingNotification',
 };
 
 const packetMessageTypeNames = Object.fromEntries(
