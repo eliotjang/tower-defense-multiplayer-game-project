@@ -49,9 +49,9 @@ export const purchaseTowerHandler = async (socket, token, packetType, payload, i
   // console.log(userGold);
   // console.log('333', towerCost);
   if (towerCost > userGold) {
-    // const failPurchaseTowerPacket = new ResponsePacket(1, '골드가 부족합니다');
-    // const encodeFailPurchaseTowerPacket = serialize(resPacketType, failPurchaseTowerPacket);
-    // socket.emit('event', encodeFailPurchaseTowerPacket);
+    const failPurchaseTowerPacket = new ResponsePacket(1, '골드가 부족합니다');
+    const encodeFailPurchaseTowerPacket = serialize(resPacketType, failPurchaseTowerPacket);
+    socket.emit('event', encodeFailPurchaseTowerPacket);
     console.log('골드 부족');
     return;
   }
