@@ -2,10 +2,11 @@ import Game from '../game.js';
 
 const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
   console.log('matchFoundHandler');
-  const { score, data } = payload;
+  const { score, gold, data } = payload;
 
   const game = Game.getInstance();
   game.highScore = score;
+  game.userGold = gold;
 
   // console.log(data);
 

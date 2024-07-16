@@ -18,7 +18,7 @@ const signInHandler = ({ socket, packetType, payload }) => {
   window.localStorage.setItem('token', payload.token);
   sessionStorage.setItem('userId', payload.userId);
   // socket.uuid = payload.userId;
-  console.log('signInHandler socket.uuid : ', socket.uuid);
+  // console.log('signInHandler socket.uuid : ', socket.uuid);
 };
 
 export default signInHandler;

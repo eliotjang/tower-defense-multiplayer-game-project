@@ -53,7 +53,11 @@ const matchFound = async (io, uuid) => {
   }
   // console.log(payload);
   const resPacketType = packetTypes.MATCH_FOUND_NOTIFICATION;
-  const notificationPacket = new NotificationPacket('대결을 시작합니다!', { score: highScore, data: payload });
+  const notificationPacket = new NotificationPacket('대결을 시작합니다!', {
+    score: highScore,
+    gold: userGold,
+    data: payload,
+  });
 
   const packet = serialize(resPacketType, notificationPacket);
   // const test = deserialize(packet, true);

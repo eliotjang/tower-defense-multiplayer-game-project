@@ -107,6 +107,8 @@ class Game {
     this.opponentTowers = []; // 상대방 타워 목록
     this.opponentTowerIndex = 0;
     this.opponentMonsterIndex = 0;
+    this.targetTowerIndex = null;
+    this.targetMonsterIndex = null;
   }
 
   initImages() {
@@ -197,9 +199,9 @@ class Game {
     initialTowerCoords.forEach((towerCoords) => {
       let tower;
       if (isMyTower) {
-        tower = new Tower(towerCoords.x, towerCoords.y, this.myTowerIndex++);
+        tower = new Tower(towerCoords.x, towerCoords.y, 0, this.myTowerIndex++);
       } else {
-        tower = new Tower(towerCoords.x, towerCoords.y, this.opponentTowerIndex++);
+        tower = new Tower(towerCoords.x, towerCoords.y, 0, this.opponentTowerIndex++);
       }
       initialTowers.push(tower);
       tower.draw(context, this.towerImage);
@@ -247,21 +249,15 @@ class Game {
   }
 
   spawnMonster() {
-    const newMonster = new Monster(
-      this.monsterPath,
-      this.monsterImages,
-      this.monsterLevel,
-      null,
-      this.myMonsterIndex++
-    );
+    const newMonster = new Monster(this.monsterPath, this.monsterImages, this.monsterLevel, null, this.myMonsterIndex);
     this.monsters.push(newMonster);
-    // TODO. 서버로 몬스터 생성 이벤트 전송
+
     const monsterData = {
-      path: newMonster.path,
-      level: newMonster.level,
       monsterNumber: newMonster.monsterNumber,
+      monsterIndex: this.myMonsterIndex++,
     };
 
+    // TODO. 서버로 몬스터 생성 이벤트 전송
     Socket.sendEventProto(packetTypes.MONSTER_SPAWN_REQUEST, monsterData);
   }
 
@@ -323,8 +319,14 @@ class Game {
       tower.updateCooldown(); // 적 타워의 쿨다운 업데이트
       this.opponentMonsters.forEach((monster) => {
         const distance = Math.sqrt(Math.pow(tower.x - monster.x, 2) + Math.pow(tower.y - monster.y, 2));
-        if (distance < tower.range) {
-          tower.attack(monster);
+        if (
+          distance < tower.range &&
+          monster.index === this.targetMonsterIndex &&
+          tower.index === this.targetTowerIndex
+        ) {
+          tower.attack(monster, 1);
+          this.targetMonsterIndex = null;
+          this.targetTowerIndex = null;
         }
       });
     });
