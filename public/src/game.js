@@ -224,7 +224,7 @@ class Game {
       index: this.myTowerIndex,
     };
     Socket.sendEventProto(packetTypes.TOWER_PURCHASE_REQUEST, payload);
-    this.towersIndex = this.nextIndex();
+    // this.towersIndex = this.nextIndex();
   }
 
   placeBase(position, isPlayer) {
