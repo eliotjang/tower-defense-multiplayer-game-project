@@ -301,7 +301,10 @@ class Game {
           this.monsters.splice(i, 1);
         }
       } else {
-        // TODO. 몬스터 사망 이벤트 전송
+        const payload = {
+          monsterIndex: monster.index,
+        };
+        Socket.sendEventProto(packetTypes.MONSTER_KILL_REQUEST, payload);
         this.monsters.splice(i, 1);
       }
     }

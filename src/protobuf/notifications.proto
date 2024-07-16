@@ -32,7 +32,7 @@ message S2C_MonsterSpawnNotification {
 }
 
 message S2C_MonsterKillNotification {
-
+    uint32 monsterIndex = 1;
 }
 
 message S2C_GameOverNotification {

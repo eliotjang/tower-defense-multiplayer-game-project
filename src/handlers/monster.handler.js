@@ -16,3 +16,16 @@ export const monsterSpawnHandler = async (socket, userId, packetType, payload, i
 
   socket.broadcast.emit('event', packet);
 };
+
+export const monsterKillRequestHandler = async (socket, userId, packetType, payload, io) => {
+  const { monsterIndex } = payload;
+
+  const notPacketType = packetTypes.MONSTER_KILL_NOTIFICATION;
+  const notificationPacket = new NotificationPacket('적 몬스터 사망', { monsterIndex });
+
+  const packet = serialize(notPacketType, notificationPacket);
+  // const test = deserialize(packet, true);
+  // console.log(test);
+
+  socket.broadcast.emit('event', packet);
+};
