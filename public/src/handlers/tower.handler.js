@@ -4,7 +4,6 @@ import { Tower } from '../tower.js';
 export const towerResponseHandler = (data) => {
   const { newUserGold, x, y } = data.payload;
   const game = Game.getInstance();
-  console.log('u', newUserGold);
 
   const tower = new Tower(x, y, game.towerCost);
   game.userGold = newUserGold;
