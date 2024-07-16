@@ -4,6 +4,7 @@ import signInHandler from '../handlers/sign-in.handler.js';
 import { towerAttackRequestHandler } from '../handlers/tower.handler.js';
 import packetTypes from './packet-types.constants.js';
 import { purchaseTowerHandler } from '../handlers/tower.handler.js';
+import signUpHandler from '../handlers/sign-up.handler.js';
 
 const dummyHandler = () => {
   // temp
@@ -11,7 +12,7 @@ const dummyHandler = () => {
 
 const handlerMappings = {
   [packetTypes.SIGN_UP_REQUEST]: {
-    handler: dummyHandler,
+    handler: signUpHandler,
   },
   [packetTypes.SIGN_IN_REQUEST]: {
     handler: signInHandler,

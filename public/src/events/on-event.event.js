@@ -7,8 +7,8 @@ const onEvent = (socket) => async (data) => {
     data.packet = new Uint8Array(data.packet);
     const packetType = data.packetType;
     const packet = deserialize(data, true);
-    const { code, timestamp, message, payload } = packet;
-    console.log(message);
+    const { code, message, payload } = packet;
+    console.log('code:', code, '  | message:', message);
 
     // packetType으로 매핑된 핸들러 찾기
     const handler = getHandlerByPacketType(packetType);

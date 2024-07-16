@@ -31,11 +31,10 @@ const serializeRequest = (packetType, { token, clientVersion, payload }) => {
   return serialized;
 };
 
-const serializeResponse = (packetType, { success, failCode, message, payload }) => {
+const serializeResponse = (packetType, { code, message, payload }) => {
   const ResponsePacket = getProtoMessages()[packetNames.response.NAME];
   const payloadData = {
-    success,
-    failCode,
+    code,
     message,
     [getPayloadKeyNameByPacketType(packetType)]: payload,
   };
