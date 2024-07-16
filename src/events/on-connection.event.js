@@ -1,3 +1,4 @@
+import { verifyToken } from '../auth/auth.js';
 import { createUser, findUserByUserId, findUserByUUID, updateUserLogin } from '../db/user/user.db.js';
 import { handleConnection } from '../handlers/helper.js';
 import { userRedis } from '../utils/redis.utils.js';
@@ -10,6 +11,16 @@ const onConnection = (io) => async (socket) => {
   // jwt verify
 
   //handleConnection(socket, userDB.uuid);
+  // if (socket.handshake.auth?.token) {
+  //   try {
+  //     verifyToken(socket.handshake.auth.token);
+  //     socket.
+  //   }
+  //   catch(err) {
+
+  //   }
+
+  // }
 
   socket.on('event', onData(io, socket)); // , userDB.uuid));
   // socket.on('disconnect', onDisconnect(socket));

@@ -10,7 +10,6 @@ const loadGame = (loginNumber) => {
   } else {
     const game = new Game(socket);
     game.userId = sessionStorage.getItem('userId');
-    // localStorage.setItem('token', `token${loginNumber ? loginNumber : ''}`);
 
     const packet = { timestamp: Date.now() };
     Socket.sendEventProto(packetTypes.MATCH_REQUEST, packet);
@@ -21,6 +20,8 @@ const loadGame = (loginNumber) => {
     // );
     displayChat();
   }
+
+  chatContainer.style.display = 'flex';
 };
 
 export default loadGame;

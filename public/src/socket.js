@@ -21,7 +21,11 @@ class Socket {
   }
 
   connect(url) {
-    this.socket = io(url);
+    this.socket = io(url, {
+      auth: {
+        token: localStorage.getItem('token'),
+      },
+    });
 
     this.socket.on('connection', (data) => {
       // const token = window.localStorage.getItem('token');

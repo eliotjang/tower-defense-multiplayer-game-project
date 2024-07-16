@@ -11,6 +11,9 @@ export const gameRedisFields = {
   START_TIME: 'start_time',
 };
 
+Object.freeze(userRedisFields);
+Object.freeze(gameRedisFields);
+
 const userRedisFieldsArray = Object.values(userRedisFields);
 const gameRedisFieldsArray = Object.values(gameRedisFields);
 
