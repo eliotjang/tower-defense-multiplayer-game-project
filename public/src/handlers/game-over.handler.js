@@ -1,6 +1,7 @@
 import packetTypes from '../constants/packet-types.constants.js';
 import Game from '../game.js';
 import RequestPacket from '../protobuf/classes/request.proto.js';
+import Socket from '../socket.js';
 
 const gameOverHandler = ({ socket, packetType, payload }) => {
   // 게임 정지
@@ -25,7 +26,8 @@ const gameOverHandler = ({ socket, packetType, payload }) => {
 
   // 게임 종료 패킷 전송
   const gameEndPacket = new RequestPacket('token', null, { timestamp: Date.now() });
-  socket.sendEventProto(packetTypes.GAME_END_REQUEST, gameEndPacket);
+
+  Socket.sendEventProto(packetTypes.GAME_END_REQUEST, gameEndPacket);
 };
 
 export default gameOverHandler;
