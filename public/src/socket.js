@@ -24,6 +24,9 @@ class Socket {
     this.socket = io(url);
 
     this.socket.on('connection', (data) => {
+      // const token = window.localStorage.getItem('token');
+      // if(token){
+      // }
       // console.log('data.uuid : ', data.uuid);
       // const game = new Game(this.socket);
       // game.userId = data.uuid;
@@ -49,7 +52,7 @@ class Socket {
   static sendEventProto(packetType, payload) {
     // 프로토콜 버퍼 적용된 sendEvent
     const requestData = {
-      token: localStorage.getItem('token') ?? 'token',
+      token: 'token',
       clientVersion: '1.0.0',
       payload,
     };
@@ -62,7 +65,7 @@ class Socket {
   sendEventProto(packetType, payload) {
     // 프로토콜 버퍼 적용된 sendEvent
     const requestData = {
-      token: localStorage.getItem('token') ?? 'token',
+      token: 'token',
       clientVersion: '1.0.0',
       payload,
     };

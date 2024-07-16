@@ -153,8 +153,8 @@ function placeInitialTowers(initialTowerCoords, initialTowers, context) {
 function placeNewTower() {
   // 타워를 구입할 수 있는 자원이 있을 때 타워 구입 후 랜덤 배치
   // if (userData.userGold < gameData.towerCost) {
-    // alert("골드가 부족합니다.");
-    // return;
+  // alert("골드가 부족합니다.");
+  // return;
   // }
 
   const { x, y } = getRandomPositionNearPath(200);
@@ -162,7 +162,7 @@ function placeNewTower() {
   sendEvent(10, { x, y, userGold: userData.userGold, userId, towerCost: gameData.towerCost, index });
   //towers.push(tower);
   // tower.draw(ctx, towerImage);
-  index ++;
+  index++;
 }
 
 function placeBase(position, isPlayer) {
@@ -390,9 +390,8 @@ Promise.all([
   });
 
   serverSocket.on('targetMonsterSpawn', (data) => {
-
-    const {packetType, path, monsterImages, level, monsterNumber } = data;
-    if (packetType === 21 ) {
+    const { packetType, path, monsterImages, level, monsterNumber } = data;
+    if (packetType === 21) {
       const newMonster = new Monster(path, monsterImages, level, monsterNumber);
       opponentMonsters.push(newMonster);
     }

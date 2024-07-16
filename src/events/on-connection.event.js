@@ -9,7 +9,7 @@ const onConnection = (io) => async (socket) => {
   // console.log(socket.handshake.auth.userId);
   // jwt verify
 
-  // handleConnection(socket, userDB.uuid);
+  //handleConnection(socket, userDB.uuid);
 
   socket.on('event', onData(io, socket)); // , userDB.uuid));
   // socket.on('disconnect', onDisconnect(socket));
