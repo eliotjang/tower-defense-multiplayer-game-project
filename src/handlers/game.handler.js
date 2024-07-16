@@ -1,6 +1,5 @@
 import packetTypes from '../constants/packet-types.constants.js';
 import NotificationPacket from '../protobuf/classes/notification/notification.proto.js';
-import ResponsePacket from '../protobuf/classes/response/response.proto.js';
 import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
 import { gameRedis } from '../utils/redis.utils.js';
 
@@ -12,10 +11,10 @@ const canvasHeight = 540;
 const userGold = 1000;
 const baseHp = 200;
 const highScore = 0;
+const towerCost = 500;
 
 export const matchRequestHandler = async (socket, uuid, packetType, payload, io) => {
   console.log('matchRequestHandler');
-  // console.log('matchRequestHandler socket.uuid : ', socket.uuid);
   const { timestamp } = payload;
   const monsterPath = generateRandomMonsterPath();
 
@@ -44,20 +43,18 @@ const matchFound = async (io, uuid) => {
   payload[userQueue.pop()] = userDataQueue.pop();
   payload[userQueue.pop()] = userDataQueue.pop();
 
-  // console.log(payload);
-
   for (const key in payload) {
     await gameRedis.createGameData(key, userGold, baseHp);
-    // const gameRD = await gameRedis.getGameData(key);
-    // console.log(gameRD);
   }
-  // console.log(payload);
   const resPacketType = packetTypes.MATCH_FOUND_NOTIFICATION;
-  const notificationPacket = new NotificationPacket('대결을 시작합니다!', { score: highScore, data: payload });
+  const notificationPacket = new NotificationPacket('대결을 시작합니다!', {
+    score: highScore,
+    gold: userGold,
+    towerCost,
+    data: payload,
+  });
 
   const packet = serialize(resPacketType, notificationPacket);
-  // const test = deserialize(packet, true);
-  // console.log(test);
 
   // 대결 시작 (통지 패킷)
   io.emit('event', packet);
@@ -66,19 +63,17 @@ const matchFound = async (io, uuid) => {
 function generateRandomMonsterPath() {
   const path = [];
   let currentX = 0;
-  let currentY = Math.floor(Math.random() * 21) + 500; // 500 ~ 520 범위의 y 시작 (캔버스 y축 중간쯤에서 시작할 수 있도록 유도)
+  let currentY = Math.floor(Math.random() * 21) + 500;
 
   path.push({ x: currentX, y: currentY });
 
   while (currentX < canvasWidth) {
-    currentX += Math.floor(Math.random() * 100) + 50; // 50 ~ 150 범위의 x 증가
-    // x 좌표에 대한 clamp 처리
+    currentX += Math.floor(Math.random() * 100) + 50;
     if (currentX > canvasWidth) {
       currentX = canvasWidth;
     }
 
-    currentY += Math.floor(Math.random() * 200) - 100; // -100 ~ 100 범위의 y 변경
-    // y 좌표에 대한 clamp 처리
+    currentY += Math.floor(Math.random() * 200) - 100;
     if (currentY < 0) {
       currentY = 0;
     }
@@ -88,15 +83,10 @@ function generateRandomMonsterPath() {
 
     path.push({ x: currentX, y: currentY });
   }
-
-  // console.log(path);
-
   return path;
 }
 
 function getRandomPositionNearPath(maxDistance, monsterPath) {
-  // console.log('getRandomPositionNearPath');
-  // 타워 배치를 위한 몬스터가 지나가는 경로 상에서 maxDistance 범위 내에서 랜덤한 위치를 반환하는 함수!
   const segmentIndex = Math.floor(Math.random() * (monsterPath.length - 1));
   const startX = monsterPath[segmentIndex].x;
   const startY = monsterPath[segmentIndex].y;

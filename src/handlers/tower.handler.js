@@ -28,7 +28,7 @@ export const purchaseTowerHandler = async (socket, token, packetType, payload, i
   const notificationPacketType = packetTypes.TOWER_PURCHASE_NOTIFICATION;
   const { x, y, userGold, userId, towerCost, index } = payload;
   const towerData = { x, y };
-  console.log(socket.uuid);
+  // console.log(socket.uuid);
   const redisUserGold = await gameRedis.getGameData(socket.uuid);
   // console.log('111', redisUserGold.user_gold);
   // console.log('222', userGold);
@@ -68,9 +68,9 @@ export const purchaseTowerHandler = async (socket, token, packetType, payload, i
   // console.log(`${userId}님 타워 추가`);
   // console.log(towers);
   //응답 패킷 인코딩
-  const resPacket = new ResponsePacket(0, '타워 구입 성공', { newUserGold, x, y });
+  const resPacket = new ResponsePacket(0, '타워 구입 성공', { newUserGold, x, y, index });
   //통지 패킷 인코딩
-  const notificationPacket = new NotificationPacket('적 타워 추가!', { x, y });
+  const notificationPacket = new NotificationPacket('적 타워 추가!', { x, y, index });
 
   const encodeResPacket = serialize(resPacketType, resPacket);
   const encodeNotificationPacket = serialize(notificationPacketType, notificationPacket);

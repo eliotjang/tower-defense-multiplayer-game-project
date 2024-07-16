@@ -75,14 +75,14 @@ class Game {
   initGameData() {
     this.isInitGame = false;
 
-    this.towerCost = 500; // 타워 구입 비용
+    this.towerCost = 0; // 타워 구입 비용
     this.monsterSpawnInterval = 0; // 몬스터 생성 주기
   }
 
   initUserData() {
     this.userId = null;
 
-    this.userGold = 1000; // 유저 골드
+    this.userGold = 0; // 유저 골드
     this.base = null; // 기지 객체
     this.baseHp = 0; // 기지 체력
     this.monsterLevel = 0; // 몬스터 레벨
@@ -95,7 +95,6 @@ class Game {
     this.highScore = 0; // 기존 최고 점수
     this.myTowerIndex = 0;
     this.myMonsterIndex = 0;
-    this.towersIndex = 0;
   }
 
   initOpponentData() {
@@ -107,6 +106,8 @@ class Game {
     this.opponentTowers = []; // 상대방 타워 목록
     this.opponentTowerIndex = 0;
     this.opponentMonsterIndex = 0;
+    this.targetTowerIndex = null;
+    this.targetMonsterIndex = null;
   }
 
   initImages() {
@@ -197,9 +198,9 @@ class Game {
     initialTowerCoords.forEach((towerCoords) => {
       let tower;
       if (isMyTower) {
-        tower = new Tower(towerCoords.x, towerCoords.y, this.myTowerIndex++);
+        tower = new Tower(towerCoords.x, towerCoords.y, 0, this.myTowerIndex++);
       } else {
-        tower = new Tower(towerCoords.x, towerCoords.y, this.opponentTowerIndex++);
+        tower = new Tower(towerCoords.x, towerCoords.y, 0, this.opponentTowerIndex++);
       }
       initialTowers.push(tower);
       tower.draw(context, this.towerImage);
@@ -208,10 +209,11 @@ class Game {
 
   placeNewTower() {
     // 타워를 구입할 수 있는 자원이 있을 때 타워 구입 후 랜덤 배치
-    // if (this.userGold < this.towerCost) {
-    // alert('골드가 부족합니다.');
-    // return;
-    // }
+    if (this.userGold < this.towerCost) {
+      console.log('tower purchased failed');
+      alert('골드가 부족합니다.');
+      return;
+    }
     // console.log('11:', this.userId);
     // console.log('22:', this.getRandomPositionNearPath);
     const { x, y } = this.getRandomPositionNearPath(200);
@@ -222,18 +224,14 @@ class Game {
       userGold: this.userGold,
       userId: this.userId,
       towerCost: this.towerCost,
-      index: this.towersIndex,
+      index: this.myTowerIndex,
     };
     // console.log(payload);
     Socket.sendEventProto(packetTypes.TOWER_PURCHASE_REQUEST, payload);
-    this.towersIndex = this.nextIndex();
     // console.log(this.towersIndex);
     //towers.push(tower);
     // tower.draw(ctx, towerImage);
     // index++;
-  }
-  nextIndex() {
-    return ++this.towersIndex;
   }
 
   placeBase(position, isPlayer) {
@@ -247,21 +245,15 @@ class Game {
   }
 
   spawnMonster() {
-    const newMonster = new Monster(
-      this.monsterPath,
-      this.monsterImages,
-      this.monsterLevel,
-      null,
-      this.myMonsterIndex++
-    );
+    const newMonster = new Monster(this.monsterPath, this.monsterImages, this.monsterLevel, null, this.myMonsterIndex);
     this.monsters.push(newMonster);
-    // TODO. 서버로 몬스터 생성 이벤트 전송
+
     const monsterData = {
-      path: newMonster.path,
-      level: newMonster.level,
       monsterNumber: newMonster.monsterNumber,
+      monsterIndex: this.myMonsterIndex++,
     };
 
+    // TODO. 서버로 몬스터 생성 이벤트 전송
     Socket.sendEventProto(packetTypes.MONSTER_SPAWN_REQUEST, monsterData);
   }
 
@@ -323,8 +315,14 @@ class Game {
       tower.updateCooldown(); // 적 타워의 쿨다운 업데이트
       this.opponentMonsters.forEach((monster) => {
         const distance = Math.sqrt(Math.pow(tower.x - monster.x, 2) + Math.pow(tower.y - monster.y, 2));
-        if (distance < tower.range) {
-          tower.attack(monster);
+        if (
+          distance < tower.range &&
+          monster.index === this.targetMonsterIndex &&
+          tower.index === this.targetTowerIndex
+        ) {
+          tower.attack(monster, 1);
+          this.targetMonsterIndex = null;
+          this.targetTowerIndex = null;
         }
       });
     });

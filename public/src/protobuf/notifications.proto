@@ -2,7 +2,9 @@ syntax = 'proto3';
 
 message S2C_MatchFoundNotification {
     uint32 score = 1;
-	map<string, UserData> data = 2;
+    uint32 gold = 2;
+    uint32 towerCost = 3;
+	map<string, UserData> data = 4;
 	message UserData {
         repeated Coords monsterPath = 1;
         repeated Coords initialTowerCoords = 2;
@@ -26,6 +28,7 @@ message S2C_TowerAttackNotification {
 
 message S2C_MonsterSpawnNotification {
     uint32 monsterNumber = 1;
+    uint32 monsterIndex = 2;
 }
 
 message S2C_MonsterKillNotification {
