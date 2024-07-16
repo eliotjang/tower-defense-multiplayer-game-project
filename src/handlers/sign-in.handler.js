@@ -30,7 +30,7 @@ const signInHandler = async (socket, userId, packetType, payload, io) => {
     socket.uuid = userDB.uuid;
 
     const data = new ResponsePacket(0, '로그인 성공', { token: token, userId: userDB.uuid });
-
+    console.log(data);
     const packet = serialize(packetTypes.SIGN_IN_RESPONSE, data);
     // console.log(deserialize(packet)); // 테스트용 역직렬화
     // console.log(packet.packet.constructor.name);

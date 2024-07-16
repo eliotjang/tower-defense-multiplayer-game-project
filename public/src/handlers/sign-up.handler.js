@@ -5,11 +5,6 @@ import { toggleCssClass } from '../utils/toggler.utils.js';
 
 const signUpHandler = ({ socket, packetType, payload }) => {
   console.log('signUpHandler');
-  // console.log(Object.keys(payload));
-  // console.log(getPayloadKeyNameByPacketType(packetType));
-  // console.log(payload[getPayloadKeyNameByPacketType(packetType)]);
-  // console.log(Object.keys(payload[getPayloadKeyNameByPacketType(packetType)]));
-
   // div 토글
   toggleCssClass('hide', 'register-buttons-01', 'main-buttons-01');
 };
