@@ -1,5 +1,7 @@
 import signUpHandler from '../../../src/handlers/sign-up.handler.js';
 import packetTypes from '../constants/packet-types.constants.js';
+import baseHandler from './base.handler.js';
+import gameOverHandler from './game-over.handler.js';
 import matchFoundNotificationHandler from './match-found.handler.js';
 import monsterSpawnNotificationHandler from './monster-spawn.handler.js';
 import signInHandler from './sign-in.handler.js';
@@ -14,6 +16,9 @@ const handlerMappings = {
   [packetTypes.TOWER_PURCHASE_RESPONSE]: towerResponseHandler,
   [packetTypes.TOWER_PURCHASE_NOTIFICATION]: towerNotificationHandler,
   [packetTypes.MONSTER_SPAWN_NOTIFICATION]: monsterSpawnNotificationHandler,
+  [packetTypes.BASE_ATTACKED_RESPONSE]: baseHandler,
+  [packetTypes.GAME_OVER_NOTIFICATION]: gameOverHandler,
+
   // ...
 };
 

@@ -1,12 +1,14 @@
 import packetTypes from '../constants/packet-types.constants.js';
 import NotificationPacket from '../protobuf/classes/notification/notification.proto.js';
-import { serialize } from '../utils/packet-serializer.utils.js';
+import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
 
 // 데이터를 대결하는 사용자에게 전송하는 함수
 export const monsterSpawnHandler = async (socket, userId, packetType, payload, io) => {
-  const { paths, monsterLevel, monsterNumber } = payload;
+  // console.log('monsterSpawnHandler');
+  const { monsterNumber, monsterIndex } = payload;
+
   const notPacketType = packetTypes.MONSTER_SPAWN_NOTIFICATION;
-  const notificationPacket = new NotificationPacket('적 몬스터 넘버 전송', { monsterNumber });
+  const notificationPacket = new NotificationPacket('적 몬스터 생성', { monsterNumber, monsterIndex });
 
   const packet = serialize(notPacketType, notificationPacket);
 
