@@ -4,7 +4,10 @@ const monsterKillNotificationHandler = ({ socket, packetType, payload }) => {
   const { monsterIndex } = payload;
 
   const game = Game.getInstance();
-  game.opponentMonsters.splice(monsterIndex, 1);
+  const targetIndex = game.opponentMonsters.findIndex((monster) => {
+    return monsterIndex === monster.index;
+  });
+  game.opponentMonsters.splice(targetIndex, 1);
 };
 
 export default monsterKillNotificationHandler;

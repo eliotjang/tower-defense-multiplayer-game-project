@@ -319,17 +319,18 @@ class Game {
       if (monster.hp > 0) {
         const Attacked = monster.move();
         monster.draw(this.ctx);
+
         if (!Attacked) {
           continue;
         }
-        const attackedSound = new Audio('sounds/attacked.wav');
-        attackedSound.volume = 0.3;
-        attackedSound.play();
-        // TODO. 몬스터가 기지를 공격했을 때 서버로 이벤트 전송
+        // const attackedSound = new Audio('sounds/attacked.wav');
+        // attackedSound.volume = 0.3;
+        // attackedSound.play();
         const payload = {
           monsterDamage: monster.attackPower,
         };
         Socket.sendEventProto(packetTypes.BASE_ATTACKED_REQUEST, payload);
+        this.monsters.splice(i, 1);
       } else {
         const payload = {
           monsterIndex: monster.index,
