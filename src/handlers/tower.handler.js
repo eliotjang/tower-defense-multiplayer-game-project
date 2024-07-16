@@ -28,7 +28,7 @@ export const purchaseTowerHandler = async (socket, token, packetType, payload, i
   const notificationPacketType = packetTypes.TOWER_PURCHASE_NOTIFICATION;
   const { x, y, userGold, userId, towerCost, index } = payload;
   const towerData = { x, y };
-  console.log(socket.uuid);
+  // console.log(socket.uuid);
   const redisUserGold = await gameRedis.getGameData(socket.uuid);
   // console.log('111', redisUserGold.user_gold);
   // console.log('222', userGold);

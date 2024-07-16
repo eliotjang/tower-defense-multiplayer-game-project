@@ -210,6 +210,7 @@ class Game {
   placeNewTower() {
     // 타워를 구입할 수 있는 자원이 있을 때 타워 구입 후 랜덤 배치
     if (this.userGold < this.towerCost) {
+      console.log('tower purchased failed');
       alert('골드가 부족합니다.');
       return;
     }
