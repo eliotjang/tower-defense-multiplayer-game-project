@@ -10,9 +10,10 @@ const baseHandler = async (socket, userId, packetType, payload, io) => {
   const game = gsm.getGame(socket.gameId);
 
   // 게임이 진행 중이 아닐 때 정보 갱신 방지
-  if (!game.isPlaying()) {
-    return;
-  }
+  // if (!game.isPlaying()) {
+  //   return;
+  // }
+
   // await userRedis.setUserData(userDB.userId, { test: 'temp' });
   const { monsterDamage } = payload;
   // console.log(`monsterDamage: ${monsterDamage}`);
