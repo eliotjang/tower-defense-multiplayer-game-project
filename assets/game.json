@@ -1,0 +1,18 @@
+{
+  "name": "game",
+  "version": "1.0.0",
+  "data": {
+    "userGold": 3000,
+    "baseHp": 200,
+    "numOfInitialTowers": 3,
+    "score": 0,
+    "monsterSpawnInterval": 3000,
+    "nextLevelInterval": 3000,
+    "levelUpScore": 10,
+    "towerCost": 500,
+    "canvasWidth": 1500,
+    "canvasHeight": 540,
+    "killReward": 200,
+    "highScore": 0
+  }
+}

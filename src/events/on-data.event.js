@@ -22,6 +22,7 @@ const onData = (io, socket) => async (data) => {
     const handler = getHandlerByPacketType(packetType);
 
     if (!handler) {
+      console.log('packetType, payload : ', packetType, payload);
       throw new Error('유효하지 않은 핸들러');
     }
     // handler 실행

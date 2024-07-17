@@ -5,7 +5,12 @@ message S2C_MatchFoundNotification {
     uint32 gold = 2;
     uint32 towerCost = 3;
     uint32 baseHp = 4;
-    map<string, UserData> data = 5;
+    uint32 highScore = 5;
+    uint32 numOfInitialTowers = 6;
+    uint32 monsterSpawnInterval =7;
+    uint32 nextLevelInterval = 8;
+    uint32 levelUpScore = 9;
+    map<string, UserData> data = 10;
     message UserData {
         repeated Coords monsterPath = 1;
         repeated Coords initialTowerCoords = 2;

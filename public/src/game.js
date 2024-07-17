@@ -1,5 +1,6 @@
 import { Base } from './base.js';
 import packetTypes from './constants/packet-types.constants.js';
+import stateSyncLoop from './interval/stateSyncLoop.js';
 import { Monster } from './monster.js';
 import Socket from './socket.js';
 import { Tower } from './tower.js';
@@ -77,6 +78,8 @@ class Game {
 
     this.towerCost = 0; // 타워 구입 비용
     this.monsterSpawnInterval = 0; // 몬스터 생성 주기
+    this.nextLevelInterval = null;
+    this.levelUpScore = null;
   }
 
   initUserData() {
@@ -210,11 +213,6 @@ class Game {
 
   placeNewTower() {
     // 타워를 구입할 수 있는 자원이 있을 때 타워 구입 후 랜덤 배치
-    if (this.userGold < this.towerCost) {
-      console.log('tower purchased failed');
-      alert('골드가 부족합니다.');
-      return;
-    }
     const { x, y } = this.getRandomPositionNearPath(200);
     const payload = {
       x,
@@ -376,7 +374,7 @@ class Game {
 
     this.initMap(); // 맵 초기화 (배경, 몬스터 경로 그리기)
 
-    this.monsterSpawnInterval = 3000;
+    stateSyncLoop();
     setInterval(this.spawnMonster.bind(this), this.monsterSpawnInterval); // 설정된 몬스터 생성 주기마다 몬스터 생성
     this.gameLoop(); // 게임 루프 최초 실행
     this.isInitGame = true;

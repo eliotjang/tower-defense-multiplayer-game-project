@@ -8,6 +8,7 @@ import packetTypes from './packet-types.constants.js';
 import { purchaseTowerHandler } from '../handlers/tower.handler.js';
 import signUpHandler from '../handlers/sign-up.handler.js';
 import chattingRequestHandler from '../handlers/chatting.handler.js';
+import { stateSyncRequestHandler } from '../handlers/state-sync.handler.js';
 
 const dummyHandler = () => {
   // temp
@@ -43,6 +44,9 @@ const handlerMappings = {
   },
   [packetTypes.MONSTER_KILL_REQUEST]: {
     handler: monsterKillRequestHandler,
+  },
+  [packetTypes.STATE_SYNC_REQUEST]: {
+    handler: stateSyncRequestHandler,
   },
 };
 
