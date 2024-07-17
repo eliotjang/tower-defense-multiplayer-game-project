@@ -52,5 +52,8 @@ export const createMatchHistory = async (firstUserUuid, secondUserUuid, startTim
  */
 export const getHighScore = async () => {
   const [rows] = await pools.USER_DB.query(SQL_QUERIES.GET_HIGH_SCORE);
+  if (typeof rows[0] === 'undefined' || rows[0] === null || Object.keys(rows[0]).length === 0) {
+    return 0;
+  }
   return rows[0].score;
 };
