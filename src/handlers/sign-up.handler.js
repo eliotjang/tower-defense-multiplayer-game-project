@@ -1,3 +1,4 @@
+import configs from '../config/configs.js';
 import packetTypes from '../constants/packet-types.constants.js';
 import { createUser, findUserByUserId, updateUserLogin } from '../db/user/user.db.js';
 import ResponsePacket from '../protobuf/classes/response/response.proto.js';
@@ -28,18 +29,22 @@ const signUpHandler = async (socket, userId, packetType, payload, io) => {
     //   throw new Error('비밀번호는 최소 6자 이상이고 영어 소문자와 숫자의 조합이어야 합니다.');
     // }
 
-    const hashedPassword = await bcrypt.hash(password, 1);
+    const hashedPassword = await bcrypt.hash(password, configs.env.saltRounds);
 
     let userDB = await findUserByUserId(id);
+    let message;
     if (!userDB) {
       userDB = await createUser(id, hashedPassword);
       console.log('새로운 유저가 DB에 등록되었습니다.');
+      message = '회원가입 완료.';
     } else {
-      await updateUserLogin(userDB.userId);
+      // 이미 존재하는 id
+      // await updateUserLogin(userDB.userId);
       console.log('기존 유저 정보를 불러옵니다.');
+      message = '이미 존재하는 회원입니다.';
     }
 
-    const data = new ResponsePacket(0, '회원가입 완료');
+    const data = new ResponsePacket(0, message);
 
     const packet = serialize(packetTypes.SIGN_UP_RESPONSE, data);
     socket.emit('event', packet);

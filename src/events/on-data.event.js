@@ -2,6 +2,7 @@ import { getHandlerByPacketType } from '../handlers/helper.js';
 import { deserialize } from '../utils/packet-serializer.utils.js';
 import { verifyToken } from '../auth/auth.js';
 import configs from '../config/configs.js';
+import packetTypes from '../constants/packet-types.constants.js';
 
 const onData = (io, socket) => async (data) => {
   try {
@@ -11,8 +12,11 @@ const onData = (io, socket) => async (data) => {
     // console.log(decoded); // 공통 요청
     // console.log(payload); // 페이로드 확인용 콘솔 로그
     // token 검증?
-    if (token != 'token') {
-      verifyToken(token);
+    // if (token !== null || typeof token !== 'undefined') {
+    if (!socket.verified && !bypassTokenVerification(packetType)) {
+      if (await verifyToken(token)) {
+        socket.verified = true;
+      }
     }
 
     // clientVersion 검증
@@ -29,6 +33,20 @@ const onData = (io, socket) => async (data) => {
     await handler(socket, null, packetType, payload, io);
   } catch (err) {
     console.error('onData:', err); // 임시
+  }
+};
+
+const bypassTokenVerification = (packetType) => {
+  switch (packetType) {
+    case packetTypes.SIGN_UP_REQUEST: {
+      return true;
+    }
+    case packetTypes.SIGN_IN_REQUEST: {
+      return true;
+    }
+    default: {
+      return false;
+    }
   }
 };
 

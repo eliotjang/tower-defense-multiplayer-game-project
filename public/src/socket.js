@@ -1,6 +1,6 @@
 import onEvent from './events/on-event.event.js';
-import Game from './game.js';
 import { serialize } from './utils/packet-serializer.js';
+import { getToken } from './auth/token.auth.js';
 
 class Socket {
   constructor(url) {
@@ -23,7 +23,7 @@ class Socket {
   connect(url) {
     this.socket = io(url, {
       auth: {
-        token: localStorage.getItem('token'),
+        token: getToken(),
       },
     });
 
@@ -40,7 +40,7 @@ class Socket {
     // 토큰과 클라이언트 버전 임의 생성
     socket.emit('event', {
       packetType,
-      token: 'token',
+      token: getToken(),
       clientVersion: '1.0.0',
       payload,
     });
@@ -49,7 +49,7 @@ class Socket {
   static sendEventProto(packetType, payload) {
     // 프로토콜 버퍼 적용된 sendEvent
     const requestData = {
-      token: 'token',
+      token: getToken(),
       clientVersion: '1.0.0',
       payload,
     };
@@ -62,7 +62,7 @@ class Socket {
   sendEventProto(packetType, payload) {
     // 프로토콜 버퍼 적용된 sendEvent
     const requestData = {
-      token: 'token',
+      token: getToken(),
       clientVersion: '1.0.0',
       payload,
     };
