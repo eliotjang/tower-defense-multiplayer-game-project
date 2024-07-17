@@ -53,6 +53,9 @@ const signUpHandler = async (socket, userId, packetType, payload, io) => {
 
     const hashedPassword = await bcrypt.hash(password, configs.env.saltRounds);
 
+    await createUser(id, hashedPassword);
+    console.log('새로운 유저가 DB에 등록되었습니다.');
+
     const responsePacket = new ResponsePacket(SuccessCodes.SUCCESS, '회원가입 완료');
 
     const packet = serialize(packetTypes.SIGN_UP_RESPONSE, responsePacket);
