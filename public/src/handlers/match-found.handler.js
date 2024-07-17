@@ -15,6 +15,8 @@ const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
     data,
   } = payload;
 
+  console.log(highScore);
+
   const game = Game.getInstance();
   game.score = score;
   game.userGold = gold;
@@ -28,7 +30,7 @@ const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
   game.progressBar.textContent = '게임이 3초 뒤에 시작됩니다.';
 
   for (const key in data) {
-    if (key === game.userId) {
+    if (key === game.uuid) {
       game.basePosition = data[key].basePosition;
       game.initialTowerCoords = data[key].initialTowerCoords;
       game.monsterPath = data[key].monsterPath;

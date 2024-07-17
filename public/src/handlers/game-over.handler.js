@@ -6,7 +6,7 @@ import Socket from '../socket.js';
 const gameOverHandler = ({ socket, packetType, payload }) => {
   // 게임 정지
   const game = Game.getInstance();
-  game.pause();
+  game.end();
 
   // 결과 출력
   const { isWin } = payload;
@@ -29,9 +29,9 @@ const gameOverHandler = ({ socket, packetType, payload }) => {
   }
 
   // 게임 종료 패킷 전송
-  const gameEndPacket = new RequestPacket('token', null, { timestamp: Date.now() });
-
-  Socket.sendEventProto(packetTypes.GAME_END_REQUEST, gameEndPacket);
+  if (isWin) {
+    Socket.sendEventProto(packetTypes.GAME_END_REQUEST, { timestamp: Date.now() });
+  }
 };
 
 export default gameOverHandler;

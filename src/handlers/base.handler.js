@@ -22,7 +22,7 @@ const baseHandler = async (socket, userId, packetType, payload, io) => {
 
   if (baseHp <= 0) {
     // 게임 정보 동결하여 업데이트 멈추기
-    game.setGameState(gameStates.ENDING);
+    // game.setGameState(gameStates.ENDING);
 
     // 패킷 생성 및 직렬화
     const myPacket = new NotificationPacket('패배', { isWin: false }); // score: });
@@ -32,7 +32,7 @@ const baseHandler = async (socket, userId, packetType, payload, io) => {
 
     // 통지
     socket.emit('event', mySerialized);
-    game.getOtherUserByMyUuid(socket.uuid).socket.emit('event', opSerialized);
+    game.emitToOther(socket.uuid, 'event', opSerialized);
 
     return;
   }
@@ -45,7 +45,7 @@ const baseHandler = async (socket, userId, packetType, payload, io) => {
 
   // 패킷 전송
   socket.emit('event', mySerialized);
-  game.getOtherUserByMyUuid(socket.uuid).socket.emit('event', opSerialized);
+  game.emitToOther(socket.uuid, 'event', opSerialized);
 };
 
 export default baseHandler;

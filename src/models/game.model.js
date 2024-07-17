@@ -7,7 +7,7 @@ import User from './user.model.js';
 import { removeUserGameData } from '../utils/data-remover.utils.js';
 import packetTypes from '../constants/packet-types.constants.js';
 import { getGameAssets } from '../init/assets.js';
-import { findUserByUUID } from '../db/user/user.db.js';
+import { findUserByUUID, getHighScore } from '../db/user/user.db.js';
 import CustomError from '../utils/errors/customError.js';
 import { ErrorCodes } from '../utils/errors/errorCodes.js';
 
@@ -16,9 +16,21 @@ class Game {
     this.gameId = gameId;
     this.gameState = gameStates.WAITING;
     this.users = [];
+    this.startTime = null;
   }
 
-  addUser(user) {
+  async addUser(user) {
+    if (this.users.includes(user)) {
+      user.socket.gameId = this.gameId;
+      return true;
+    }
+    if (!(user instanceof User)) {
+      throw new CustomError(ErrorCodes.SESSION_USER_NOT_FOUND, '추가할 유저 없음');
+    }
+    if (this.users.length >= 2) {
+      return false;
+    }
+
     const { game } = getGameAssets();
     const {
       numOfInitialTowers,
@@ -29,31 +41,26 @@ class Game {
       levelUpScore,
       towerCost,
       monsterSpawnInterval,
-      highScore,
     } = game.data;
-    if (!(user instanceof User)) {
-      throw new CustomError(ErrorCodes.SESSION_USER_NOT_FOUND, '추가할 유저 없음');
-    }
-    if (this.users.length >= 2) {
-      return false;
-    }
+
     this.users.push(user);
     user.socket.gameId = this.gameId;
     if (this.users.length == 2) {
       this.gameState = gameStates.PLAYING;
       const initData = this.initGameData(this.users);
-
       const payload = {
         score,
         gold: userGold,
         towerCost,
         baseHp,
-        highScore, // highScore
+        highScore: await getHighScore(), // highScore
         numOfInitialTowers,
         monsterSpawnInterval,
         nextLevelInterval,
         levelUpScore,
       };
+
+      console.log('-=-=-=', payload);
 
       const temp = new Map();
 
@@ -71,6 +78,7 @@ class Game {
       const packet = serialize(packetTypes.MATCH_FOUND_NOTIFICATION, notificationPacket);
 
       this.users.forEach((user) => user.socket.emit('event', packet));
+      this.startTime = Date.now();
     }
     return true;
   }
@@ -116,6 +124,42 @@ class Game {
   getOtherUserSocketByMyUuid(myUuid) {
     const otherUser = this.getOtherUserByMyUuid(myUuid);
     return otherUser?.socket;
+  }
+
+  /**
+   * 게임 세션 내 모든 유저에게 broadcast하는 기능
+   * @param {string} event 이벤트 명
+   * @param {object} data 보낼 데이터
+   */
+  broadcast(event, data) {
+    if (this.users.length === 0) {
+      console.error('broadcast: 게임 세션에 유저가 없습니다.');
+      return false;
+    }
+    for (const user of this.users) {
+      user.socket.emit(event, data);
+    }
+    return true;
+  }
+
+  /**
+   * 상대에게 emit하는 기능
+   * @param {string} uuid 자신의 uuid
+   * @param {string} event 이벤트 명
+   * @param {object} data 보낼 데이터
+   * @returns 성공 시 true, 실패 시 false를 반환
+   */
+  emitToOther(uuid, event, data) {
+    if (this.users.length < 2) {
+      console.error('emitToOther: 보낼 상대가 없습니다.');
+      return false;
+    }
+    if (this.users[0].uuid !== uuid) {
+      this.users[0].socket.emit(event, data);
+      return true;
+    }
+    this.users[1].socket.emit(event, data);
+    return true;
   }
 
   setGameState(gameState) {
@@ -174,10 +218,20 @@ class Game {
     return true;
   }
 
-  endGame() {
-    for (const user of this.users) {
-      removeUserGameData(user);
-    }
+  // endGame() {
+  //   for (const user of this.users) {
+  //     removeUserGameData(user);
+  //   }
+  // }
+
+  wrapResults() {
+    // console.log(this.users.map((user) => user.uuid));
+    return {
+      users: this.users,
+      startTime: this.startTime,
+      endTime: Date.now(),
+      score: null,
+    };
   }
 }
 

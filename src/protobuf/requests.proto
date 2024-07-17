@@ -55,6 +55,10 @@ message C2S_StateSyncRequest {
     uint64 timestamp = 1;
 }
 
+message C2S_PingRequest {
+    uint64 timestamp = 1;
+}
+
 message RequestPacket {
     string token = 1; // 제거
     string clientVersion = 2;
@@ -70,5 +74,6 @@ message RequestPacket {
         C2S_GameEndRequest gameEndRequest = 11;
         C2S_ChattingRequest chattingRequest = 12;
         C2S_StateSyncRequest stateSyncRequest = 13;
+        C2S_PingRequest pingRequest = 14;
     }
 }

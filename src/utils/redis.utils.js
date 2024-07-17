@@ -14,6 +14,7 @@ import { ErrorCodes } from './errors/errorCodes.js';
 const USER_PREFIX = 'user:';
 const GAME_DATA_PREFIX = 'game:';
 const TOWERS_PREFIX = 'towers:';
+const HIGH_SCORE_PREFIX = 'high_score:';
 
 export const userRedis = {
   createUserData: async function (uuid, token) {
@@ -166,6 +167,18 @@ export const gameRedis = {
     }
   },
 
+  patchGameDataScore: async function (uuid, byAmount) {
+    try {
+      if (typeof byAmount !== 'number') {
+        throw new Error('byAmount 값 오류:', byAmount);
+      }
+      const key = `${GAME_DATA_PREFIX}${uuid}:${grf.SCORE}`;
+      return await redisClient.incrBy(key, byAmount);
+    } catch (err) {
+      console.error('patchGameDataBaseHp failed:', err);
+    }
+  },
+
   patchGameDataBaseHp: async function (uuid, byAmount) {
     try {
       if (typeof byAmount !== 'number') {
@@ -246,6 +259,25 @@ export const gameRedis = {
       }
     } catch (error) {
       console.error('removeGameData Error Message : ', error);
+    }
+  },
+};
+
+export const highScoreRedis = {
+  setHighScore: async function (score) {
+    try {
+      const key = `${HIGH_SCORE_PREFIX}key`;
+      await redisClient.set(key, `${score}`);
+    } catch (err) {
+      console.error('setHighScore Error:', err);
+    }
+  },
+  getHighScore: async function () {
+    try {
+      const key = `${HIGH_SCORE_PREFIX}key`;
+      return await redisClient.get(key);
+    } catch (err) {
+      console.error('getHighScore Error:', err);
     }
   },
 };

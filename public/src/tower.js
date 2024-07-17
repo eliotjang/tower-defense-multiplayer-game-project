@@ -38,7 +38,7 @@ export class Tower {
     if (this.cooldown <= 0) {
       const packet = {
         timestamp: Date.now(),
-        userId: game.userId,
+        userId: game.uuid,
         towerIndex: this.index,
         monsterIndex: monster.index,
       };

@@ -1,5 +1,5 @@
 import packetTypes from '../constants/packet-types.constants.js';
-import { findUserByUserId } from '../db/user/user.db.js';
+import { findUserByUserId, updateUserLogin } from '../db/user/user.db.js';
 import ResponsePacket from '../protobuf/classes/response/response.proto.js';
 import { serialize } from '../utils/packet-serializer.utils.js';
 import jwt from 'jsonwebtoken';
@@ -14,6 +14,7 @@ const signInHandler = async (socket, userId, packetType, payload, io) => {
     /// 아이디/비번 체크
     const { id, password } = payload;
     const userDB = await findUserByUserId(id);
+    console.log('userDB:', userDB);
     if (!userDB) {
       throw new CustomError(ErrorCodes.USER_NOT_FOUND, '유효하지 않은 유저입니다.');
     }
@@ -23,16 +24,18 @@ const signInHandler = async (socket, userId, packetType, payload, io) => {
     // sign JWT token
     const token = jwt.sign(
       {
-        id: userDB.id,
+        id: userDB.userId,
       },
       configs.env.jwtSecret
     );
+    socket.token = token;
     socket.uuid = userDB.uuid;
 
+    await updateUserLogin(userDB.id);
     userSessionsManager.addUser(userDB.uuid, socket);
 
-    const data = new ResponsePacket(SuccessCodes.SUCCESS, '로그인 성공', { token: token, userId: userDB.uuid });
-    // console.log(data);
+    const data = new ResponsePacket(SuccessCodes.SUCCESS, '로그인 성공', { token: token, uuid: userDB.uuid });
+    
     const packet = serialize(packetTypes.SIGN_IN_RESPONSE, data);
     socket.emit('event', packet);
   } catch (err) {

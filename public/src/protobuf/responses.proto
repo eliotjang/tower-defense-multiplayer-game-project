@@ -8,7 +8,7 @@ message S2C_SignUpResponse {
 // 서버 -> 클라이언트: 로그인 응답 패킷
 message S2C_SignInResponse {
     string token = 1; // 성공 시 발급되는 JWT 토큰
-    string userId = 2; // 제거
+    string uuid = 2;
     // 토큰 전송
 }
 
@@ -39,6 +39,10 @@ message S2C_StateSyncResponse {
     uint32 levelUpScore = 1;
 }
 
+message S2C_PingResponse {
+    uint64 timestamp = 1;
+}
+
 message ResponsePacket {
     // bool success = 1; // true = 성공, false = 실패
     // string message = 2; // 성공/실패 출력 메세지
@@ -54,5 +58,6 @@ message ResponsePacket {
         S2C_MonsterKillResponse monsterKillResponse = 8;
         S2C_BaseAttackedResponse baseAttackedResponse = 9;
         S2C_StateSyncResponse stateSyncResponse = 10;
+        S2C_PingResponse pingResponse = 11;
     }
 }

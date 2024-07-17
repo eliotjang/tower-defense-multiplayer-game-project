@@ -1,5 +1,7 @@
 import { deserialize } from '../utils/packet-serializer.js';
 import { getHandlerByPacketType } from '../handlers/index.handler.js';
+import packetTypes from '../constants/packet-types.constants.js';
+import { pong } from '../utils/utils.js';
 import { handleError } from '../utils/errors/errorHandler.js';
 import CustomError from '../utils/errors/customError.js';
 import { ErrorCodes } from '../utils/errors/errorCodes.js';
@@ -12,6 +14,12 @@ const onEvent = (socket) => async (data) => {
     const packet = deserialize(data, true);
     const { code, message, payload } = packet;
     // console.log('code:', code, '  | message:', message); //수신받은 코드(성공 0,실패 그 외 다른 값)와 메세지 출력 콘솔
+
+    // ping-pong
+    if (packetType === packetTypes.PING_RESPONSE) {
+      pong(payload.timestamp);
+      return;
+    }
 
     // packetType으로 매핑된 핸들러 찾기
     const handler = getHandlerByPacketType(packetType);

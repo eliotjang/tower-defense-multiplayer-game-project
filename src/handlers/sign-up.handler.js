@@ -1,3 +1,4 @@
+import configs from '../config/configs.js';
 import packetTypes from '../constants/packet-types.constants.js';
 import { createUser, findUserByUserId, updateUserLogin } from '../db/user/user.db.js';
 import ResponsePacket from '../protobuf/classes/response/response.proto.js';
@@ -31,7 +32,6 @@ const signUpHandler = async (socket, userId, packetType, payload, io) => {
       throw new CustomError(ErrorCodes.EXISTED_USER, '유저 중복 생성 에러');
     }
 
-    // 배포 직전 활성화 예정
     if (!onlyNumberAndEnglish(id) || id.length < 6) {
       const responsePacket = new ResponsePacket(
         ErrorCodes.REQUEST_NOT_SUCCESS,
@@ -51,16 +51,7 @@ const signUpHandler = async (socket, userId, packetType, payload, io) => {
       throw new CustomError(ErrorCodes.REQUEST_NOT_SUCCESS, '아이디 및 비밀번호 조합 설정');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 1);
-
-    let userDB = await findUserByUserId(id);
-    if (!userDB) {
-      userDB = await createUser(id, hashedPassword);
-      console.log('새로운 유저가 DB에 등록되었습니다.');
-    } else {
-      await updateUserLogin(userDB.userId);
-      console.log('기존 유저 정보를 불러옵니다.');
-    }
+    const hashedPassword = await bcrypt.hash(password, configs.env.saltRounds);
 
     const responsePacket = new ResponsePacket(SuccessCodes.SUCCESS, '회원가입 완료');
 

@@ -1,5 +1,6 @@
 import packetTypes from '../constants/packet-types.constants.js';
 import NotificationPacket from '../protobuf/classes/notification/notification.proto.js';
+import { gameSessionsManager as gsm } from '../sessions/game.session.js';
 import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
 
 const chattingRequestHandler = async (socket, userId, packetType, payload, io) => {
@@ -16,7 +17,8 @@ const chattingNotification = (socket, chat) => {
   // const test = deserialize(packet, true);
   // console.log(test);
 
-  socket.broadcast.emit('event', packet);
+  const other = gsm.getOtherGameUserByMyUuid(socket.gameId, socket.uuid);
+  other.socket.emit('event', packet);
 };
 
 export default chattingRequestHandler;
