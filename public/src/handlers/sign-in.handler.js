@@ -9,6 +9,11 @@ const signInHandler = ({ socket, packetType, payload }) => {
 
   const matchButton = document.getElementById('matchButton');
   matchButton.classList.remove('hidden');
+
+  const registerButton = document.getElementById('registerButton');
+  const loginButton = document.getElementById('loginButton');
+  registerButton.classList.add('hidden');
+  loginButton.classList.add('hidden');
 };
 
 export default signInHandler;

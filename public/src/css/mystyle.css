@@ -186,3 +186,11 @@ body {
 #matchButton.hidden {
   display: none;
 }
+
+#registerButton.hidden {
+  display: none;
+}
+
+#loginButton.hidden {
+  display: none;
+}
