@@ -5,16 +5,14 @@ import configs from '../config/configs.js';
 import packetTypes from '../constants/packet-types.constants.js';
 import CustomError from '../utils/errors/customError.js';
 import { ErrorCodes } from '../utils/errors/errorCodes.js';
+import { handleError } from '../utils/errors/errorHandler.js';
 
 const onData = (io, socket) => async (data) => {
   try {
     const decoded = deserialize(data, true);
     const packetType = data.packetType;
     const { token, clientVersion, payload } = decoded;
-    // console.log(decoded); // 공통 요청
-    // console.log(payload); // 페이로드 확인용 콘솔 로그
-    // token 검증?
-    // if (token !== null || typeof token !== 'undefined') {
+
     if (!socket.verified && !bypassTokenVerification(packetType)) {
       if (await verifyToken(token)) {
         socket.verified = true;
@@ -34,7 +32,7 @@ const onData = (io, socket) => async (data) => {
     // handler 실행
     await handler(socket, null, packetType, payload, io);
   } catch (err) {
-    console.error('onData:', err); // 임시
+    await handleError(socket, err);
   }
 };
 
