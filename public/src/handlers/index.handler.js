@@ -5,9 +5,10 @@ import baseHandler from './base.handler.js';
 import chattingNotificationHandler from './chatting.handler.js';
 import gameOverHandler from './game-over.handler.js';
 import matchFoundNotificationHandler from './match-found.handler.js';
-import monsterKillNotificationHandler from './monster-kill.handler.js';
+import { monsterKillNotificationHandler, monsterKillResponseHandler } from './monster-kill.handler.js';
 import monsterSpawnNotificationHandler from './monster-spawn.handler.js';
 import signInHandler from './sign-in.handler.js';
+import stateSyncResponseHandler from './state-stync.handler.js';
 import towerAttackNotificationHandler from './tower-attack.handler.js';
 import { towerNotificationHandler, towerResponseHandler } from './tower.handler.js';
 
@@ -19,10 +20,12 @@ const handlerMappings = {
   [packetTypes.TOWER_PURCHASE_RESPONSE]: towerResponseHandler,
   [packetTypes.TOWER_PURCHASE_NOTIFICATION]: towerNotificationHandler,
   [packetTypes.MONSTER_SPAWN_NOTIFICATION]: monsterSpawnNotificationHandler,
+  [packetTypes.MONSTER_KILL_RESPONSE]: monsterKillResponseHandler,
   [packetTypes.MONSTER_KILL_NOTIFICATION]: monsterKillNotificationHandler,
   [packetTypes.BASE_ATTACKED_RESPONSE]: baseHandler,
   [packetTypes.GAME_OVER_NOTIFICATION]: gameOverHandler,
   [packetTypes.CHATTING_NOTIFICATION]: chattingNotificationHandler,
+  [packetTypes.STATE_SYNC_RESPONSE]: stateSyncResponseHandler,
 };
 
 export const getHandlerByPacketType = (packetType) => {

@@ -27,8 +27,7 @@ class Socket {
       },
     });
 
-    this.socket.on('connection', (data) => {
-    });
+    this.socket.on('connection', (data) => {});
     this.socket.on('event', onEvent(this.socket));
     this.socket.on('error', () => {});
   }

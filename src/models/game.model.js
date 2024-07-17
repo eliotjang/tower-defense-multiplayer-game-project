@@ -1,5 +1,4 @@
 import { gameStates } from '../constants/game.constants.js';
-import { gameConstants as gc } from '../constants/game.constants.js';
 import { gameRedisFields } from '../constants/redis.constants.js';
 import NotificationPacket from '../protobuf/classes/notification/notification.proto.js';
 import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
@@ -7,6 +6,8 @@ import { gameRedis } from '../utils/redis.utils.js';
 import User from './user.model.js';
 import { removeUserGameData } from '../utils/data-remover.utils.js';
 import packetTypes from '../constants/packet-types.constants.js';
+import { getGameAssets } from '../init/assets.js';
+import { findUserByUUID } from '../db/user/user.db.js';
 
 class Game {
   constructor(gameId) {
@@ -16,6 +17,18 @@ class Game {
   }
 
   addUser(user) {
+    const { game } = getGameAssets();
+    const {
+      numOfInitialTowers,
+      userGold,
+      baseHp,
+      score,
+      nextLevelInterval,
+      levelUpScore,
+      towerCost,
+      monsterSpawnInterval,
+      highScore,
+    } = game.data;
     if (!(user instanceof User)) {
       throw new Error('추가할 유저가 없습니다.');
     }
@@ -29,11 +42,17 @@ class Game {
       const initData = this.initGameData(this.users);
 
       const payload = {
-        score: 0, // highscore
-        gold: gc.GOLD,
-        towerCost: gc.TOWER_COST,
-        baseHp: gc.BASE_HP,
+        score,
+        gold: userGold,
+        towerCost,
+        baseHp,
+        highScore, // highScore
+        numOfInitialTowers,
+        monsterSpawnInterval,
+        nextLevelInterval,
+        levelUpScore,
       };
+
       const temp = new Map();
 
       for (const user of this.users) {
@@ -48,29 +67,32 @@ class Game {
 
       const notificationPacket = new NotificationPacket('대결을 시작합니다!', payload);
       const packet = serialize(packetTypes.MATCH_FOUND_NOTIFICATION, notificationPacket);
+
       this.users.forEach((user) => user.socket.emit('event', packet));
     }
     return true;
   }
 
   initGameData(users) {
+    const { game } = getGameAssets();
+    const { numOfInitialTowers, userGold, baseHp, score, canvasWidth, canvasHeight } = game.data;
     const data = {};
     for (const user of users) {
       // init
       const uuid = user.uuid;
-      const monsterPath = generateRandomMonsterPath(gc.CANVAS_WIDTH, gc.CANVAS_HEIGHT);
+      const monsterPath = generateRandomMonsterPath(canvasWidth, canvasHeight);
       const lastPoint = monsterPath[monsterPath.length - 1];
       const basePosition = { x: lastPoint.x, y: lastPoint.y };
       const gameData = {
-        [gameRedisFields.BASE_HP]: gc.BASE_HP,
-        [gameRedisFields.GOLD]: gc.GOLD,
-        [gameRedisFields.SCORE]: gc.SCORE,
+        [gameRedisFields.BASE_HP]: baseHp,
+        [gameRedisFields.GOLD]: userGold,
+        [gameRedisFields.SCORE]: score,
         monsterPath: monsterPath,
         basePosition: basePosition,
         // [gameRedisFields.START_TIME]: ,
       };
       const initialTowerCoords = [];
-      for (let i = 0; i < gc.NUM_OF_INITIAL_TOWERS; i++) {
+      for (let i = 0; i < numOfInitialTowers; i++) {
         const { x, y } = getRandomPositionNearPath(200, monsterPath);
         initialTowerCoords.push({ x, y });
       }

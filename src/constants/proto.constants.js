@@ -31,6 +31,8 @@ const packetPayloadKeyNames = {
   [packetTypes.GAME_END_REQUEST]: 'gameEndRequest',
   [packetTypes.CHATTING_REQUEST]: 'chattingRequest',
   [packetTypes.CHATTING_NOTIFICATION]: 'chattingNotification',
+  [packetTypes.STATE_SYNC_REQUEST]: 'stateSyncRequest',
+  [packetTypes.STATE_SYNC_RESPONSE]: 'stateSyncResponse',
 };
 
 const packetMessageTypeNames = Object.fromEntries(

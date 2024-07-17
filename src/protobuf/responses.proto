@@ -24,16 +24,20 @@ message S2C_TowerAttackResponse {
 }
 
 message S2C_MonsterSpawnResponse {
-
+    
 }
 
 message S2C_MonsterKillResponse {
-
+    uint32 userGold = 1;
 }
 
 message S2C_BaseAttackedResponse { // 추후 통지 패킷으로 변경 필요
     bool isOpponent = 1;
     uint32 baseHp = 2;
+}
+
+message S2C_StateSyncResponse {
+    uint32 levelUpScore = 1;
 }
 
 message ResponsePacket {
@@ -50,5 +54,6 @@ message ResponsePacket {
         S2C_MonsterSpawnResponse monsterSpawnResponse = 7;
         S2C_MonsterKillResponse monsterKillResponse = 8;
         S2C_BaseAttackedResponse baseAttackedResponse = 9;
+        S2C_StateSyncResponse stateSyncResponse = 10;
     }
 }
