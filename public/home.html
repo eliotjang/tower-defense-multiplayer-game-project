@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Changmin Kang" />
-    <title>내일배움캠프 Node.js 트랙 타워 디펜스 게임 온라인</title>
+    <meta name="author" content="Team 15" />
+    <title>타워 디펜스 게임 온라인</title>
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
     <link rel="stylesheet" href="/src/css/mystyle.css" />
   </head>
@@ -14,7 +14,7 @@
       <div class="main-buttons" id="main-buttons-01">
         <button id="registerButton">회원가입</button>
         <button id="loginButton">로그인</button>
-        <button id="matchButton">다른 유저와 대결하기</button>
+        <button id="matchButton" class="hidden">다른 유저와 대결하기</button>
       </div>
       <div class="register-buttons hide" id="register-buttons-01">
         <h2>회원가입</h2>
@@ -44,6 +44,12 @@
         <button id="chat">보내기</button>
       </div>
     </div>
+    <div id="modalContainer" class="hidden">
+      <div id="modalContent">
+        <p class="modalMessage">모달 메세지</p>
+        <button id="modalCloseButton">닫기</button>
+      </div>
+    </div>
     <canvas id="gameCanvas" width="1500" height="680"></canvas>
     <canvas id="opponentCanvas" width="1500" height="680"></canvas>
     <script
@@ -56,5 +62,6 @@
       import('./src/init/index.init.js');
     </script>
     <script type="module" src="./src/chatting.js"></script>
+    <script type="module" src="src/modals/modal.js"></script>
   </body>
 </html>

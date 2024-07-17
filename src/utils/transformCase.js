@@ -1,5 +1,7 @@
 import camelCase from 'lodash/camelCase.js';
 import { caseTypes, lodashMappings } from '../constants/case.constants.js';
+import CustomError from './errors/customError.js';
+import { ErrorCodes } from './errors/errorCodes.js';
 
 /**
  * 객체의 key와 value를 특정 case로 변환하는 함수.
@@ -9,7 +11,7 @@ import { caseTypes, lodashMappings } from '../constants/case.constants.js';
  */
 export const transformCase = (obj, caseType) => {
   if (!Object.values(caseTypes).includes(caseType)) {
-    throw new Error(`Error | transformCase failed: caseType ${caseType}`);
+    throw new CustomError(ErrorCodes.TRANSFORM_CASE_ERROR, 'DB 케이스 변경 실패');
   }
   return transformCaseRec(obj, caseType);
 };

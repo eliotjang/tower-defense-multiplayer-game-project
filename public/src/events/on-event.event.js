@@ -1,5 +1,8 @@
 import { deserialize } from '../utils/packet-serializer.js';
 import { getHandlerByPacketType } from '../handlers/index.handler.js';
+import { handleError } from '../utils/errors/errorHandler.js';
+import CustomError from '../utils/errors/customError.js';
+import { ErrorCodes } from '../utils/errors/errorCodes.js';
 
 const onEvent = (socket) => async (data) => {
   try {
@@ -13,14 +16,18 @@ const onEvent = (socket) => async (data) => {
     // packetType으로 매핑된 핸들러 찾기
     const handler = getHandlerByPacketType(packetType);
 
+    if (code === ErrorCodes.REQUEST_NOT_SUCCESS) {
+      throw new CustomError(ErrorCodes.REQUEST_NOT_SUCCESS, message);
+    }
+
     // 핸들러 없을 시 에러
     if (!handler) {
-      throw new Error('핸들러가 존재하지 않습니다.');
+      throw new CustomError(ErrorCodes.UNKNOWN_HANDLER_ID, '존재하지 않는 핸들러');
     }
 
     await handler({ socket, packetType, payload }); // 임시, 필요한 인자 추가 예정
   } catch (err) {
-    console.error(err);
+    handleError(socket, err);
   }
 };
 

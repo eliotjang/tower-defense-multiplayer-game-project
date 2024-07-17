@@ -27,7 +27,7 @@ export const purchaseTowerHandler = async (socket, token, packetType, payload, i
   const redisUserGold = await gameRedis.getGameData(socket.uuid);
 
   if (redisUserGold.user_gold !== userGold) {
-    const failUserGoldPacket = new ResponsePacket(1, '보유 골드수량이 서버와 일치하지 않습니다');
+    const failUserGoldPacket = new ResponsePacket(2, '보유 골드수량이 서버와 일치하지 않습니다');
     const encodeFailUserGoldPacket = serialize(resPacketType, failUserGoldPacket);
     socket.emit('event', encodeFailUserGoldPacket);
     return;
