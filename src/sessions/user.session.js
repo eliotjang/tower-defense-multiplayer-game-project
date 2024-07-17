@@ -11,6 +11,12 @@ export const userSessionsManager = {
     }
     return userSessions[uuid];
   },
+  getUserBySocket: function (socket) {
+    if (userSessions[socket.uuid]) {
+      return userSessions[socket.uuid];
+    }
+    this.addUser(socket.uuid, socket);
+  },
   getUserByUuid: function (uuid) {
     return userSessions[uuid];
   },

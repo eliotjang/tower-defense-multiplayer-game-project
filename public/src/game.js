@@ -20,6 +20,7 @@ class Game {
     this.initOpponentData();
     this.initImages();
     this.socket = socket;
+    this.intervals = [];
 
     Promise.all([
       new Promise((resolve) => (this.backgroundImage.onload = resolve)),
@@ -77,13 +78,13 @@ class Game {
     this.isInitGame = false;
 
     this.towerCost = 0; // 타워 구입 비용
-    this.monsterSpawnInterval = 0; // 몬스터 생성 주기
+    this.monsterSpawnInterval = 3000; // 몬스터 생성 주기
     this.nextLevelInterval = null;
     this.levelUpScore = null;
   }
 
   initUserData() {
-    this.userId = null;
+    this.uuid = null;
 
     this.userGold = 0; // 유저 골드
     this.base = null; // 기지 객체
@@ -218,7 +219,7 @@ class Game {
       x,
       y,
       userGold: this.userGold,
-      userId: this.userId,
+      userId: this.uuid,
       towerCost: this.towerCost,
       index: this.myTowerIndex,
     };
@@ -249,6 +250,13 @@ class Game {
     Socket.sendEventProto(packetTypes.MONSTER_SPAWN_REQUEST, monsterData);
   }
 
+  end() {
+    for (const intervalId of this.intervals) {
+      clearInterval(intervalId);
+    }
+    this.pause();
+  }
+
   pause() {
     this.bgm.pause();
     this.isInitGame = false;
@@ -262,6 +270,9 @@ class Game {
   wait(milliSeconds) {
     return new Promise((resolve) => {
       const waitForResume = () => {
+        this.ctx.font = '25px Times New Roman';
+        this.ctx.fillStyle = 'skyblue';
+        this.ctx.fillText(`최고 기록: ${this.highScore}`, 100, 50);
         if (this.isInitGame) {
           resolve();
         } else {
@@ -375,7 +386,7 @@ class Game {
     this.initMap(); // 맵 초기화 (배경, 몬스터 경로 그리기)
 
     stateSyncLoop();
-    setInterval(this.spawnMonster.bind(this), this.monsterSpawnInterval); // 설정된 몬스터 생성 주기마다 몬스터 생성
+    this.intervals.push(setInterval(this.spawnMonster.bind(this), this.monsterSpawnInterval)); // 설정된 몬스터 생성 주기마다 몬스터 생성
     this.gameLoop(); // 게임 루프 최초 실행
     this.isInitGame = true;
   }

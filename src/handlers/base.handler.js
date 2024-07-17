@@ -21,7 +21,7 @@ const baseHandler = async (socket, userId, packetType, payload, io) => {
 
   if (baseHp <= 0) {
     // 게임 정보 동결하여 업데이트 멈추기
-    game.setGameState(gameStates.ENDING);
+    // game.setGameState(gameStates.ENDING);
 
     // 패킷 생성 및 직렬화
     const myPacket = new NotificationPacket('패배', { isWin: false }); // score: });

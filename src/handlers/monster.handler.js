@@ -35,7 +35,7 @@ export const monsterKillRequestHandler = async (socket, userId, packetType, payl
   }
 
   const { monsterIndex } = payload;
-  const { gameAsset } = getGameAssets();
+  const { game: gameAsset } = getGameAssets();
   const { killReward } = gameAsset.data;
 
   await gameRedis.patchGameDataGold(socket.uuid, killReward);
