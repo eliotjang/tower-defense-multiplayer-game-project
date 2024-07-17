@@ -33,6 +33,8 @@ const packetPayloadKeyNames = {
   [packetTypes.CHATTING_NOTIFICATION]: 'chattingNotification',
   [packetTypes.STATE_SYNC_REQUEST]: 'stateSyncRequest',
   [packetTypes.STATE_SYNC_RESPONSE]: 'stateSyncResponse',
+  [packetTypes.PING_REQUEST]: 'pingRequest',
+  [packetTypes.PING_RESPONSE]: 'pingResponse',
 };
 
 const packetMessageTypeNames = Object.fromEntries(

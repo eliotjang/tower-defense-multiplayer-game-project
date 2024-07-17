@@ -10,6 +10,7 @@ const configs = {
     redisUsername: env.REDIS_USERNAME,
     redisPassword: env.REDIS_PASSWORD,
     jwtSecret: env.JWT_SECRET,
+    saltRounds: env.SALT_ROUNDS,
   },
   client: {
     clientVersion: '1.0.0',

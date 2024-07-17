@@ -32,6 +32,9 @@ const packetTypes = {
 
   CHATTING_REQUEST: 40,
   CHATTING_NOTIFICATION: 41,
+
+  PING_REQUEST: 100,
+  PING_RESPONSE: 101,
 };
 
 export default packetTypes;
