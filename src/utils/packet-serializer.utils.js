@@ -4,6 +4,8 @@ import {
   packetNames,
 } from '../constants/proto.constants.js';
 import { getProtoMessages } from '../init/proto.init.js';
+import CustomError from './errors/customError.js';
+import { ErrorCodes } from './errors/errorCodes.js';
 
 /**
  * 패킷 타입을 이용해 페이로드를 직렬화하여 반환하는 함수. 세 번째 인자를 true로 설정하면 packetType과 payload키를 가지는 객체를 반환한다.
@@ -109,6 +111,6 @@ const deserializeNotification = (packet) => {
 const verifyPacket = (MessageType, payloadData) => {
   const message = MessageType.verify(payloadData);
   if (message) {
-    throw new Error(`Error | 직렬화 에러: ${message}`);
+    throw new CustomError(ErrorCodes.SERIALIZE_ERROR, '직렬화 에러');
   }
 };

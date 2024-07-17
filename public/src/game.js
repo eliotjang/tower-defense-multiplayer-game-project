@@ -326,7 +326,7 @@ class Game {
           continue;
         }
         const attackedSound = new Audio('sounds/attacked.wav');
-        attackedSound.volume = 0.3;
+        attackedSound.volume = 0.1;
         attackedSound.play();
         const payload = {
           monsterDamage: monster.attackPower,

@@ -3,6 +3,8 @@ import { deserialize } from '../utils/packet-serializer.utils.js';
 import { verifyToken } from '../auth/auth.js';
 import configs from '../config/configs.js';
 import packetTypes from '../constants/packet-types.constants.js';
+import CustomError from '../utils/errors/customError.js';
+import { ErrorCodes } from '../utils/errors/errorCodes.js';
 
 const onData = (io, socket) => async (data) => {
   try {
@@ -27,7 +29,7 @@ const onData = (io, socket) => async (data) => {
 
     if (!handler) {
       console.log('packetType, payload : ', packetType, payload);
-      throw new Error('유효하지 않은 핸들러');
+      throw new CustomError(ErrorCodes.UNKNOWN_HANDLER_ID, '유효하지 않은 핸들러');
     }
     // handler 실행
     await handler(socket, null, packetType, payload, io);
@@ -54,7 +56,7 @@ const verifyClientVersion = (clientVersion) => {
   // 클라이언트 버전 검증
   if (clientVersion !== configs.client.clientVersion) {
     // 실패 시 에러 발생
-    throw new Error('클라이언트 버전 검증 실패');
+    throw new CustomError(ErrorCodes.CLIENT_VERSION_MISMATCH, '클라이언트 버전 검증 실패');
   }
 };
 

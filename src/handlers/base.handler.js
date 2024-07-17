@@ -3,6 +3,7 @@ import packetTypes from '../constants/packet-types.constants.js';
 import NotificationPacket from '../protobuf/classes/notification/notification.proto.js';
 import ResponsePacket from '../protobuf/classes/response/response.proto.js';
 import { gameSessionsManager as gsm } from '../sessions/game.session.js';
+import { SuccessCodes } from '../utils/errors/errorCodes.js';
 import { serialize } from '../utils/packet-serializer.utils.js';
 import { gameRedis } from '../utils/redis.utils.js';
 
@@ -37,9 +38,9 @@ const baseHandler = async (socket, userId, packetType, payload, io) => {
   }
 
   // BaseAttackedResponse: 패킷 생성 및 직렬화
-  const myPacket = new ResponsePacket(0, `내 기지 체력`, { isOpponent: false, baseHp });
+  const myPacket = new ResponsePacket(SuccessCodes.SUCCESS, `내 기지 체력`, { isOpponent: false, baseHp });
   const mySerialized = serialize(packetTypes.BASE_ATTACKED_RESPONSE, myPacket);
-  const opPacket = new ResponsePacket(0, `상대의 기지 체력`, { isOpponent: true, baseHp });
+  const opPacket = new ResponsePacket(SuccessCodes.SUCCESS, `상대의 기지 체력`, { isOpponent: true, baseHp });
   const opSerialized = serialize(packetTypes.BASE_ATTACKED_RESPONSE, opPacket);
 
   // 패킷 전송

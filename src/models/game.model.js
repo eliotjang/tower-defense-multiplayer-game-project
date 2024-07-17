@@ -8,6 +8,8 @@ import { removeUserGameData } from '../utils/data-remover.utils.js';
 import packetTypes from '../constants/packet-types.constants.js';
 import { getGameAssets } from '../init/assets.js';
 import { findUserByUUID, getHighScore } from '../db/user/user.db.js';
+import CustomError from '../utils/errors/customError.js';
+import { ErrorCodes } from '../utils/errors/errorCodes.js';
 
 class Game {
   constructor(gameId) {
@@ -23,7 +25,7 @@ class Game {
       return true;
     }
     if (!(user instanceof User)) {
-      throw new Error('추가할 유저가 없습니다.');
+      throw new CustomError(ErrorCodes.SESSION_USER_NOT_FOUND, '추가할 유저 없음');
     }
     if (this.users.length >= 2) {
       return false;

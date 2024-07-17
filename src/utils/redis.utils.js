@@ -8,6 +8,8 @@ import {
 } from '../constants/redis.constants.js';
 import { transformCase } from './transformCase.js';
 import caseTypes from '../constants/case.constants.js';
+import CustomError from './errors/customError.js';
+import { ErrorCodes } from './errors/errorCodes.js';
 
 const USER_PREFIX = 'user:';
 const GAME_DATA_PREFIX = 'game:';
@@ -156,7 +158,7 @@ export const gameRedis = {
   patchGameDataGold: async function (uuid, byAmount) {
     try {
       if (typeof byAmount !== 'number') {
-        throw new Error('byAmount 값 오류:', byAmount);
+        throw new CustomError(ErrorCodes.GAME_REDIS_DATA_ERROR, 'byAmount 값 에러');
       }
       const key = `${GAME_DATA_PREFIX}${uuid}:${grf.GOLD}`;
       await redisClient.incrBy(key, byAmount);
@@ -180,7 +182,7 @@ export const gameRedis = {
   patchGameDataBaseHp: async function (uuid, byAmount) {
     try {
       if (typeof byAmount !== 'number') {
-        throw new Error('byAmount 값 오류:', byAmount);
+        throw new CustomError(ErrorCodes.GAME_REDIS_DATA_ERROR, 'byAmount 값 에러');
       }
       const key = `${GAME_DATA_PREFIX}${uuid}:${grf.BASE_HP}`;
       return await redisClient.incrBy(key, byAmount);

@@ -1,6 +1,7 @@
 import packetTypes from '../constants/packet-types.constants.js';
 import { getGameAssets } from '../init/assets.js';
 import ResponsePacket from '../protobuf/classes/response/response.proto.js';
+import { SuccessCodes } from '../utils/errors/errorCodes.js';
 import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
 import { gameRedis } from '../utils/redis.utils.js';
 
@@ -13,7 +14,7 @@ export const stateSyncRequestHandler = async (socket, uuid, packetType, payload,
 
   const resPacketType = packetTypes.STATE_SYNC_RESPONSE;
 
-  const responsePacket = new ResponsePacket(0, '상태 동기화', { levelUpScore });
+  const responsePacket = new ResponsePacket(SuccessCodes.SUCCESS, '상태 동기화', { levelUpScore });
 
   const packet = serialize(resPacketType, responsePacket);
 

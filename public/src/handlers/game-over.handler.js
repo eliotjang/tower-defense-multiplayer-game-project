@@ -12,15 +12,19 @@ const gameOverHandler = ({ socket, packetType, payload }) => {
   const { isWin } = payload;
   const winSound = new Audio('sounds/win.wav');
   const loseSound = new Audio('sounds/lose.wav');
-  winSound.volume = 0.3;
-  loseSound.volume = 0.3;
+  winSound.volume = 0.1;
+  loseSound.volume = 0.1;
+  const modal = document.getElementById('modalContainer');
+  const modalMessage = document.querySelector('.modalMessage');
   if (isWin) {
     winSound.play().then(() => {
-      alert('당신이 게임에서 승리했습니다!');
+      modalMessage.innerHTML = '축하드립니다!. 게임에서 승리했습니다!';
+      modal.classList.remove('hidden');
     });
   } else {
     loseSound.play().then(() => {
-      alert('아쉽지만 대결에서 패배하셨습니다! 다음 대결에서는 꼭 이기세요!');
+      modalMessage.innerHTML = '아쉽습니다. 게임에서 패배했습니다..';
+      modal.classList.remove('hidden');
     });
   }
 
