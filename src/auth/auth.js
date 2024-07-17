@@ -10,7 +10,7 @@ export const verifyToken = async (token) => {
     const userId = decodedToken.id;
 
     if (userId === null || typeof userId === 'undefined') {
-      throw new CustomError(ErrorCodesrrorCodes.MISSING_LOGIN_FIELDS, '로그인 정보 필요');
+      throw new CustomError(ErrorCodes.MISSING_LOGIN_FIELDS, '로그인 정보 필요');
     }
     const user = await findUserByUserId(userId);
 
