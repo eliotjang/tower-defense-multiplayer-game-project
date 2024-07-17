@@ -5,7 +5,7 @@ dotEnv.config();
 const envConstants = {
   JWT_SECRET: process.env.JWT_SECRET,
   SALT_ROUNDS: +process.env.SALT_ROUNDS,
-  SERVER_HOST: process.env.SERVER_HOST || '127.0.0.1',
+  SERVER_HOST: process.env.SERVER_HOST || '13.209.73.219',
   SERVER_PORT: +process.env.SERVER_PORT || 5555,
   REDIS_HOST: process.env.REDIS_HOST || 'localhost',
   REDIS_PORT: +process.env.REDIS_PORT || 6379,
