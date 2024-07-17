@@ -15,8 +15,6 @@ const matchFoundNotificationHandler = ({ socket, packetType, payload }) => {
     data,
   } = payload;
 
-  console.log(highScore);
-
   const game = Game.getInstance();
   game.score = score;
   game.userGold = gold;
