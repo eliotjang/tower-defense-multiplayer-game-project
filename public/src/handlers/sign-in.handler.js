@@ -7,7 +7,7 @@ const signInHandler = ({ socket, packetType, payload }) => {
 
   // 토큰 저장
   setToken(payload.token);
-  localStorage.setItem('uuid', payload.uuid);
+  sessionStorage.setItem('uuid', payload.uuid);
 
   showMatchButton();
 };
