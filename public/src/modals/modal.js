@@ -1,11 +1,11 @@
-// const modalOpenButton = document.getElementById('modalOpenButton');
-const modalCloseButton = document.getElementById('modalCloseButton');
 const modal = document.getElementById('modalContainer');
+const modalMessage = document.getElementById('modal-message-01');
 
-// modalOpenButton.addEventListener('click', () => {
-//   modal.classList.remove('hidden');
-// });
-
-modalCloseButton.addEventListener('click', () => {
+export const hideModal = () => {
   modal.classList.add('hidden');
-});
+};
+
+export const displayModalMessage = (message) => {
+  modalMessage.innerHTML = message;
+  modal.classList.remove('hidden');
+};

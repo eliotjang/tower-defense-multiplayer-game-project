@@ -4,6 +4,7 @@ import init from './init.js';
 import Socket from '../socket.js';
 import { toggleCssClass } from '../utils/toggler.utils.js';
 import { addMessage } from '../chatting.js';
+import { hideModal } from '../modals/modal.js';
 
 init();
 
@@ -57,6 +58,8 @@ const initIndex = () => {
       inputField.value = '';
     }
   });
+
+  document.getElementById('modalCloseButton').addEventListener('click', hideModal);
 };
 
 initIndex();

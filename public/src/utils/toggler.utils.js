@@ -21,3 +21,13 @@ export const toggleCssClass = (cssClass, elementId1, elementId2) => {
   element1.classList.toggle(cssClass);
   element2.classList.toggle(cssClass);
 };
+
+export const showMatchButton = () => {
+  const matchButton = document.getElementById('matchButton');
+  matchButton.classList.remove('hidden');
+
+  const registerButton = document.getElementById('registerButton');
+  const loginButton = document.getElementById('loginButton');
+  registerButton.classList.add('hidden');
+  loginButton.classList.add('hidden');
+};

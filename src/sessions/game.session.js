@@ -64,21 +64,27 @@ export const gameSessionsManager = {
     return null;
   },
 
-  removeUser: function (gameId, uuid) {
+  findGameByUuid: function (uuid) {
+    for (const game of Object.values(gameSessions)) {
+      if (game.getUserByUuid(uuid)) {
+        return game;
+      }
+    }
+    return null;
+  },
+
+  removeUser: async function (gameId, uuid) {
     const game = this.getGame(gameId);
+    if (!game) {
+      // 게임이 존재하지 않음
+      return true;
+    }
+
     game.removeUserByUuId(uuid);
-    if (game.users.length === 0 && game.isEnding()) {
+    if (game.users.length === 0) {
       delete gameSessions[gameId];
     }
   },
-
-  // removeGameSessionByGameId: function (gameId) {
-  //   if (gameSessions[gameId]) {
-  //     gameSessions[gameId].endGame();
-  //     delete gameSessions[gameId];
-  //     console.log('게임 세션 제거 완료, ID:', gameId);
-  //   }
-  // },
 
   /**
    * 게임을 종료하고 결과를 반환합니다.
@@ -88,12 +94,11 @@ export const gameSessionsManager = {
   endGame: async function (gameId) {
     if (gameSessions[gameId]) {
       if (gameSessions[gameId].isEnding()) {
-        return null;
+        return false;
       }
       gameSessions[gameId].setGameState(gameStates.ENDING);
       const results = gameSessions[gameId].wrapResults();
-
-      // get winner info?
+      console.log(`게임 종료 ( gameId: ${gameId} )`);
 
       // 유의미한 데이터 추출
       let maxScore = 0;
@@ -106,14 +111,15 @@ export const gameSessionsManager = {
       // 게임 결과에 추출된 정보 추가
       results.score = maxScore;
 
-      console.log('------------results:', results);
-      // 게임 세션 제거
-      delete gameSessions[gameId];
-      console.log('게임 세션 제거 완료, ID:', gameId);
-
       // 결과 반환
       return results;
     }
     return null;
+  },
+
+  deleteGameSession: function (gameId) {
+    // 게임 세션 제거
+    delete gameSessions[gameId];
+    console.log('게임 세션 제거 완료, ID:', gameId);
   },
 };

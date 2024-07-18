@@ -1,3 +1,4 @@
+import { displayModalMessage } from '../../modals/modal.js';
 import { ErrorCodes } from './errorCodes.js';
 
 export const handleError = (socket, error) => {
@@ -5,10 +6,7 @@ export const handleError = (socket, error) => {
   let message;
   console.log(error);
   if (error.code === ErrorCodes.REQUEST_NOT_SUCCESS) {
-    const modal = document.getElementById('modalContainer');
-    const modalMessage = document.querySelector('.modalMessage');
-    modalMessage.innerHTML = error.message;
-    modal.classList.remove('hidden');
+    displayModalMessage(error.message);
   } else if (error.code) {
     responseCode = error.code;
     message = error.message;

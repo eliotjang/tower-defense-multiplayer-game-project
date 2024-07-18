@@ -9,7 +9,7 @@ const loadGame = (loginNumber) => {
     console.error('game-loader.js: 소켓이 없습니다.');
   } else {
     const game = new Game(socket);
-    game.uuid = localStorage.getItem('uuid');
+    game.uuid = sessionStorage.getItem('uuid');
 
     const packet = { timestamp: Date.now() };
     Socket.sendEventProto(packetTypes.MATCH_REQUEST, packet);
