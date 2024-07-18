@@ -43,7 +43,9 @@ message S2C_MonsterKillNotification {
 
 message S2C_GameOverNotification {
     bool isWin = 1;
+    uint32 baseHp = 2;
 }
+
 
 message S2C_ChattingNotification {
     string chat = 1;

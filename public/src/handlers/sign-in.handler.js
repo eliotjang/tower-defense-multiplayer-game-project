@@ -1,5 +1,5 @@
 import { setToken } from '../auth/token.auth.js';
-import { toggleCssClass } from '../utils/toggler.utils.js';
+import { showMatchButton, toggleCssClass } from '../utils/toggler.utils.js';
 
 const signInHandler = ({ socket, packetType, payload }) => {
   // div 토글
@@ -9,13 +9,7 @@ const signInHandler = ({ socket, packetType, payload }) => {
   setToken(payload.token);
   localStorage.setItem('uuid', payload.uuid);
 
-  const matchButton = document.getElementById('matchButton');
-  matchButton.classList.remove('hidden');
-
-  const registerButton = document.getElementById('registerButton');
-  const loginButton = document.getElementById('loginButton');
-  registerButton.classList.add('hidden');
-  loginButton.classList.add('hidden');
+  showMatchButton();
 };
 
 export default signInHandler;

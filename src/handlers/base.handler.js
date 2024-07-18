@@ -25,9 +25,9 @@ const baseHandler = async (socket, userId, packetType, payload, io) => {
     // game.setGameState(gameStates.ENDING);
 
     // 패킷 생성 및 직렬화
-    const myPacket = new NotificationPacket('패배', { isWin: false }); // score: });
+    const myPacket = new NotificationPacket('패배', { isWin: false, baseHp }); // score: });
     const mySerialized = serialize(packetTypes.GAME_OVER_NOTIFICATION, myPacket);
-    const opPacket = new NotificationPacket('승리', { isWin: true });
+    const opPacket = new NotificationPacket('승리', { isWin: true, baseHp });
     const opSerialized = serialize(packetTypes.GAME_OVER_NOTIFICATION, opPacket);
 
     // 통지
