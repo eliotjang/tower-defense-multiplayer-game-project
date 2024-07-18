@@ -1,8 +1,8 @@
 ## 타워 디펜스 게임 프로젝트
 
-![프로젝트 이미지](C:\GitHub\tower-defense-multiplayer-game-project\public\images)
+![프로젝트 이미지](public/images/game.png)
 
-프로젝트 제작 기간 : 2024.7.11.(목) ~ 2024.6.20.(목)
+프로젝트 제작 기간 : 2024.7.11.(목) ~ 2024.7.18.(목)
 
 ### 타워 디펜스 게임 프로젝트 기획 및 설계
 
@@ -14,7 +14,7 @@
 
 ### 프로젝트 패킷 명세서
 
-![패킷 명세서 이미지](C:\GitHub\tower-defense-multiplayer-game-project\public\images\packet-structure.png)
+![패킷 명세서 이미지](public/images/packet-structure.png)
 
 - [프로젝트 패킷 명세서 링크](https://www.notion.so/2fed892d7d3a4fde9e6423cd13afd820)
 
