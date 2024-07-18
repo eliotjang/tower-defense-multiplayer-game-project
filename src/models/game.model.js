@@ -1,13 +1,13 @@
 import { gameStates } from '../constants/game.constants.js';
 import { gameRedisFields } from '../constants/redis.constants.js';
 import NotificationPacket from '../protobuf/classes/notification/notification.proto.js';
-import { deserialize, serialize } from '../utils/packet-serializer.utils.js';
+import { serialize } from '../utils/packet-serializer.utils.js';
 import { gameRedis } from '../utils/redis.utils.js';
 import User from './user.model.js';
 import { removeUserGameData } from '../utils/data-remover.utils.js';
 import packetTypes from '../constants/packet-types.constants.js';
 import { getGameAssets } from '../init/assets.js';
-import { findUserByUUID, getHighScore } from '../db/user/user.db.js';
+import { getHighScore } from '../db/user/user.db.js';
 import CustomError from '../utils/errors/customError.js';
 import { ErrorCodes } from '../utils/errors/errorCodes.js';
 
@@ -31,21 +31,21 @@ class Game {
       return false;
     }
 
-    const { game } = getGameAssets();
-    const {
-      numOfInitialTowers,
-      userGold,
-      baseHp,
-      score,
-      nextLevelInterval,
-      levelUpScore,
-      towerCost,
-      monsterSpawnInterval,
-    } = game.data;
-
     this.users.push(user);
     user.socket.gameId = this.gameId;
     if (this.users.length == 2) {
+      const { game } = getGameAssets();
+      const {
+        numOfInitialTowers,
+        userGold,
+        baseHp,
+        score,
+        nextLevelInterval,
+        levelUpScore,
+        towerCost,
+        monsterSpawnInterval,
+      } = game.data;
+
       this.gameState = gameStates.PLAYING;
       const initData = this.initGameData(this.users);
       const payload = {
@@ -59,8 +59,6 @@ class Game {
         nextLevelInterval,
         levelUpScore,
       };
-
-      console.log('-=-=-=', payload);
 
       const temp = new Map();
 
@@ -99,7 +97,6 @@ class Game {
         [gameRedisFields.SCORE]: score,
         monsterPath: monsterPath,
         basePosition: basePosition,
-        // [gameRedisFields.START_TIME]: ,
       };
       const initialTowerCoords = [];
       for (let i = 0; i < numOfInitialTowers; i++) {
@@ -111,6 +108,14 @@ class Game {
       Promise.all([gameRedis.setGameData(uuid, gameData)]).then();
     }
     return data;
+  }
+
+  getUserByUuid(uuid) {
+    const user = this.users.find((item) => item.uuid === uuid);
+    if (!user) {
+      return null;
+    }
+    return user;
   }
 
   getOtherUserByMyUuid(myUuid) {
@@ -182,6 +187,10 @@ class Game {
     return this.gameState === gameStates.ENDING;
   }
 
+  isWaiting() {
+    return this.gameState === gameStates.WAITING;
+  }
+
   /**
    *
    * @param {User} user
@@ -218,14 +227,7 @@ class Game {
     return true;
   }
 
-  // endGame() {
-  //   for (const user of this.users) {
-  //     removeUserGameData(user);
-  //   }
-  // }
-
   wrapResults() {
-    // console.log(this.users.map((user) => user.uuid));
     return {
       users: this.users,
       startTime: this.startTime,

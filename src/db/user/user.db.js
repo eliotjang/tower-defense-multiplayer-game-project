@@ -29,16 +29,16 @@ export const updateUserLogin = async (userId) => {
 /**
  *
  * @param {String} id 매치 기록의 id
- * @param {String} firstUserUuid 첫 번쨰 유저의 uuid
- * @param {String} secondUserUuid 두 번쨰 유저의 uuid
+ * @param {String} winnerUuId 첫 번쨰 유저의 uuid
+ * @param {String} loserUuid 두 번쨰 유저의 uuid
  * @param {Long} startTime 매치 시작 타임스탬프 Date.now()
  * @param {Long} endTime 매치 종료 타임스탬프 Date.now()
  * @param {Int} score 승리 플레이어의 점수
  */
-export const createMatchHistory = async (firstUserUuid, secondUserUuid, startTime, endTime, score) => {
+export const createMatchHistory = async (winnerUuId, loserUuid, startTime, endTime, score) => {
   const [rows] = await pools.USER_DB.query(SQL_QUERIES.CREATE_MATCH_HISTORY, [
-    firstUserUuid,
-    secondUserUuid,
+    winnerUuId,
+    loserUuid,
     formatDate(new Date(startTime)),
     formatDate(new Date(endTime)),
     score,
