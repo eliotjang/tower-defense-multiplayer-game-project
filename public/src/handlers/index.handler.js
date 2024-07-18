@@ -8,7 +8,7 @@ import matchFoundNotificationHandler from './match-found.handler.js';
 import { monsterKillNotificationHandler, monsterKillResponseHandler } from './monster-kill.handler.js';
 import monsterSpawnNotificationHandler from './monster-spawn.handler.js';
 import signInHandler from './sign-in.handler.js';
-import stateSyncResponseHandler from './state-stync.handler.js';
+import stateSyncResponseHandler from './state-sync.handler.js';
 import towerAttackNotificationHandler from './tower-attack.handler.js';
 import { towerNotificationHandler, towerResponseHandler } from './tower.handler.js';
 
