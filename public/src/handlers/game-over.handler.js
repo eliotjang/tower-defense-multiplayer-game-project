@@ -18,7 +18,7 @@ const gameOverHandler = ({ socket, packetType, payload }) => {
   const modalMessage = document.querySelector('.modalMessage');
   if (isWin) {
     winSound.play().then(() => {
-      modalMessage.innerHTML = '축하드립니다!. 게임에서 승리했습니다!';
+      modalMessage.innerHTML = '축하드립니다! 게임에서 승리했습니다!';
       modal.classList.remove('hidden');
     });
   } else {
